@@ -1,0 +1,169 @@
+# گزارش جامع پورتال‌های ثبت کسب‌وکار
+## گیم‌نت در منطقه اسکله (İskele) — قبرس شمالی (KKTC)
+
+**تاریخ تهیه گزارش:** ۱۴۰۴  
+**موضوع:** پورتال‌ها و دایرکتوری‌هایی برای بهتر دیده‌شدن گیم‌نت
+
+---
+
+## مقدمه و استراتژی
+
+با توجه به موقعیت کسب‌وکار شما (گیم‌نت در اسکله / لانگ‌بیچ)، مخاطبان اصلی شامل دانشجویان، ساکنان محلی ترک‌زبان، جامعه ایرانیان، روس‌زبان‌ها و توریست‌ها هستند.  
+
+استراتژی ثبت باید ترکیبی از این موارد باشد:
+- پلتفرم‌های جهانی (گوگل، یاندکس و ...)
+- دایرکتوری‌های محلی قبرس شمالی
+- شبکه‌های اجتماعی و کانال‌های مکمل گیمینگ
+
+---
+
+## ۱. پلتفرم‌های جهانی (اولویت اول — حیاتی)
+
+این پلتفرم‌ها مهم‌ترین ابزارها برای دیده‌شدن محلی هستند و باید در اولویت اول قرار گیرند:
+
+| پلتفرم | لینک ثبت | توضیحات |
+|--------|----------|---------|
+| **Google Business Profile** | https://business.google.com | مهم‌ترین ابزار. حضور در Google Maps و جستجوی محلی. دسته‌بندی پیشنهادی: Internet Cafe / Video Game Store |
+| **Yandex Business** | https://business.yandex.com | بسیار مهم برای اسکله به دلیل جمعیت بالای روس‌زبان در لانگ‌بیچ |
+| **Bing Places** | https://www.bingplaces.com | ثبت رایگان در موتور جستجوی بینگ |
+| **Apple Business Connect** | https://businessconnect.apple.com | برای نمایش در Apple Maps (کاربران آیفون) |
+| **TripAdvisor** | https://www.tripadvisor.com/Owners | جذب توریست‌ها به عنوان مکان تفریحی |
+| **Foursquare** | https://business.foursquare.com | دیتابیس مورد استفاده بسیاری از اپلیکیشن‌ها |
+| **Facebook Business** | https://www.facebook.com/business | صفحه کسب‌وکار + امکان ساخت رویداد برای تورنمنت‌ها |
+| **Instagram Business** | https://business.instagram.com | مهم‌ترین شبکه اجتماعی در قبرس شمالی |
+
+---
+
+## ۲. دایرکتوری‌های اختصاصی قبرس شمالی (KKTC)
+
+### ۲.۱. Kimibilin.com ⭐ (پیشنهادی)
+- **لینک اصلی:** https://kimibilin.com
+- **صفحه اسکله:** https://kimibilin.com/b/iskele/
+- **توضیحات:** دارای بخش اختصاصی اسکله. افزودن کسب‌وکار کاملاً رایگان و ساده. شامل آدرس، تلفن، شبکه‌های اجتماعی و نظرات مشتریان.
+
+### ۲.۲. Find It North Cyprus ⭐ (پیشنهادی)
+- **لینک:** https://www.finditnorthcyprus.com
+- **توضیحات:** دایرکتوری انگلیسی‌زبان کامل کسب‌وکارهای قبرس شمالی. مناسب جامعه خارجی‌ها و انگلیسی‌زبانان.
+
+### ۲.۳. Kıbrıs İşletmeleri
+- **لینک:** https://kibrisisletmeleri.com
+- **توضیحات:** راهنمای کسب‌وکار قبرس شمالی با امکان فیلتر بر اساس شهر، بخش و امتیاز.
+
+### ۲.۴. Kıbrıs Firma Rehberi (firma.kktc.com)
+- **لینک:** https://firma.kktc.com
+- **توضیحات:** افزودن رایگان از طریق «Ücretsiz Firma Ekle». دارای دسته‌بندی Bilgisayar - Bilişim که مناسب گیم‌نت است.
+
+### ۲.۵. Nerede360
+- **لینک:** https://www.nerede360.com/bolgeler-kibris-firma-rehberi
+- **توضیحات:** دارای بخش جداگانه برای شرکت‌های اسکله (İskele Firmaları).
+
+### ۲.۶. Nerdebulayim.com
+- **لینک:** https://www.nerdebulayim.com/firmalar/
+- **توضیحات:** راهنمای شرکت‌ها و محل‌های کار فعال در قبرس شمالی.
+
+### ۲.۷. دایرکتوری روزنامه‌های محلی (اعتبار بالا)
+
+| روزنامه / پورتال | لینک |
+|------------------|------|
+| **Kıbrıs Manşet — Rehber** | https://www.kibrismanset.com/rehber |
+| **Kıbrıs Türk Haber — Rehber** | https://www.kibristurk.com/rehber |
+| **Diyalog Gazetesi — Firma Rehberi** | https://www.diyaloggazetesi.com/firma-rehberi/ |
+
+---
+
+## ۳. دایرکتوری‌های عمومی‌تر (اولویت دوم)
+
+| پورتال | لینک | توضیحات |
+|--------|------|---------|
+| **B2BMap Cyprus** | https://b2bmap.com/cyprus/companies | ثبت رایگان — افزایش آگاهی برند |
+| **CypIndex** | https://www.cypindex.com | شبکه کسب‌وکار قبرس (بیشتر جنوب، اما مفید) |
+| **Cyprus Atlas** | https://www.cyprusatlas.com | بیش از ۳۰٬۰۰۰ شرکت در بیش از ۲٬۰۰۰ دسته‌بندی |
+| **Firmarehberi.com** | https://firmarehberi.com | دایرکتوری کسب‌وکارهای کوچک — افزودن رایگان |
+| **Firmarehberim.com** | https://firmarehberim.com | دارای بخش قبرس — کمک به سئوی محلی |
+
+---
+
+## ۴. کانال‌های مکمل ویژه گیم‌نت
+
+چون کسب‌وکار شما گیمینگ است، این موارد را جدی بگیرید:
+
+1. **Discord**  
+   ساخت سرور اختصاصی برای گیم‌نت (ابزار اصلی ارتباط گیمرها و اطلاع‌رسانی تورنمنت‌ها).
+
+2. **گروه‌های فیسبوک و تلگرام محلی**  
+   - گروه‌های ساکنان اسکله / لانگ‌بیچ  
+   - گروه‌های ایرانیان مقیم قبرس شمالی  
+   - گروه‌های روس‌زبان‌های منطقه  
+
+3. **Waze for Business**  
+   - لینک: https://biz.waze.com  
+   - ثبت مکان برای مسیریابی رانندگان.
+
+4. **2GIS**  
+   نقشه محبوب بین روس‌زبان‌ها.
+
+---
+
+## ۵. نقشه اقدام پیشنهادی (اولویت‌بندی)
+
+### هفته اول (رایگان و پربازده)
+1. **Google Business Profile** (مهم‌ترین مورد)
+2. **Yandex Business** (به دلیل جمعیت روس منطقه)
+3. صفحه **اینستاگرام بیزینس** + **فیسبوک بیزینس**
+
+### هفته دوم (دایرکتوری‌های محلی)
+4. kimibilin.com (بخش اسکله)
+5. finditnorthcyprus.com
+6. firma.kktc.com و kibrisisletmeleri.com
+7. دایرکتوری روزنامه‌ها (Kıbrıs Manşet، Diyalog و ...)
+
+---
+
+## ۶. نکته بسیار مهم (NAP Consistency)
+
+در تمام پورتال‌ها، **نام کسب‌وکار + آدرس + شماره تلفن** را دقیقاً یکسان وارد کنید.  
+
+این یکنواختی (NAP = Name, Address, Phone) یکی از مهم‌ترین فاکتورهای **سئوی محلی گوگل** است.
+
+همچنین از مشتریان راضی بخواهید در **گوگل** برای شما Review (نظر) ثبت کنند — تأثیر آن از بسیاری از تبلیغات بیشتر است.
+
+---
+
+## خلاصه لینک‌های مهم (برای کپی سریع)
+
+**جهانی:**
+- https://business.google.com
+- https://business.yandex.com
+- https://www.bingplaces.com
+- https://businessconnect.apple.com
+- https://www.tripadvisor.com/Owners
+- https://business.foursquare.com
+- https://www.facebook.com/business
+- https://business.instagram.com
+
+**محلی قبرس شمالی:**
+- https://kimibilin.com
+- https://kimibilin.com/b/iskele/
+- https://www.finditnorthcyprus.com
+- https://kibrisisletmeleri.com
+- https://firma.kktc.com
+- https://www.nerede360.com/bolgeler-kibris-firma-rehberi
+- https://www.nerdebulayim.com/firmalar/
+- https://www.kibrismanset.com/rehber
+- https://www.kibristurk.com/rehber
+- https://www.diyaloggazetesi.com/firma-rehberi/
+
+**سایر:**
+- https://b2bmap.com/cyprus/companies
+- https://www.cypindex.com
+- https://www.cyprusatlas.com
+- https://firmarehberi.com
+- https://firmarehberim.com
+- https://biz.waze.com
+
+---
+
+**موفق و پرروز باشید!** 🎮🚀  
+
+*گزارش ویژه گیم‌نت اسکله — قبرس شمالی*  
+*این فایل Markdown را می‌توانید با پسوند `.md` ذخیره کنید یا در ابزارهایی مثل Typora، Obsidian، VS Code یا حتی WhatsApp/Telegram ارسال کنید.*
