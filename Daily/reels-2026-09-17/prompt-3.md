@@ -64,29 +64,34 @@ face camera. She is standing, relaxed, warm confident smile. 50mm, shallow
 depth of field. Youna and Lea remain clearly visible over her shoulder,
 playing happily in the background bokeh.
 
-3.0-8.5s — Mona speaks directly to camera, addressing parents like a friendly
+3.0-7.5s — Mona speaks directly to camera, addressing parents like a friendly
 social-media host, not a salesperson. Natural gestures, steady eye contact
 with the lens. Camera holds still on a medium shot.
 
-8.5-10.0s — Mona finishes with a warm closing smile. Camera holds completely
+7.5-10.0s — Mona finishes with a warm closing smile, holding the look a
+beat longer. Camera holds completely
 steady. Behind her Youna and Lea laugh at something on screen. A subtle BAZINO
 logo appears as a small clean lower-third graphic — not a full-screen card,
 not covering Mona's face.
 
 DIALOGUE — Turkish, natural delivery
-Mona: "Çocuklarınızı Bazino'ya gönderin, siz de rahatça dinlenin."
-Delivered warmly and unhurried across roughly five seconds.
+Mona: "Ne zaman huzur istersen, Bazino burada."
+Delivered warmly and unhurried across roughly four seconds, with a small
+natural pause after "istersen".
 
 LIP SYNC — HIGHEST PRIORITY
 Mona's lip synchronisation must be frame-accurate to the Turkish audio. Every
 syllable must match the mouth shape precisely:
-- Closed-lip consonants (b, p, m) in "Bazino", "gönderin" must show the lips
-  fully meeting.
-- Rounded vowels (o, ö, u, ü) in "Çocuklarınızı", "gönderin", "Bazino'ya"
-  must show clearly rounded lips.
-- Open vowels (a, e) must show a correspondingly open jaw.
-- The Turkish "ç" in "Çocuklarınızı" and "ş" sounds require visible
-  lip protrusion.
+- "Ne zaman" — open jaw on the two "a" vowels, tongue tip visible on the "n"
+  sounds, lips relaxed and apart.
+- "huzur" — breathy open "h", then clearly rounded and slightly protruded
+  lips through both "u" vowels.
+- "istersen" — wide flat lips on the "i" and "e" vowels, teeth close together
+  on the "s" sounds.
+- "Bazino" — the lips must fully meet and release on the "B", then round
+  distinctly on the closing "o".
+- "burada" — lips meet again on the "b", round on "u", then open wide on the
+  two "a" vowels.
 Mouth movement must start and stop exactly with the audio — no drift, no
 floating or mumbling mouth, no continued movement after the line ends. Jaw,
 lips, tongue and cheek motion must all read as genuine Turkish speech, not
@@ -141,16 +146,21 @@ BAZINO. No prices, discounts, or promotional claims.
 | «subtle brand presence» | مشخص شد: لوگوی کوچک lower-third در ثانیه آخر |
 | مونا | ارجاع به تصویر آپلودی حذف شد — شخصیت از پروژه Google Flow خوانده می‌شود |
 | لیپ‌سینک | بخش اختصاصی با جزئیات آواشناسی ترکی اضافه شد |
+| دیالوگ مونا | تغییر کرد به `Ne zaman huzur istersen, Bazino burada.` — دیگر متن روی تصویر را تکرار نمی‌کند |
 
 ### دیالوگ
 
-**نسخه تأییدشده (۵ ثانیه):**
+**نسخه تأییدشده (~۴ ثانیه):**
 ```
-Çocuklarınızı Bazino'ya gönderin, siz de rahatça dinlenin.
+Ne zaman huzur istersen, Bazino burada.
 ```
+**فارسی:** «هر وقت آرامش خواستی، بازینو اینجاست.»
 
-**نسخه کامل اولیه (~۶ ثانیه — فقط اگر ورود مونا حذف شود):**
-```
-Çocuklarınızı Bazino'ya gönderin, siz de gönül rahatlığıyla dinlenin
-veya işlerinize bakın!
-```
+نکته: این جمله با **«تو»** (`istersen`) است نه «شما» — صمیمی و دوستانه،
+متناسب با شخصیت گرم مونا.
+
+**نسخه‌های رد شده:**
+- `Çocuklarınızı Bazino'ya gönderin, siz de rahatça dinlenin.` — تقریباً
+  همان متن روی تصویر بود و پیام را دو بار تکرار می‌کرد.
+- `Ne zaman huzura ihtiyacınız olursa, Bazino burada.` — نسخه محترمانه با
+  «شما»، ۵ ثانیه، ریتم ضعیف‌تر.
