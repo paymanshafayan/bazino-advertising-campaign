@@ -1,9 +1,10 @@
 # پرامپت ۳ از ۳ — ثانیه ۲۰ تا ۳۰ (مونا رو به دوربین)
 
 **وضعیت:** ✅ تأییدشده توسط مالک
-**فریم اول:** آخرین فریم ویدئوی ۲ (بچه‌ها روی مبل در حال بازی) — با نام `frame_1` آپلود شود
+**فریم اول:** `frame_1-video3.jpg` (یا آخرین فریم واقعی ویدئوی ۲) — با نام `frame_1` آپلود شود
 **تصویر مرجع مونا:** `Assets/mona/mona-brandwear-fullbody-01.png`
-**تصویر مرجع محیط:** `Assets/club/club-wide-03.jpeg`
+**تصویر مرجع محیط:** `Assets/club/club-tall-02.jpeg`
+**تصاویر مرجع شخصیت:** `Assets/youna/youna-portrait-avatar-01.jpg` · `Assets/lea/lea-portrait-avatar-01.jpg`
 
 ```
 Create a 10-second vertical 9:16 premium cinematic advertising video,
@@ -20,13 +21,18 @@ hairstyle, skin tone, body proportions and elegant look exactly as shown in
 the uploaded reference image. Do not create a different woman. Her face must
 match the reference in every frame.
 
-CHARACTER LOCK — the children, identical in all three videos:
-GIRL, age 8: long curly light-brown hair past the shoulders, plain white
-short-sleeved t-shirt, blue denim jeans.
-BOY, age 10: short messy light-brown hair, plain white t-shirt, dark blue
-denim jeans.
-Same two children as the previous two videos, same faces, same clothing,
-no variation.
+CHARACTER LOCK — the two young people, identical in all three videos.
+The attached portrait references define these exact people; reproduce their
+faces with maximum fidelity.
+
+YOUNA, age 15: short dark brown hair, warm brown eyes, defined young jawline,
+clear skin. Plain white t-shirt, dark blue denim jeans.
+
+LEA, age 11: long wavy light brown hair past her shoulders, warm brown eyes,
+round youthful face. Plain white t-shirt, blue denim jeans.
+
+Both must be instantly recognisable as the people in the attached reference
+photographs. Same faces, same clothing, no variation.
 
 ENVIRONMENT REFERENCE — CRITICAL
 Use the uploaded interior photograph of the BAZINO gaming centre as the
@@ -42,19 +48,19 @@ seating. It does NOT have desktop computers, desk monitors, or gaming chairs.
 This must read as the SAME LOCATION as the previous video.
 
 CONTINUITY
-Continue directly from the previous video: the two children are already
+Continue directly from the previous video: Youna and Lea are already
 seated on the low black sofa, playing with console controllers, lit by the
 blue glow of the large screen.
 
 SHOT SEQUENCE
 
-0.0-2.0s — Held two-shot of the children playing, exactly as the previous
+0.0-2.0s — Held two-shot of Youna and Lea playing, exactly as the previous
 video ended. Mona enters from frame right in soft focus foreground, walking
 naturally into position. Camera begins a slow dolly back to accommodate her.
 
 2.0-3.0s — Focus pulls from the children to Mona as she settles and turns to
 face camera. She is standing, relaxed, warm confident smile. 50mm, shallow
-depth of field. The children remain clearly visible over her shoulder,
+depth of field. Youna and Lea remain clearly visible over her shoulder,
 playing happily in the background bokeh.
 
 3.0-8.5s — Mona speaks directly to camera, addressing parents like a friendly
@@ -62,7 +68,7 @@ social-media host, not a salesperson. Natural gestures, steady eye contact
 with the lens. Camera holds still on a medium shot.
 
 8.5-10.0s — Mona finishes with a warm closing smile. Camera holds completely
-steady. Behind her the children laugh at something on screen. A subtle BAZINO
+steady. Behind her Youna and Lea laugh at something on screen. A subtle BAZINO
 logo appears as a small clean lower-third graphic — not a full-screen card,
 not covering Mona's face.
 
@@ -92,8 +98,8 @@ clean skin tones on Mona, strong blue accents behind her. Mona lit slightly
 warmer than the background so she separates from the blue.
 
 FINAL SHOT
-Hold on Mona looking directly into the camera with a friendly smile, the
-children still playing behind her in the same BAZINO interior. Steady frame,
+Hold on Mona looking directly into the camera with a friendly smile, Youna and Lea
+still playing behind her in the same BAZINO interior. Steady frame,
 no camera movement in the final second. This is the closing frame of the
 three-part reel.
 

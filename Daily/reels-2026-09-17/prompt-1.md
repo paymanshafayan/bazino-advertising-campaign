@@ -1,7 +1,8 @@
 # پرامپت ۱ از ۳ — ثانیه ۰ تا ۱۰ (خانه)
 
 **وضعیت:** ✅ تأییدشده توسط مالک
-**فریم اول:** `frame_1.jpg`
+**فریم اول:** `frame_1-video1.jpg`
+**تصاویر مرجع شخصیت:** `Assets/hasti/hasti-portrait-avatar-01.jpg` · `Assets/youna/youna-portrait-avatar-01.jpg` · `Assets/lea/lea-portrait-avatar-01.jpg`
 
 ```
 Create a 10-second vertical 9:16 cinematic advertising video,
@@ -11,26 +12,35 @@ FIRST FRAME: Use the attached image named frame_1 as the exact opening
 frame of the video. All motion must begin from that frame and continue
 naturally from it.
 
-CHARACTER LOCK — identical in all three videos:
-GIRL, age 8: long curly light-brown hair past the shoulders, plain white
-short-sleeved t-shirt, blue denim jeans, barefoot.
-BOY, age 10: short messy light-brown hair, plain white t-shirt, dark blue
-denim jeans, barefoot.
-MOTHER, age 35: shoulder-length wavy brown hair, loose white linen shirt,
-beige tailored trousers, barefoot.
-Same two children and same mother throughout, same faces, same clothing,
-no variation.
+CHARACTER LOCK — identical in all three videos. The attached portrait
+references define these exact people; reproduce their faces with maximum
+fidelity, as if photographing the same individuals again.
+
+HASTI, the mother, age 35: long wavy golden light-brown hair with blonde
+sun-kissed highlights falling past her shoulders, golden tanned Mediterranean
+skin, warm brown eyes, high defined cheekbones. Cream linen shirt, beige
+trousers.
+
+YOUNA, the son, age 15: short dark brown hair, warm brown eyes, defined young
+jawline, clear skin. Plain white t-shirt, dark blue denim jeans.
+
+LEA, the daughter, age 11: long wavy light brown hair past her shoulders, warm
+brown eyes, round youthful face. Plain white t-shirt, blue denim jeans.
+
+These three must be instantly recognisable as the people in the attached
+reference photographs. Same faces, same clothing, no variation across the
+three videos.
 
 SCENE
 Inside a stylish, luxurious modern family home — elegant furniture, large
 windows, warm natural afternoon light, sophisticated interior in beige and
 walnut tones.
 
-The two children are running wildly from one side of the living room to the
+Youna and Lea are running wildly from one side of the living room to the
 other, jumping on cushions, laughing, knocking things over, creating noise
 and mess.
 
-Their mother stands among the chaos looking visibly exhausted and completely
+Hasti, their mother, stands among the chaos looking visibly exhausted and completely
 overwhelmed. She is tired and affectionate, never angry, never shouting.
 
 ACTION AND CAMERA
@@ -50,13 +60,13 @@ detail beyond the BAZINO logo.
 
 She turns the phone toward the children and speaks.
 
-The children stop instantly, look at each other, and erupt with excitement.
+Youna and Lea stop instantly, look at each other, and erupt with excitement.
 They spin and run toward the front door. Camera follows them from behind in
 a smooth handheld tracking move, low angle, energetic but controlled.
 
 DIALOGUE — Turkish, natural delivery, clear, not dubbed
-Mother: "Bazino'da sizin için oyun ayırttım!"
-Children, overlapping shouts as they run: "Yaşasın!"
+Hasti: "Bazino'da sizin için oyun ayırttım!"
+Youna and Lea, overlapping shouts as they run: "Yaşasın!"
 
 ON-SCREEN TEXT — Turkish, top third, persistent for the full 10 seconds
 "Çocuklar oynasın, siz rahatlayın!"

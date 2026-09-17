@@ -1,8 +1,9 @@
 # پرامپت ۲ از ۳ — ثانیه ۱۰ تا ۲۰ (بیرون رفتن → ورود به گیم‌نت)
 
 **وضعیت:** ✅ تأییدشده توسط مالک
-**فریم اول:** آخرین فریم ویدئوی ۱ (بچه‌ها در آستانه در) — با نام `frame_1` آپلود شود
-**تصویر مرجع محیط:** `Assets/club/club-wide-03.jpeg`
+**فریم اول:** `frame_1-video2.jpg` (یا آخرین فریم واقعی ویدئوی ۱) — با نام `frame_1` آپلود شود
+**تصویر مرجع محیط:** `Assets/club/club-tall-02.jpeg`
+**تصاویر مرجع شخصیت:** `Assets/hasti/…` · `Assets/youna/…` · `Assets/lea/…`
 
 ```
 Create a 10-second vertical 9:16 cinematic advertising video,
@@ -12,15 +13,24 @@ FIRST FRAME: Use the attached image named frame_1 as the exact opening
 frame of this video. All motion must begin from that frame and continue
 naturally from it.
 
-CHARACTER LOCK — identical in all three videos:
-GIRL, age 8: long curly light-brown hair past the shoulders, plain white
-short-sleeved t-shirt, blue denim jeans.
-BOY, age 10: short messy light-brown hair, plain white t-shirt, dark blue
-denim jeans.
-MOTHER, age 35: shoulder-length wavy brown hair, loose white linen shirt,
-beige tailored trousers.
-Same two children and same mother as the previous video, same faces, same
-clothing, no variation. Match the attached reference images exactly.
+CHARACTER LOCK — identical in all three videos. The attached portrait
+references define these exact people; reproduce their faces with maximum
+fidelity, as if photographing the same individuals again.
+
+HASTI, the mother, age 35: long wavy golden light-brown hair with blonde
+sun-kissed highlights falling past her shoulders, golden tanned Mediterranean
+skin, warm brown eyes, high defined cheekbones. Cream linen shirt, beige
+trousers.
+
+YOUNA, the son, age 15: short dark brown hair, warm brown eyes, defined young
+jawline, clear skin. Plain white t-shirt, dark blue denim jeans.
+
+LEA, the daughter, age 11: long wavy light brown hair past her shoulders, warm
+brown eyes, round youthful face. Plain white t-shirt, blue denim jeans.
+
+These three must be instantly recognisable as the people in the attached
+reference photographs. Same faces, same clothing, no variation across the
+three videos.
 
 ENVIRONMENT REFERENCE — CRITICAL
 Use the uploaded interior photograph of the BAZINO gaming centre as the
@@ -41,24 +51,23 @@ front door open and are running out.
 
 SHOT SEQUENCE
 
-0.0-2.0s — Continuing the tracking move from behind, the two children burst
+0.0-2.0s — Continuing the tracking move from behind, Youna and Lea burst
 through the doorway into bright afternoon light, laughing.
 They shout together in Turkish: "Yaşasın!"
 
-2.0-3.0s — QUICK CUT BACK to the mother inside the home. Medium shot, she
+2.0-3.0s — QUICK CUT BACK to Hasti inside the home. Medium shot, she
 lets out a long relieved breath, a warm smile spreading, and sinks back into
 the sofa. Her shoulders drop. Two seconds only — this is the payoff beat.
 
-3.0-5.0s — Exterior, clean modern Mediterranean street in warm daylight. The
-children run together toward a glass entrance door with the BAZINO logo.
+3.0-5.0s — Exterior, clean modern Mediterranean street in warm daylight. They run together toward a glass entrance door with the BAZINO logo.
 Smooth tracking shot alongside them, 35mm.
 
-5.0-7.0s — INTERIOR REVEAL. The children step inside. Camera pushes in behind
+5.0-7.0s — INTERIOR REVEAL. Youna and Lea step inside. Camera pushes in behind
 them at low height. The warm daylight gives way to the deep blue LED glow of
 the venue. This is the key colour transition of the whole reel — warm home to
 cool BAZINO blue.
 
-7.0-10.0s — The children drop onto one of the low black sofas facing a large
+7.0-10.0s — Youna and Lea drop onto one of the low black sofas facing a large
 wall-mounted screen and pick up console controllers. Slow dolly-in to a
 two-shot of their faces lit by blue screen light, grinning, fully absorbed.
 
@@ -69,8 +78,8 @@ fighting, no weapons, no shooters, no blood. This is a family-safety
 advertisement featuring young children.
 
 DIALOGUE — Turkish, natural children's voices, realistic lip sync
-Children, together at 1.0s: "Yaşasın!"
-No other dialogue. The mother's beat is silent except for her breath.
+Youna and Lea, together at 1.0s: "Yaşasın!"
+No other dialogue. Hasti's beat is silent except for her breath.
 
 ON-SCREEN TEXT — Turkish, top third, persistent for the full 10 seconds
 "Çocuklar oynasın, siz rahatlayın!"
@@ -88,7 +97,7 @@ Warm exterior daylight shifting to the deep blue interior palette of the
 reference photograph. Rich blacks, strong blue LED accents, clean highlights.
 
 IMPORTANT TRANSITION
-End on a stable, held two-shot of the children playing happily on the sofa
+End on a stable, held two-shot of Youna and Lea playing happily on the sofa
 inside the BAZINO interior, blue screen light on their faces. Hold the camera
 steady for the final second. The next video continues from this exact
 environment and framing.
