@@ -854,22 +854,24 @@ post otherwise — these are not preferences):
 | An affiliate carousel must be **exactly 4 slides with a Turkish caption** | `AFFILIATE_FOUR_SLIDES_TURKISH_CAPTION` |
 | Affiliate posts are scheduled only in **batches of exactly 3** | `THREE_POSTS_REQUIRED` |
 
-⚠️ **Two engines exist in the portal** (`igEngine.ts` v3 and `campaignV4.ts`
-v4) and they disagree on the keyword: v3 reads a single `SQUAD`, v4 reads the
-four language keywords above. Neither is retired. Confirm which path is live
-before publishing affiliate content. Full analysis: `PORTAL_CAMPAIGN_AUDIT.md`.
+Owner decision (2026-09-17): the v3 engine (`igEngine.ts`, single `SQUAD`
+keyword) is **retired**; `campaignV4.ts` with the four language keywords is the
+only engine. Removal is specified in
+`Doc/portal-agent-prompt-campaign-fix-fa.md`.
 
 **Intended to be retired in v1:** system messaging the friend, the friend
 commenting a numeric code, and `share_confirmed_by_friend_code`.
 
-🔴 **Not actually retired in code (verified 2026-09-17).** `campaignV4.ts:66`
-still creates a `friend` role from a six-digit comment, still writes
-`share_confirmed_by_friend_code`, and the `partner2` message in all four
-languages still instructs the friend to comment the code. The identifier
-`friend_flow_retired` does not exist anywhere in the repository. Only the
-`partner-invite` endpoint is genuinely retired (HTTP 410). Until the owner
-decides whether the code flow stays or goes, do not describe it as retired in
-published content.
+**Owner decision (2026-09-17): the friend code flow goes.** It was still live
+in `campaignV4.ts:66` at the time of the audit; removal is specified in
+`Doc/portal-agent-prompt-campaign-fix-fa.md` (a six-digit comment will be
+rejected with `friend_flow_retired`). The `partner-invite` endpoint is already
+retired (HTTP 410). Do not produce content that asks a friend to comment a code.
+
+**Commission rates are never stated in content.** `commissionPct`,
+`attributionDays`, `refundDays` and coupon values are set by the admin in the
+management panel and are the only valid source. Never quote a rate, and never
+promise guaranteed earnings.
 
 **Approved guidance message** (the fixed wording sent after the keyword
 comment; translated per content language, meaning must not change without
