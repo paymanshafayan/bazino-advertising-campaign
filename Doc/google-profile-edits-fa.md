@@ -98,3 +98,32 @@ wheelchair=yes
 
 ## ⬜ گالری و لوگو
 فرم جای لوگو و تا ۱۰ عکس گالری دارد — هنوز آپلود نشده چون فایلی در دسترس نیست.
+
+---
+
+# پیوست ۴ — نتایج دور دوم دایرکتوری‌ها (۲۰۲۶-۰۹-۱۷)
+
+| سایت | وضعیت | جزئیات |
+|---|---|---|
+| **OpenStreetMap** | ✅ **منتشر شد** | ۱۴ تگ، زنده روی نقشه |
+| **kimibilin.com** | ✅ ثبت شد | «Onay Bekliyor» — صف تأیید |
+| **kibrisisletmeleri.com** | ✅ ثبت شد | صف تأیید مدیر |
+| nerdebulayim.com | 🟡 نیمه‌کاره | حساب ساخته شد، فرم پر شد، «DEVAM ET» به مرحله ۲ نمی‌رود |
+| kibrisisrehberi.com | 🔴 گیر | تب «Kayıt ol» رندر نمی‌شود |
+| nerede360.com | 🔴 گیر | دیالوگ رضایت کوکی بسته نمی‌شود |
+| cyprus-faq.com | 🔴 بسته | **«Registration disallowed»** — ثبت‌نام غیرفعال است |
+| finditnorthcyprus.com | 🔴 مرده | خطای اتصال |
+| firma.kktc.com | 🔴 مرده | خطای اتصال |
+
+## رمزهای عبور (منتقل شوند به جای امن)
+- OSM: `/home/user/cdp/osm_pw.txt` — کاربر `BazinoPro`
+- kibrisisletmeleri: `/home/user/cdp/kibris_pw.txt`
+- nerdebulayim: `/home/user/cdp/nerdebulayim_pw.txt` — کاربر `bazinopro`
+- kimibilin: از مرورگر بازیابی شود (سندباکس ری‌ست شد)
+
+⚠️ این فایل‌ها با ری‌ست سندباکس پاک می‌شوند.
+
+## کارهای دستی باقی‌مانده
+1. **nerdebulayim** — «DEVAM ET» را بزنید تا پیام خطا معلوم شود
+2. **kibrisisrehberi** — ثبت‌نام دستی در `/index.php/firma-ekle/`
+3. **cyprus-faq** — ثبت‌نام بسته؛ تنها راه ایمیل به تحریریه برای درج رویداد تورنمنت
