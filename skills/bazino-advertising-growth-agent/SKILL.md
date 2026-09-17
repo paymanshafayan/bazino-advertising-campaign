@@ -817,10 +817,13 @@ piece of affiliate content must be built on it.
    | English | `Ready` |
    | Russian | `Готово` |
 
-   ⚠️ The portal's configured default is currently `SQUAD`. Until the portal
-   campaign settings are updated to accept these four keywords, affiliate
-   content must not be published with a keyword the portal will not recognize.
-   Verify the configured keyword before publishing (open issue, HANDOFF §3).
+   These four keywords are **live in production** — Zernio matches them today.
+   `SQUAD` was the earlier single-keyword default and is **retired as a comment
+   keyword**. Do not publish content asking for `SQUAD`.
+
+   Not to be confused with the **campaign identifier** `SQUAD26`, which is a
+   separate thing: it is used in attribution links and UTM parameters
+   (`utm_campaign=SQUAD26`) and remains valid.
 
    For Turkish content the approved hook may open with `Hazır mısın?`.
 2. The system sends a Private Reply with guidance and a button — **containing no link**.
