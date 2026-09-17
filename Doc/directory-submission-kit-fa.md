@@ -51,6 +51,8 @@
 | Website | `https://bazino.pro` |
 | Instagram | `https://instagram.com/bazinopro` |
 | Email | `Bazinopro@gmail.com` |
+| WhatsApp | `https://wa.me/905391333747` |
+| Facebook | `https://facebook.com/bazinopro` |
 
 ### ⚠️ نام کسب‌وکار — دقت کنید
 
@@ -273,7 +275,7 @@ KKTC, esports, turnuva, tournament, VIP gaming, игровой клуб, Иск�
 - Phone: `+90 539 133 37 47`
 - Category: `Internet Cafe`
 
-**فیسبوک:** یک Facebook Page بسازید، همان NAP را وارد کنید و به اینستاگرام لینک کنید. این پیش‌نیاز ثبت در Apple Business Connect و چند پلتفرم دیگر هم هست.
+**فیسبوک:** ✅ صفحه از قبل وجود دارد → `facebook.com/bazinopro`. فقط بررسی کنید که NAP آن با جدول بخش ۱ یکی باشد.
 
 ---
 
@@ -347,14 +349,14 @@ KKTC, esports, turnuva, tournament, VIP gaming, игровой клуб, Иск�
 | ۴ | Cyprus-FAQ (پروفایل) | ⬜ | | | |
 | ۴ب | Cyprus-FAQ (رویداد) | 🔒 بلاک | | | منتظر ساعت رسمی تورنمنت |
 | ۵ | Instagram Business | ⬜ | | | |
-| ۵ب | Facebook Page | ⬜ | | | |
+| ۵ب | Facebook Page | ✅ موجود | | facebook.com/bazinopro | فقط NAP بررسی شود |
 | ۶ | firma.kktc.com | ⬜ | | | |
 | ۷ | kibrisisletmeleri.com | ⬜ | | | |
 | ۸ | kibrisisrehberi.com | ⬜ | | | |
 | ۹ | nerdebulayim.com | ⬜ | | | |
 | ۱۰ | Yandex Business | ⬜ | | | |
 | ۱۱ | Yandex Maps | ⬜ | | | |
-| ۱۲ | Google Business Profile | 🔒 بلاک | | | نیازمند تابلوی دائمی + گام‌های قبلی |
+| ۱۲ | Google Business Profile | ✅ ثبت و تأیید شده | | BAZINO - PS5 Gaming Center | ۲ ویرایش باقی: `Doc/google-profile-edits-fa.md` |
 | ۱۳ | Bing Places | ⬜ | | | بعد از گوگل |
 | ۱۴ | Apple Business Connect | ⬜ | | | |
 | ۱۵ | Foursquare | ⬜ | | | |
