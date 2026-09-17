@@ -2,7 +2,7 @@
 
 **وضعیت:** ✅ تأییدشده توسط مالک
 **فریم اول:** `frame_1-video3.jpg` (یا آخرین فریم واقعی ویدئوی ۲) — با نام `frame_1` آپلود شود
-**تصویر مرجع مونا:** `Assets/mona/mona-brandwear-fullbody-01.png`
+**شخصیت مونا:** در پروژه Google Flow ذخیره شده — تصویر مرجع آپلود نمی‌شود
 **تصویر مرجع محیط:** `Assets/club/club-tall-02.jpeg`
 **تصاویر مرجع شخصیت:** `Assets/youna/youna-portrait-avatar-01.jpg` · `Assets/lea/lea-portrait-avatar-01.jpg`
 
@@ -14,12 +14,13 @@ FIRST FRAME: Use the attached image named frame_1 as the exact opening
 frame of this video. All motion must begin from that frame and continue
 naturally from it.
 
-CHARACTER REFERENCE — MONA
-Use the uploaded image of the woman as the EXACT VISUAL REFERENCE for the
-character "Mona", the BAZINO brand influencer. Preserve her facial features,
-hairstyle, skin tone, body proportions and elegant look exactly as shown in
-the uploaded reference image. Do not create a different woman. Her face must
-match the reference in every frame.
+CHARACTER — MONA
+Mona is the BAZINO brand influencer and is already saved as a character in
+this Google Flow project. Use the stored Mona character from the project
+library for this video. Do not generate a new or different woman, and do not
+improvise her appearance — her face, hairstyle, skin tone and body
+proportions must come from the saved project character and stay consistent
+in every frame.
 
 CHARACTER LOCK — the two young people, identical in all three videos.
 The attached portrait references define these exact people; reproduce their
@@ -72,9 +73,25 @@ steady. Behind her Youna and Lea laugh at something on screen. A subtle BAZINO
 logo appears as a small clean lower-third graphic — not a full-screen card,
 not covering Mona's face.
 
-DIALOGUE — Turkish, natural delivery, accurate lip synchronisation
+DIALOGUE — Turkish, natural delivery
 Mona: "Çocuklarınızı Bazino'ya gönderin, siz de rahatça dinlenin."
 Delivered warmly and unhurried across roughly five seconds.
+
+LIP SYNC — HIGHEST PRIORITY
+Mona's lip synchronisation must be frame-accurate to the Turkish audio. Every
+syllable must match the mouth shape precisely:
+- Closed-lip consonants (b, p, m) in "Bazino", "gönderin" must show the lips
+  fully meeting.
+- Rounded vowels (o, ö, u, ü) in "Çocuklarınızı", "gönderin", "Bazino'ya"
+  must show clearly rounded lips.
+- Open vowels (a, e) must show a correspondingly open jaw.
+- The Turkish "ç" in "Çocuklarınızı" and "ş" sounds require visible
+  lip protrusion.
+Mouth movement must start and stop exactly with the audio — no drift, no
+floating or mumbling mouth, no continued movement after the line ends. Jaw,
+lips, tongue and cheek motion must all read as genuine Turkish speech, not
+generic talking. Face the camera straight on throughout the dialogue so the
+mouth is fully visible and unobstructed.
 
 ON-SCREEN GAME CONTENT — IMPORTANT
 The television screens must show only age-appropriate content: a football or
@@ -98,14 +115,16 @@ clean skin tones on Mona, strong blue accents behind her. Mona lit slightly
 warmer than the background so she separates from the blue.
 
 FINAL SHOT
-Hold on Mona looking directly into the camera with a friendly smile, Youna and Lea
+Hold on Mona looking directly into the camera with a friendly smile, her
+mouth closed and still now that the line has finished, Youna and Lea
 still playing behind her in the same BAZINO interior. Steady frame,
 no camera movement in the final second. This is the closing frame of the
 three-part reel.
 
 CONSTRAINTS
-Natural acting, realistic facial expressions, accurate Turkish lip sync,
-smooth cinematic camera movement, high-end commercial production quality.
+Natural acting, realistic facial expressions, frame-accurate Turkish lip
+sync, smooth cinematic camera movement, high-end commercial production
+quality.
 No subtitles other than the specified top text. No brand logos other than
 BAZINO. No prices, discounts, or promotional claims.
 ```
@@ -120,6 +139,8 @@ BAZINO. No prices, discounts, or promotional claims.
 | قفل شخصیت بچه‌ها | اضافه شد |
 | `frame_1` | اضافه شد |
 | «subtle brand presence» | مشخص شد: لوگوی کوچک lower-third در ثانیه آخر |
+| مونا | ارجاع به تصویر آپلودی حذف شد — شخصیت از پروژه Google Flow خوانده می‌شود |
+| لیپ‌سینک | بخش اختصاصی با جزئیات آواشناسی ترکی اضافه شد |
 
 ### دیالوگ
 
