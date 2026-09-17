@@ -8,7 +8,7 @@
 
 ## 👉 از کجا شروع کنیم؟
 
-۱. **[`BAZINO_Advertising_Growth_Agent_System_Memory.md`](BAZINO_Advertising_Growth_Agent_System_Memory.md)** — ⛔ **اول این** — حافظه سیستمی و دستورالعمل عملیاتی ایجنت تبلیغات و رشد. در هر تعارض، این سند حاکم است.
+۱. **[`skills/bazino-advertising-growth-agent/SKILL.md`](skills/bazino-advertising-growth-agent/SKILL.md)** — ⛔ **اول این** — **اسکیل پروژه**: دستورالعمل حاکم ایجنت تبلیغات و رشد (هویت، مونا، ماموریت روزانه، فلو Affiliate، استراتژی کانال‌ها). هر جا گفته شود «اسکیل»، منظور همین فایل است و در هر تعارض حاکم است.
 ۲. **[`HANDOFF.md`](HANDOFF.md)** — نقطه ورود عملیاتی: ساختار فایل‌ها، معرفی مونا (اینفلوئنسر مجازی) و شرح ماموریت روزانه.
 
 ---
@@ -17,7 +17,7 @@
 
 | مسیر | محتوا |
 |---|---|
-| [`BAZINO_Advertising_Growth_Agent_System_Memory.md`](BAZINO_Advertising_Growth_Agent_System_Memory.md) | ⛔ حافظه سیستمی ایجنت — اول خوانده شود، در تعارض حاکم است |
+| [`skills/bazino-advertising-growth-agent/SKILL.md`](skills/bazino-advertising-growth-agent/SKILL.md) | ⛔ **اسکیل پروژه** — اول خوانده شود، در تعارض حاکم است |
 | [`HANDOFF.md`](HANDOFF.md) | سند تحویل: مسیر فایل‌ها، مونا، ماموریت روزانه، قواعد الزامی |
 | [`PROJECT_REVIEW.md`](PROJECT_REVIEW.md) | ممیزی کامل اسناد و تصاویر + چک‌لیست اقدامات |
 | [`Doc/affiliate-instagram-plan-fa.md`](Doc/affiliate-instagram-plan-fa.md) | طرح Affiliate / کمپین Invite Your Squad |
@@ -36,7 +36,7 @@
 
 ## قواعد کلیدی
 
-0. **حافظه سیستمی ایجنت اول خوانده می‌شود** و در هر تعارض حاکم است.
+0. **اسکیل پروژه اول خوانده می‌شود** و در هر تعارض حاکم است. («اسکیل» = `skills/bazino-advertising-growth-agent/SKILL.md`)
 1. **چهره و اندام مونا در تمام تبلیغات ثابت است** — تولید تصویر بدون تصویر مرجع ممنوع.
 2. **قانون صداقت** — هیچ تخفیف، جایزه، کمیسیون یا تاریخ تأییدنشده‌ای اعلام نمی‌شود.
 3. **زبان Reels:** ۸۰٪ ترکی، ۱۰٪ فارسی، ۱۰٪ انگلیسی. کپشن پیش‌فرض ترکی.
