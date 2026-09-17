@@ -8,5 +8,3 @@ __pycache__/
 bridge-session.ps1
 bridge-listing.ps1
 
-# local credentials — never commit
-credentials-local.md
