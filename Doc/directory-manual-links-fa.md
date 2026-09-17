@@ -9,8 +9,7 @@
 
 🔗 **https://www.nerdebulayim.com/panel/firma-ekle**
 
-**ورود:** `bazinopro` / `Bznyncse7hR5`
-یا ایمیل `Bazinopro@gmail.com`
+**ورود:** کاربر `bazinopro` — رمز در فایل محلی (به ریپو کامیت نمی‌شود)
 
 ### وضعیت
 حساب ساخته شده و **کل فرم مرحله ۱ پر است**. فقط دکمه **«DEVAM ET»** به مرحله ۲ نمی‌رود.
@@ -92,20 +91,19 @@
 
 ---
 
-## 🔐 رمزهای عبور — فوری منتقل شوند
+## 🔐 رمزهای عبور
 
-⚠️ این فایل‌ها با ری‌ست سندباکس **پاک می‌شوند**.
+⚠️ **این ریپو عمومی است — هیچ رمزی اینجا ذخیره نمی‌شود.**
 
-| سایت | کاربر | رمز |
-|---|---|---|
-| OpenStreetMap | `BazinoPro` | `Bzn!melnllw7K7` |
-| kibrisisletmeleri.com | `Bazinopro@gmail.com` | `Bzn!2js0kquqM4` |
-| nerdebulayim.com | `bazinopro` | `Bznyncse7hR5` |
-| kimibilin.com | `Bazinopro` | از مرورگر بازیابی شود |
+رمزها در فایل محلی `credentials-local.md` در ریشه ریپو هستند که در `.gitignore` قرار دارد و هرگز کامیت نمی‌شود.
 
-`cyprus-faq` رمزی ندارد چون ثبت‌نام انجام نشد.
-
----
+| سایت | کاربر |
+|---|---|
+| OpenStreetMap | `BazinoPro` |
+| kibrisisletmeleri.com | `Bazinopro@gmail.com` |
+| nerdebulayim.com | `bazinopro` |
+| nerede360.com | `Bazinopro@gmail.com` |
+| kimibilin.com | `Bazinopro` |
 
 ## ✅ کارهای تمام‌شده (نیازی به اقدام نیست)
 
