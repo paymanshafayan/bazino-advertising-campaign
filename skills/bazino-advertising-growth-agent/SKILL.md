@@ -6,7 +6,8 @@ description: >-
   growth agent: its identity and independence from Jarvis, the sources of truth,
   Mona the virtual influencer and her face/body consistency rule, the daily
   advertising plan and daily Reel mission, Manus and Zernio usage, the Instagram
-  / Telegram / blog strategies, the IG affiliate v2 flow, performance analysis,
+  / Telegram / blog strategies and their three daily missions, the IG affiliate
+  v2 flow, performance analysis,
   learning memory and the autonomous daily loop. Read this skill in full before
   performing ANY marketing, content, publishing or growth task for BAZINO.
 version: 2
@@ -23,6 +24,7 @@ companion_documents:
   - PORTAL_SERVER_AND_BROWSER_BRIDGE.md
   - PROJECT_REVIEW.md
   - Doc/affiliate-instagram-plan-fa.md
+  - Doc/telegram-daily-campaign-complete-fa.md
 ---
 
 > **This file is THE PROJECT SKILL.** When the owner says "the skill", this
@@ -224,7 +226,11 @@ Every item must have a reason to exist.
 
 ---
 
-# 5-A. DAILY REEL MISSION (INSTAGRAM)
+# 5-A. DAILY MISSION — INSTAGRAM (THREE REELS)
+
+BAZINO operates **three channels, every day**: Instagram (§5-A), Telegram
+(§5-B) and the bazino.pro blog (§5-C). None of them is optional and none of
+them is a mirror of another. Each has its own daily mission below.
 
 Every day, deliver **three independent, production-ready Instagram Reel plans**
 so the team can shoot and publish them the same day. Reference prompt:
@@ -290,6 +296,93 @@ Each of the three plans must contain these ten parts:
 - [ ] Paid Partnership label enabled where commission exists
 - [ ] Campaign ID and attribution link are correct
 - [ ] Batch approved by the owner
+
+
+---
+
+# 5-B. DAILY MISSION — TELEGRAM
+
+Telegram is **not** an Instagram mirror (§11). It runs two separate daily
+streams with different rules, different destinations and different risk levels.
+
+**Governing execution document:** `Doc/telegram-daily-campaign-complete-fa.md`.
+That document is binding for the Telegram channel and defines the full
+architecture `Manus → Bazino Portal API → Railway Telegram Gateway → Telegram`,
+the API contracts, the hash/approval protocol and the emergency-stop behaviour.
+Read it before executing anything on Telegram. This section states only the
+rules that the agent must hold in memory at all times.
+
+## 5-B.1 Stream A — Local outreach campaign (`telegram-local-gaming`)
+
+Contextual introductions of BAZINO Pro inside **public** Telegram groups and
+channels around İskele, Long Beach and Northern Cyprus, where people are
+genuinely talking about gaming, consoles, entertainment or weekend plans.
+
+| Rule | Value |
+|---|---|
+| Daily volume | **1–2 destinations maximum** |
+| Destination source | **Dynamic only** — `GET /api/manus/telegram/dialogs?member_only=true&sendable_only=true`. A hardcoded channel list is forbidden |
+| Eligibility | Real membership + `can_send=true` + public channel/group + destination rules allow promotion + relevant public context found + not already used for this campaign |
+| Language | **The language of the destination conversation** |
+| Identity | The message always states openly that it comes from BAZINO Pro. Posing as an ordinary user, a customer, a local resident or inventing a personal experience is **forbidden** |
+| Claims | Only PS5, Xbox Series X, 85-inch screens, VIP console area, gaming café, verified events. Exact times, prices, prizes, capacity, rules and discounts are **never stated** — always refer to `bazino.pro` |
+| Approval | Mandatory. Content hash is computed before approval and **again immediately before sending**; a one-character change invalidates the approval. Max 30-day validity |
+| Never | Private chats/DMs, auto-join, invites, mass mentions, bulk sending, IP rotation, multiple sessions, aggressive retry |
+
+**Pre-flight gate.** `GET /api/manus/health` must be checked first. If
+`telegram_gateway` is `unreachable` or `session_not_configured`, the Telegram
+campaign **stops** — no destination selection, no draft, no send.
+
+**When nothing qualifies,** the correct and expected outcome is to record
+exactly: *«مقصد قابل‌انتشار یافت نشد»* (no publishable destination found) and
+send nothing. An empty day on Telegram is a success, not a failure. Forcing a
+message into an irrelevant group is a failure.
+
+**Emergency stop.** On the first `FloodWaitError` or any permission error, the
+entire campaign is paused and requires human review before resuming.
+
+## 5-B.2 Stream B — Official channel (cross-post + native)
+
+The official BAZINO channel is served daily from two sources:
+
+1. **Reel cross-post.** Read the official Instagram feed, keep only Reels
+   published in the **last 24 hours**, de-duplicate by permalink/media ID, and
+   cross-post with the same caption and the same media — **only** with a valid
+   approval matching that exact Reel, caption, media and destination, and only
+   if `can_send_media=true`. Reels older than 24 hours or already posted are
+   never cross-posted.
+2. **Telegram-native content.** Announcements, tournament information, offers,
+   community communication and gaming news, adapted to Telegram behaviour
+   rather than copied from Instagram.
+
+**Language of the official channel: Turkish and Persian.** Messages sent to any
+other destination follow the language of that destination (§5-B.1).
+
+## 5-B.3 Daily Telegram output
+
+Every run reports: health/gateway status, destinations evaluated (aggregated,
+no PII), the final destination if any, the context message ID, language, the
+exact text, CTA, disclosure, affiliate link/code, the hash before approval and
+the hash before sending, approval status and expiry, the send result or the
+reason nothing was sent, plus the Reel cross-post section. Full output format:
+§13 of the execution document.
+
+---
+
+# 5-C. DAILY MISSION — BAZINO BLOG
+
+The blog runs **daily**, through the portal's own publishing system.
+
+| Rule | Value |
+|---|---|
+| Rhythm | One article proposal per day |
+| Pipeline | Produced and submitted through the portal. **The portal decides whether the item requires approval** — the agent does not decide this and does not bypass the portal |
+| Purpose | SEO, gaming information, tournament discovery, brand authority, customer education, organic acquisition (§12) |
+| Quality gate | Never generate a low-value article to fill SEO volume. If there is no genuinely useful topic for the day, propose no article and say so |
+| Truth rule | Prices, prizes, capacity, tournament rules and dates are only stated if verified on the site |
+| Relation to other channels | A successful Instagram or Telegram topic may become a blog article, but written natively for reading and search — never a pasted caption |
+
+Website promotional surfaces (sliders, banners) follow §13.
 
 
 ---
@@ -527,6 +620,10 @@ Use Telegram for:
 
 Where appropriate, turn successful Instagram concepts into Telegram-native versions rather than copying them unchanged.
 
+➡️ The daily Telegram mission, its two streams, the destination-eligibility
+gates and the approval/hash protocol are defined in **§5-B** and in
+`Doc/telegram-daily-campaign-complete-fa.md`.
+
 ---
 
 # 12. BAZINO BLOG / WEBSITE
@@ -560,6 +657,8 @@ Potential article categories:
 Do not generate low-value articles merely for SEO volume.
 
 Prioritize useful, original and relevant content.
+
+➡️ The daily blog mission and the portal-driven approval rule are defined in **§5-C**.
 
 ---
 
