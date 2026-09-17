@@ -19,15 +19,21 @@
 
 ```
 CHARACTER LOCK — identical in all three videos:
-GIRL, age 8: long curly light-brown hair past the shoulders,
-plain white short-sleeved t-shirt, blue denim jeans, barefoot.
-BOY, age 10: short messy light-brown hair, plain white t-shirt,
-dark blue denim jeans, barefoot.
-MOTHER, age 35: shoulder-length wavy brown hair, loose white
-linen shirt, beige tailored trousers, barefoot.
-Same two children and same mother throughout, same faces,
-same clothing, no variation.
+LEA, girl age 11: long wavy light-brown hair past the shoulders,
+warm brown eyes, plain white t-shirt, blue denim jeans.
+YOUNA, boy age 15: short dark brown hair, warm brown eyes,
+plain white t-shirt, dark blue denim jeans.
+HASTI, mother age 35: long wavy golden-light-brown hair with
+blonde highlights, tanned Mediterranean skin, warm brown eyes,
+cream linen shirt, beige trousers.
+Same three characters throughout, same faces, same clothing,
+no variation. Match the attached reference images exactly.
 ```
+
+**تصاویر مرجع شخصیت‌ها** (در هر تولید به مدل داده شوند):
+- `Assets/hasti/hasti-portrait-avatar-01.jpg`
+- `Assets/youna/youna-portrait-avatar-01.jpg`
+- `Assets/lea/lea-portrait-avatar-01.jpg`
 
 ⚠️ **توصیف متنی به‌تنهایی کافی نیست.** برای ویدئوی ۲ و ۳ حتماً **آخرین فریم ویدئوی قبلی**
 را هم به‌عنوان تصویر مرجع آپلود کنید، نه فقط متن.
@@ -47,7 +53,10 @@ same clothing, no variation.
 
 | فایل | کاربرد |
 |---|---|
-| `frame_1.jpg` | فریم اول ویدئوی ۱ — ۹۴۰×۱۶۷۲ (۹:۱۶) |
+| `frame_1-video1.jpg` | فریم اول ویدئوی ۱ — خانه، هرج‌ومرج · ۷۶۸×۱۳۷۶ |
+| `frame_1-video2.jpg` | فریم اول ویدئوی ۲ — خروج از در · ۹۴۱×۱۶۷۲ |
+| `frame_1-video3.jpg` | فریم اول ویدئوی ۳ — داخل گیم‌نت · ۷۶۸×۱۳۷۶ |
+| `portrait-mother.jpg` · `portrait-boy-15.jpg` · `portrait-girl-11.jpg` | پرتره‌های اولیه (منبع شخصیت‌ها) |
 | `prompt-1.md` | پرامپت ویدئوی ۱ (ثانیه ۰–۱۰) — خانه ✅ |
 | `prompt-2.md` | پرامپت ویدئوی ۲ (ثانیه ۱۰–۲۰) — بیرون → گیم‌نت ✅ |
 | `prompt-3.md` | پرامپت ویدئوی ۳ (ثانیه ۲۰–۳۰) — مونا ✅ |
@@ -58,11 +67,13 @@ same clothing, no variation.
 
 ## زنجیره تصاویر مرجع
 
-| ویدئو | تصاویر لازم |
-|---|---|
-| ۱ | `frame_1.jpg` |
-| ۲ | آخرین فریم ویدئو ۱ + عکس داخلی گیم‌نت (`Assets/club/club-wide-03.jpeg`) |
-| ۳ | فریمی از ویدئو ۲ + عکس مونا (`Assets/mona/…`) + عکس گیم‌نت |
+| ویدئو | تصویر `frame_1` | تصاویر مرجع اضافی |
+|---|---|---|
+| ۱ | `frame_1-video1.jpg` | هستی · یونا · لیا |
+| ۲ | `frame_1-video2.jpg` | یونا · لیا · `Assets/club/club-tall-02.jpeg` |
+| ۳ | `frame_1-video3.jpg` | یونا · لیا · مونا (`Assets/mona/mona-brandwear-fullbody-01.png`) · `Assets/club/club-tall-02.jpeg` |
+
+⚠️ هر سه فریم با تصاویر مرجع شخصیت‌ها ساخته شده‌اند، پس چهره‌ها در کل ریل ثابت است.
 
 ---
 
