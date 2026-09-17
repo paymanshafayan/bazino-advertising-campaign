@@ -245,40 +245,47 @@ the agent must hold in memory at all times. Reference prompt:
 Every day, deliver **three independent, production-ready Instagram Reel plans**
 so the team can shoot and publish them the same day.
 
-## 5-A.1 Content categories
+## 5-A.1 The daily three — current operating mode
 
-Seven categories exist (execution document §4). Three of them are **strategic
-pillars that must be covered continuously** — they carry the business
-objectives:
+**Format: three Instagram Reels per day. Nothing else.**
+Four-slide carousels are **not required in the current mode** and should not be
+produced unless the owner reactivates them. (The portal still enforces the
+four-slide Turkish-caption rule *if* an affiliate carousel is ever submitted —
+see §14-A — but that path is not in use.)
 
-| # | Pillar category | Focus | Rule source |
-|---|---|---|---|
-| 1 | **BAZINO SAFE** | Parents, safety, peace of mind, a trustworthy place for their children | `Doc/prestige-safe-campaign-draft-fa.md` |
-| 2 | **TOURNAMENT** | Competitions — current focus: **FC 2026 / FIFA 26, every Saturday**, started Saturday 12 September 2026 | Verified facts from the site |
-| 3 | **AFFILIATE** | Invite Your Squad campaign | `Doc/affiliate-instagram-plan-fa.md` + §14-A |
-
-Four supporting categories rotate through the weekly calendar: **Fun &
-Excitement**, **Venue & Facilities**, **Community & Friends**, and
-**Seasonal / Trend / Music**.
-
-The daily set of three Reels must keep the three pillars alive. A supporting
-category may take one of the three slots on a given day, but **no pillar may go
-uncovered for a whole week**.
-
-## 5-A.1.1 Weekly calendar (operational pattern, adjustable)
-
-| Day | Theme | Format |
+| Slot | Category | Content |
 |---|---|---|
-| Saturday | FC/FIFA tournament, weekly competition | Event Reel + reminder Story |
-| Sunday | Safety and family | Emotional or experience-led Reel |
-| Monday | Fun and excitement | Trend Reel or Mona reaction |
-| Tuesday | Venue and facilities | Tour Reel or Carousel |
-| Wednesday | Affiliate / invite friends | Instructional or scripted Reel |
-| Thursday | VIP, console, group experience | Gaming-lifestyle Reel |
-| Friday | Event reminder or community content | Short Reel, Story, permitted reshare |
+| 1 | **TOURNAMENT** | The currently active competition. Today: FC 2026 / FIFA 26, every Saturday |
+| 2 | **AFFILIATE** | Invite Your Squad (§14-A) |
+| 3 | **SAFE ⇄ PRESTIGE — alternating** | Odd day → BAZINO SAFE (parents, a trustworthy environment). Even day → PRESTIGE (quality, belonging, the premium experience). One per day, never both |
 
-Before preparing a batch, review the current feed so the same topic, framing or
-composition does not repeat back to back.
+Slot 3 alternates on a strict day-by-day cycle. Record which of the two ran, so
+the next day takes the other one. If a day is skipped, the alternation resumes
+from whichever was **not** used last.
+
+## 5-A.1.1 Growth Reels — trend and viral content
+
+Beyond the three fixed slots, Reels may be designed and published around
+**trending or viral topics** to grow reach and gain followers for the page.
+This is encouraged, not merely tolerated: the page needs an audience before the
+campaign slots can convert anyone.
+
+Binding conditions:
+
+- Same **three-Reel batch** structure and the same owner approval (§5-A.3).
+- All standing rules apply without exception: Mona's consistency (§6-A), the
+  truth rule, the language ratio, the visual palette, the technical spec.
+- A trend must be **translated into BAZINO's world** (§22), not copied. If a
+  trend cannot be connected to gaming, the venue, the community or the
+  experience, it is not used.
+- A growth Reel never makes a campaign promise and never carries an
+  unverified offer.
+- Growth Reels do not replace the three fixed slots on a given day; they form
+  their own batch.
+
+Supporting themes available for growth batches: **Fun & Excitement**,
+**Venue & Facilities**, **Community & Friends**, **Seasonal / Trend / Music**
+(full treatment per category in the execution document §4).
 
 ## 5-A.2 Mandatory output for each Reel
 
@@ -300,7 +307,7 @@ Each of the three plans must contain these ten parts:
 | Rule | Detail |
 |---|---|
 | **Language** | Fixed Reel ratio: **80% Turkish, 10% Persian, 10% English**. Default post caption is Turkish. Russian is not a default for voice Reels. A Persian translation is always produced **for internal review only** and is never added to the published caption unless that content's brief approves it |
-| **Carousel posts** | Four slides in order: Turkish → Persian → English → Russian. All slides must match in framing, rotation, dimensions, color, text timing and CTA position |
+| **Carousel posts** | Not in use in the current mode. If ever reactivated: four slides in order Turkish → Persian → English → Russian, matching in framing, rotation, dimensions, color, text timing and CTA position |
 | **Technical** | 9:16, 1080×1920. 8–15 seconds for fast content, longer only when the narrative requires it. First frame instantly legible, never a black fade. Text kept clear of edges and Instagram UI zones |
 | **Reel timing** | 0–2s hook · 2–7s main action · 7–10s benefit · 10–15s CTA |
 | **Cover** | Consistent with the page's fixed template, legible in the grid, text never over Mona's face |
@@ -317,7 +324,8 @@ Each of the three plans must contain these ten parts:
 
 ```
 1. Read this skill and the reference document for the category
-2. Produce three Reel plans following the ten-part structure
+2. Determine slot 3 for today: SAFE or PRESTIGE, whichever did not run last
+   (§5-A.1). Then produce three Reel plans following the ten-part structure
 3. Pick assets from Assets/club/ (vertical for Reels → club-tall-*)
 4. Generate Mona imagery if needed — always with the reference image (§6-A.2)
 5. QC Mona's face and body consistency
@@ -376,6 +384,8 @@ indicator:
 | Fun & excitement | Reach, retention, likes, shares |
 | Tournament | Comments, registration clicks, DMs, reservations |
 | Affiliate | Keyword comments, private replies, link clicks, qualified sign-ups |
+| Prestige | Saves, profile visits, follower growth, sentiment in comments |
+| Growth / trend | Reach, non-follower reach, follows gained, shares |
 | Venue & facilities | Profile visits, calls, reservation clicks, DMs |
 | Community & friends | Shares, tags, comments, repeat visits |
 
