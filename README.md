@@ -22,6 +22,8 @@
 | [`Doc/prestige-safe-campaign-draft-fa.md`](Doc/prestige-safe-campaign-draft-fa.md) | کمپین Prestige & Safe + BAZINO CLUB |
 | [`Doc/business-directories-report-fa.md`](Doc/business-directories-report-fa.md) | پورتال‌های ثبت کسب‌وکار و سئوی محلی |
 | [`Daily/daily-reels-prompt.md`](Daily/daily-reels-prompt.md) | پرامپت ماموریت روزانه تولید Reel |
+| [`PORTAL_OVERVIEW.md`](PORTAL_OVERVIEW.md) | شرح کامل امکانات و ساختار پورتال bazino.pro |
+| [`PORTAL_SERVER_AND_BROWSER_BRIDGE.md`](PORTAL_SERVER_AND_BROWSER_BRIDGE.md) | راه‌اندازی سرور پورتال + Chromium + پل CDP مرورگر |
 | [`Mona/`](Mona/) | شناسنامه شخصیت مونا (فارسی + انگلیسی) |
 | [`Assets/mona/`](Assets/mona/) | تصاویر مرجع مونا |
 | [`Assets/club/`](Assets/club/) | عکس‌های محل BAZINO |
