@@ -49,6 +49,43 @@ npm test
 
 ---
 
+## ۰٫۵ ✅ اجرای تأییدشده در این سندباکس (2026-09-17)
+
+کل رویه بخش‌های الف و ب در این سندباکس **واقعاً اجرا و تأیید شد**:
+
+| گام | نتیجه واقعی |
+|---|---|
+| `npm install --ignore-scripts` | ✅ 597 پکیج در ۱۳ ثانیه |
+| `node-gyp rebuild --nodedir=/usr/local` | ✅ `gyp info ok` — ۱۰۲ ثانیه |
+| تست SQLite | ✅ `SQLITE OK { a: 42 }` |
+| بوت سرور (`npx tsx server.ts`) | ✅ پورت 3000 + 24678 روی `0.0.0.0` |
+| `GET /` | ✅ HTTP 200 |
+| `GET /api/systems` | ✅ JSON چهارزبانه سیستم‌ها |
+| `GET /api/state` بدون توکن | ✅ `AUTH_REQUIRED` (رفتار درست) |
+| `npm ci` در browser-test | ✅ بدون رفتن به CDN پلی‌رایت |
+| `node bootstrap.cjs --ready` | ✅ `/tmp/chromium` ≈ ۲۰۰MB |
+| `ldd /tmp/chromium` | ✅ صفر `not found` |
+| `node verify-env.mjs` | ✅ `OK: browser=149.0.7827.0 h1=hello bazino` |
+| کپی فونت Vazirmatn | ✅ ۹ فایل TTF در `/tmp/fonts/Vazirmatn/` |
+| اسکرین‌شات صفحه اصلی | ✅ رندر کامل، تصویر Hero = عکس واقعی سالن |
+| رندر متن فارسی | ✅ حروف چسبیده، اعداد فارسی، راست‌چین |
+
+**لاگ بوت واقعی:**
+
+```
+[Security] JWT_SECRET is not set in the environment. Using an INSECURE development-only fallback secret.
+[Database Engine] Active provider initialized: SQLite
+[Storage] data dir: /home/user/bazino-gamenet-portal (cwd — set BAZINO_DATA_DIR for persistence)
+[SQLite] No users found. Creating a minimal fallback admin.
+[SQLite] Seeded 28 Instagram campaign setting row(s) (existing keys left untouched).
+[Parent API] Parent routes registered: /api/parent/*
+[BAZINO Backend Server] is running beautifully with SQLite on http://0.0.0.0:3000
+```
+
+> **نکته‌ای که در سند اصلی نبود:** اسکریپت‌های Playwright باید **داخل پوشه `browser-test`** اجرا شوند (مثلاً `/home/user/browser-test/shot.mjs`)، نه در `/tmp`. اگر بیرون آن پوشه باشند، `ERR_MODULE_NOT_FOUND: Cannot find package 'playwright'` می‌گیرید چون `node_modules` آنجاست.
+
+---
+
 ## ۱. مشخصات محیط سندباکس
 
 | مورد | مقدار |
