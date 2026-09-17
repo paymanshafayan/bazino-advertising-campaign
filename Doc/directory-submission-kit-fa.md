@@ -21,13 +21,15 @@
 
 | مورد | وضعیت | چرا لازم است |
 |---|---|---|
-| ایمیل رسمی (مثلاً `info@bazino.pro`) | ❓ نامشخص | تقریباً همه فرم‌ها می‌خواهند |
-| مختصات دقیق GPS | ❌ ندارد | برای OpenStreetMap و نقشه‌ها ضروری |
+| ایمیل رسمی | ✅ `Bazinopro@gmail.com` | تقریباً همه فرم‌ها می‌خواهند |
+| مختصات دقیق GPS | ✅ `35.2634752, 33.9088575` | از پروفایل گوگل استخراج شد |
 | لوگوی بازینو (PNG شفاف) | ❌ در ریپو نیست | فیلد لوگو در اکثر پورتال‌ها |
-| عکس نمای بیرونی با تابلو | ❌ ندارد | **برای احراز گوگل حیاتی است** |
+| عکس نمای بیرونی با تابلو | ❌ ندارد | برای گوگل دیگر لازم نیست (تأیید شده) — ولی برای سایر پروفایل‌ها مفید است |
 | نام کانال تلگرام رسمی | ❓ نامشخص | فیلد اختیاری — فعلاً خالی بماند |
 
-> 📍 **گرفتن مختصات GPS:** در محل بایستید، Google Maps را باز کنید، روی موقعیت خود لمس طولانی کنید؛ عدد نمایش‌داده‌شده را یادداشت و در `HANDOFF.md` ثبت کنید.
+> ✅ **مختصات از پروفایل تأییدشده گوگل گرفته شد** — نیازی به اندازه‌گیری در محل نیست.
+
+> 🎉 **خبر مهم:** پروفایل Google Business از قبل **ثبت و تأیید شده** است (`BAZINO - PS5 Gaming Center`، دسته `Video arcade`، ۵.۰ از ۲ نظر). سخت‌ترین مرحله از قبل انجام شده و گام ۸ این سند دیگر بلاک نیست.
 
 ---
 
@@ -37,20 +39,24 @@
 
 | فیلد | مقدار |
 |---|---|
-| Business Name | `Bazino Pro` |
-| Address (EN) | `Derviş İzzigil Sokak No.12, İskele — Vista Mare Main Lobby, Shop No.5` |
-| Address (TR) | `Derviş İzzigil Sokak No.12, İskele — Vista Mare Ana Lobi, Dükkan No.5` |
-| City | `İskele` |
-| Region | `İskele District` |
-| Country | `Cyprus` / `Northern Cyprus (KKTC)` — هر کدام در فرم موجود بود |
+| Business Name | `BAZINO - PS5 Gaming Center` |
+| Address | `İskele, Long Beach, Mackenzie Square, Vista Mare, Lobby, Unit No. 5` |
+| City | `İskele` (در گوگل: `Yeni İskele`) |
+| Country | `Cyprus` / `Northern Cyprus (KKTC)` |
 | Phone | `+90 539 133 37 47` |
-| Hours | `24/7` (همه روزهای هفته، ۲۴ ساعته) |
+| Hours | `24/7` |
+| Latitude | `35.2634752` |
+| Longitude | `33.9088575` |
+| Plus Code | `7W75+9G Yeni İskele` |
 | Website | `https://bazino.pro` |
 | Instagram | `https://instagram.com/bazinopro` |
+| Email | `Bazinopro@gmail.com` |
 
 ### ⚠️ نام کسب‌وکار — دقت کنید
 
-در فیلد نام **فقط** بنویسید `Bazino Pro`. اضافه‌کردن کلیدواژه یا شهر (مثل «Bazino Pro Gaming Lounge İskele») هم خلاف قوانین گوگل است و هم شایع‌ترین علت رد شدن احراز هویت (۲۶٪ ردها). نام پروفایل باید **دقیقاً با تابلوی فیزیکی مغازه یکی باشد**.
+نام رسمی **`BAZINO - PS5 Gaming Center`** است — همان چیزی که در پروفایل تأییدشده گوگل ثبت شده. در **همه** پورتال‌ها دقیقاً همین نوشته شود.
+
+⚠️ نام `Bazino Pro` **منسوخ است** و دیگر نباید در هیچ فرم ثبتی استفاده شود. (`@bazinopro` فقط هندل اینستاگرام است و فرق دارد.)
 
 ---
 
@@ -98,7 +104,7 @@
 
 **Türkçe:**
 ```
-Bazino Pro, İskele Long Beach bölgesinde yer alan modern bir oyun salonudur. PlayStation 5 ve Xbox Series X konsolları, 85 inç büyük ekranlar ve VIP konsol alanı ile arkadaşlarınızla rahat bir oyun deneyimi sunar.
+BAZINO, İskele Long Beach bölgesinde yer alan modern bir oyun salonudur. PlayStation 5 ve Xbox Series X konsolları, 85 inç büyük ekranlar ve VIP konsol alanı ile arkadaşlarınızla rahat bir oyun deneyimi sunar.
 
 Haftanın her günü 24 saat açığız. Düzenli konsol turnuvaları düzenlenmektedir. Oyun kafe ortamında oturabilir, tek başınıza veya grup halinde oynayabilirsiniz.
 
@@ -107,7 +113,7 @@ Güncel bilgi ve etkinlikler için: bazino.pro
 
 **English:**
 ```
-Bazino Pro is a modern gaming lounge located in the Long Beach area of İskele, Northern Cyprus. We offer PlayStation 5 and Xbox Series X consoles, 85-inch large screens and a dedicated VIP console area for a comfortable gaming experience with friends.
+BAZINO is a modern gaming lounge located in the Long Beach area of İskele, Northern Cyprus. We offer PlayStation 5 and Xbox Series X consoles, 85-inch large screens and a dedicated VIP console area for a comfortable gaming experience with friends.
 
 Open 24 hours, every day of the week. Regular console tournaments are held. Relax in our gaming café environment and play solo or in groups.
 
@@ -116,7 +122,7 @@ For current information and events: bazino.pro
 
 **Русский:**
 ```
-Bazino Pro — современный игровой клуб в районе Лонг Бич, Искеле, Северный Кипр. К вашим услугам консоли PlayStation 5 и Xbox Series X, большие экраны 85 дюймов и отдельная VIP-зона для комфортной игры с друзьями.
+BAZINO — современный игровой клуб в районе Лонг Бич, Искеле, Северный Кипр. К вашим услугам консоли PlayStation 5 и Xbox Series X, большие экраны 85 дюймов и отдельная VIP-зона для комфортной игры с друзьями.
 
 Работаем круглосуточно, семь дней в неделю. Регулярно проводятся консольные турниры. В нашем игровом кафе можно отдохнуть и поиграть одному или компанией.
 
@@ -127,11 +133,11 @@ Bazino Pro — современный игровой клуб в районе Л
 
 **English:**
 ```
-Bazino Pro is a modern gaming lounge in the Long Beach area of İskele, Northern Cyprus, located in the main lobby of Vista Mare.
+BAZINO is a modern gaming lounge in İskele, Northern Cyprus, located in the Vista Mare lobby at Mackenzie Square, Long Beach.
 
 We offer PlayStation 5 and Xbox Series X consoles paired with 85-inch large screens, plus a dedicated VIP console area for groups who want a more private setup. Our gaming café environment is built for both focused play and hanging out with friends.
 
-Bazino Pro is open 24 hours a day, seven days a week, which makes it a practical option for students and residents with irregular schedules, as well as visitors staying in the Long Beach area.
+BAZINO is open 24 hours a day, seven days a week, which makes it a practical option for students and residents with irregular schedules, as well as visitors staying in the Long Beach area.
 
 We host regular console tournaments. Details of upcoming events, opening arrangements and current activities are published on our website and Instagram.
 
@@ -141,11 +147,11 @@ Instagram: @bazinopro
 
 **Türkçe:**
 ```
-Bazino Pro, Kuzey Kıbrıs'ın İskele bölgesinde, Long Beach'te Vista Mare ana lobisinde yer alan modern bir oyun salonudur.
+BAZINO, Kuzey Kıbrıs'ın İskele bölgesinde, Long Beach'te Mackenzie Square'deki Vista Mare lobisinde yer alan modern bir oyun salonudur.
 
 PlayStation 5 ve Xbox Series X konsollarını 85 inç büyük ekranlarla birlikte sunuyoruz. Daha özel bir ortam isteyen gruplar için ayrılmış VIP konsol alanımız bulunmaktadır. Oyun kafe ortamımız hem odaklanarak oynamak hem de arkadaşlarla vakit geçirmek için tasarlanmıştır.
 
-Bazino Pro haftanın yedi günü 24 saat açıktır. Bu nedenle ders programı düzensiz olan öğrenciler, bölge sakinleri ve Long Beach'te konaklayan ziyaretçiler için uygun bir seçenektir.
+BAZINO haftanın yedi günü 24 saat açıktır. Bu nedenle ders programı düzensiz olan öğrenciler, bölge sakinleri ve Long Beach'te konaklayan ziyaretçiler için uygun bir seçenektir.
 
 Düzenli olarak konsol turnuvaları düzenliyoruz. Yaklaşan etkinlikler ve güncel bilgiler web sitemizde ve Instagram hesabımızda yayınlanır.
 
@@ -191,18 +197,20 @@ KKTC, esports, turnuva, tournament, VIP gaming, игровой клуб, Иск�
 
 | کلید | مقدار |
 |---|---|
-| `name` | `Bazino Pro` |
+| `name` | `BAZINO - PS5 Gaming Center` |
 | `amenity` | `internet_cafe` |
 | `leisure` | `amusement_arcade` |
-| `addr:street` | `Derviş İzzigil Sokak` |
-| `addr:housenumber` | `12` |
+| `addr:place` | `Mackenzie Square, Vista Mare` |
+| `addr:housenumber` | `5` |
 | `addr:city` | `İskele` |
 | `phone` | `+90 539 133 37 47` |
 | `website` | `https://bazino.pro` |
 | `opening_hours` | `24/7` |
 | `internet_access` | `wlan` |
 
-در توضیح تغییر (changeset comment) بنویسید: `Adding Bazino Pro gaming lounge in İskele`
+مختصات: `35.2634752, 33.9088575`
+
+در توضیح تغییر (changeset comment) بنویسید: `Adding BAZINO PS5 Gaming Center in İskele`
 
 ---
 
@@ -213,9 +221,9 @@ KKTC, esports, turnuva, tournament, VIP gaming, игровой клуб, Иск�
 **لینک:** https://kimibilin.com/b/iskele/ — دنبال دکمه «Firma Ekle» بگردید
 
 **فیلدها:**
-- Firma Adı: `Bazino Pro`
+- Firma Adı: `BAZINO - PS5 Gaming Center`
 - Kategori: `İnternet Kafe` (در صورت امکان `Eğlence` را هم اضافه کنید)
-- Adres: `Derviş İzzigil Sokak No.12, İskele — Vista Mare Ana Lobi, Dükkan No.5`
+- Adres: `İskele, Long Beach, Mackenzie Square, Vista Mare, Lobby, Unit No. 5`
 - Telefon: `+90 539 133 37 47`
 - Web: `https://bazino.pro`
 - Açıklama: **نسخه متوسط ترکی** از بخش ۳.۲
@@ -249,8 +257,8 @@ KKTC, esports, turnuva, tournament, VIP gaming, игровой клуб, Иск�
 
 قالب آماده برای وقتی ساعت تأیید شد:
 ```
-Название: Турнир FC 2026 в Bazino Pro
-Место: Bazino Pro, Vista Mare, Лонг Бич, Искеле
+Название: Турнир FC 2026 в BAZINO
+Место: BAZINO - PS5 Gaming Center, Vista Mare, Маккензи Сквер, Лонг Бич, Искеле
 Когда: каждую субботу, [ЧАС — ЖДЁМ ПОДТВЕРЖДЕНИЯ]
 Описание: Еженедельный консольный турнир FC 2026. Условия участия
 и регистрация на сайте bazino.pro
@@ -291,41 +299,24 @@ KKTC, esports, turnuva, tournament, VIP gaming, игровой клуб, Иск�
 
 ---
 
-### 🔴 گام ۸ — Google Business Profile (آخر از همه)
+### ✅ گام ۸ — Google Business Profile — **از قبل انجام شده**
 
 **لینک:** https://business.google.com
 
-**چرا آخر:** گوگل حضور کسب‌وکار در دایرکتوری‌های دیگر را به‌عنوان سیگنال اعتبار می‌سنجد. اگر گام‌های ۱ تا ۷ انجام شده باشند، احتمال قبولی به‌مراتب بالاتر است.
+🎉 پروفایل **ثبت، تأیید و تحت مالکیت** است. نیازی به احراز هویت ویدئویی نیست.
 
-**چک‌لیست اجباری پیش از اقدام:**
+| | |
+|---|---|
+| نام | BAZINO - PS5 Gaming Center |
+| دسته اصلی | Video arcade |
+| امتیاز | ۵.۰ (۲ نظر) |
+| Plus Code | 7W75+9G Yeni İskele |
 
-- [ ] تابلوی **دائمی** با نام `Bazino Pro` روی مغازه نصب است
-- [ ] نام در تابلوی راهنمای لابی Vista Mare درج شده
-- [ ] گام‌های ۱ تا ۷ انجام شده‌اند
-- [ ] شماره تلفن در همه جا دقیقاً یکسان است
-- [ ] مدارک آماده‌اند: ثبت کسب‌وکار، قبض، قرارداد اجاره
+**کارهای بهینه‌سازی (نه ثبت):** افزودن دسته‌های فرعی، توضیحات چندزبانه، عکس داخلی، ساعات تعطیلات.
 
-**مقادیر فرم:**
-- Business name: `Bazino Pro` ← **فقط همین، بدون هیچ اضافه‌ای**
-- Primary category: `Internet Cafe`
-- Additional: `Video Game Store`, `Amusement Center`
-- Description: **نسخه بلند انگلیسی** (بخش ۳.۳)
-- Hours: Open 24 hours — هر هفت روز
+⚠️ **دسته اصلی را عوض نکنید** — روی پروفایل تأییدشده ریسک بازبینی مجدد دارد. فقط دسته فرعی اضافه کنید.
 
-**ویدئوی احراز — ترتیب دقیق (یک‌نفس، بدون قطع):**
-1. تابلوی نام خیابان `Derviş İzzigil Sokak`
-2. ورودی و نمای بیرونی Vista Mare
-3. تابلوی راهنمای لابی که `Bazino Pro` در آن دیده شود
-4. تابلوی خود مغازه (Shop No.5)
-5. ورود به داخل
-6. کنسول‌ها و نمایشگرها
-7. مدرکی از فعالیت در محل: صندوق، دستگاه کارت‌خوان، یا قبض به نام کسب‌وکار
 
-❌ **در ویدئو نباید باشد:** چهره افراد، صدای صحبت، قطع و وصل، مونتاژ.
-
-پس از ارسال: **یک بار ارسال و ۵ روز کاری صبر**. ارسال مکرر روند را کند می‌کند.
-
-اگر رد شد: https://support.google.com/business/contact/local_appeals
 
 ---
 

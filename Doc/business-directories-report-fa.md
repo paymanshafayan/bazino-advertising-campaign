@@ -319,17 +319,19 @@ Waze در گزارش اصلی بود. اضافه می‌شود: **Apple Maps ا�
 
 | فیلد | مقدار رسمی |
 |---|---|
-| **Name** | Bazino Pro |
-| **Address (EN)** | Derviş İzzigil Sokak No.12, İskele — Vista Mare Main Lobby, Shop No.5 |
-| **Address (TR)** | Derviş İzzigil Sokak No.12, İskele — Vista Mare Ana Lobi, Dükkan No.5 |
+| **Name** | BAZINO - PS5 Gaming Center |
+| **Address** | İskele, Long Beach, Mackenzie Square, Vista Mare, Lobby, Unit No. 5 |
 | **Phone** | +90 539 133 37 47 |
 | **Hours** | ۲۴ ساعته، ۷ روز هفته |
+| **Lat / Lng** | 35.2634752 / 33.9088575 |
+| **Plus Code** | 7W75+9G Yeni İskele |
 | **Website** | https://bazino.pro |
 | **Instagram** | @bazinopro |
+| **Email** | Bazinopro@gmail.com |
 
-⚠️ حتی تفاوت «No.12» با «No: 12» یا «Sokak» با «Sk.» می‌تواند گوگل را به این نتیجه برساند که دو کسب‌وکار متفاوت‌اند. **از همین جدول کپی کنید.**
+⚠️ کوچک‌ترین تفاوت نگارشی می‌تواند گوگل را به این نتیجه برساند که دو کسب‌وکار متفاوت‌اند. **از همین جدول کپی کنید.**
 
-منبع رسمی این مقادیر: `HANDOFF.md` بخش «مشخصات گیم‌نت». اگر روزی تغییر کردند، اول آنجا اصلاح شود و بعد در همه پورتال‌ها.
+منبع رسمی: پروفایل تأییدشده Google Business، ثبت‌شده در `HANDOFF.md`. نام `Bazino Pro` و آدرس «Derviş İzzigil Sokak No.12» **منسوخ** شدند.
 
 ---
 
