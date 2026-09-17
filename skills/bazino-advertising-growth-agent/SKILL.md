@@ -24,6 +24,7 @@ companion_documents:
   - PORTAL_SERVER_AND_BROWSER_BRIDGE.md
   - PROJECT_REVIEW.md
   - Doc/affiliate-instagram-plan-fa.md
+  - Doc/instagram-daily-campaign-complete-fa.md
   - Doc/telegram-daily-campaign-complete-fa.md
 ---
 
@@ -226,23 +227,58 @@ Every item must have a reason to exist.
 
 ---
 
-# 5-A. DAILY MISSION — INSTAGRAM (THREE REELS)
+# 5-A. DAILY MISSION — INSTAGRAM
 
 BAZINO operates **three channels, every day**: Instagram (§5-A), Telegram
 (§5-B) and the bazino.pro blog (§5-C). None of them is optional and none of
 them is a mirror of another. Each has its own daily mission below.
 
-Every day, deliver **three independent, production-ready Instagram Reel plans**
-so the team can shoot and publish them the same day. Reference prompt:
+**Governing execution document:** `Doc/instagram-daily-campaign-complete-fa.md`.
+It holds the seven content categories in full (video ideas, Mona's movement,
+on-screen text and caption structure per category), the weekly calendar, the
+Reel/Post/Carousel production standards, the caption and hashtag architecture,
+the eight-stage production pipeline, the QC checklists and the daily content
+card. Read it before producing Instagram content. This section states only what
+the agent must hold in memory at all times. Reference prompt:
 `Daily/daily-reels-prompt.md`.
 
-## 5-A.1 The three fixed daily categories
+Every day, deliver **three independent, production-ready Instagram Reel plans**
+so the team can shoot and publish them the same day.
 
-| # | Category | Focus | Rule source |
+## 5-A.1 Content categories
+
+Seven categories exist (execution document §4). Three of them are **strategic
+pillars that must be covered continuously** — they carry the business
+objectives:
+
+| # | Pillar category | Focus | Rule source |
 |---|---|---|---|
 | 1 | **BAZINO SAFE** | Parents, safety, peace of mind, a trustworthy place for their children | `Doc/prestige-safe-campaign-draft-fa.md` |
-| 2 | **TOURNAMENT** | Competitions — current focus: **FIFA 26, every Saturday** | Verified facts from the site |
+| 2 | **TOURNAMENT** | Competitions — current focus: **FC 2026 / FIFA 26, every Saturday**, started Saturday 12 September 2026 | Verified facts from the site |
 | 3 | **AFFILIATE** | Invite Your Squad campaign | `Doc/affiliate-instagram-plan-fa.md` + §14-A |
+
+Four supporting categories rotate through the weekly calendar: **Fun &
+Excitement**, **Venue & Facilities**, **Community & Friends**, and
+**Seasonal / Trend / Music**.
+
+The daily set of three Reels must keep the three pillars alive. A supporting
+category may take one of the three slots on a given day, but **no pillar may go
+uncovered for a whole week**.
+
+## 5-A.1.1 Weekly calendar (operational pattern, adjustable)
+
+| Day | Theme | Format |
+|---|---|---|
+| Saturday | FC/FIFA tournament, weekly competition | Event Reel + reminder Story |
+| Sunday | Safety and family | Emotional or experience-led Reel |
+| Monday | Fun and excitement | Trend Reel or Mona reaction |
+| Tuesday | Venue and facilities | Tour Reel or Carousel |
+| Wednesday | Affiliate / invite friends | Instructional or scripted Reel |
+| Thursday | VIP, console, group experience | Gaming-lifestyle Reel |
+| Friday | Event reminder or community content | Short Reel, Story, permitted reshare |
+
+Before preparing a batch, review the current feed so the same topic, framing or
+composition does not repeat back to back.
 
 ## 5-A.2 Mandatory output for each Reel
 
@@ -263,12 +299,17 @@ Each of the three plans must contain these ten parts:
 
 | Rule | Detail |
 |---|---|
-| **Language** | Fixed Reel ratio: **80% Turkish, 10% Persian, 10% English**. Default post caption is Turkish. Russian is not a default for voice Reels |
-| **Carousel posts** | Four slides in order: Turkish → Persian → English → Russian |
+| **Language** | Fixed Reel ratio: **80% Turkish, 10% Persian, 10% English**. Default post caption is Turkish. Russian is not a default for voice Reels. A Persian translation is always produced **for internal review only** and is never added to the published caption unless that content's brief approves it |
+| **Carousel posts** | Four slides in order: Turkish → Persian → English → Russian. All slides must match in framing, rotation, dimensions, color, text timing and CTA position |
+| **Technical** | 9:16, 1080×1920. 8–15 seconds for fast content, longer only when the narrative requires it. First frame instantly legible, never a black fade. Text kept clear of edges and Instagram UI zones |
+| **Reel timing** | 0–2s hook · 2–7s main action · 7–10s benefit · 10–15s CTA |
+| **Cover** | Consistent with the page's fixed template, legible in the grid, text never over Mona's face |
+| **Hashtags** | Five layers — brand · location · topic · game/event · CTA/affiliate. Max 30; a focused relevant set beats filling the cap |
 | **Batching** | Publish in fixed batches of three (three posts or three Reels), only after explicit approval of that batch |
-| **Audio** | Every Reel with speech must have embedded audio and full lip-sync. Detached or mismatched audio is not a final version |
+| **Audio** | Every Reel with speech must have embedded audio and lip-sync. Detached or unchecked audio is not a final version. If exact lip-sync is technically impossible, the output is labeled **"best-effort audio match"** and must not be presented as precise lip-sync (§26) |
 | **Visual palette** | Black/navy, hero yellow, neon blue, console atmosphere |
-| **Links** | No direct site link in promotional captions; refer to the bio link only |
+| **Links** | No direct site link in promotional captions; refer to the bio link only. **Exception:** tournament content uses the official CTA `Detaylar ve kayıt: bazino.pro`. General CTA: `Detaylar ve rezervasyon için Bio'daki bağlantıya göz at.` |
+| **Forbidden claims** | No unverified PC/RTX/Core i9 hardware claims, no customer counts, no revenue figures, no rankings, no guaranteed wins, no "100% safe", "constant supervision" or "guaranteed protection" |
 | **Truth rule** | ❌ Never invent a discount, prize, commission, date or condition that is not verified on the site |
 | **Three distinct Reels** | They must not resemble each other, and all three must be genuinely producible that same day |
 
@@ -281,9 +322,14 @@ Each of the three plans must contain these ten parts:
 4. Generate Mona imagery if needed — always with the reference image (§6-A.2)
 5. QC Mona's face and body consistency
 6. Compliance check: language, palette, truth rule, partnership label
-7. Save output to Output/Reels/YYYY-MM-DD/
+7. Save output to Output/Reels/YYYY-MM-DD/ using the daily content card
+   (execution document §12)
 8. Send the batch for owner approval
 9. Publish only after explicit approval
+10. AFFILIATE content only: immediately after publishing, take the exact
+    numeric Media ID from the official publish/Meta API response and register
+    it with the portal endpoint using Idempotency-Key `instagram:<media_id>`
+    (§5-A.6)
 ```
 
 ## 5-A.5 Pre-publication checklist
@@ -296,6 +342,45 @@ Each of the three plans must contain these ten parts:
 - [ ] Paid Partnership label enabled where commission exists
 - [ ] Campaign ID and attribution link are correct
 - [ ] Batch approved by the owner
+- [ ] 9:16 / 1080×1920, first frame not black, audio and codec correct
+- [ ] Turkish is natural and error-free; Persian text renders correctly RTL
+- [ ] Lip-sync verified, or the best-effort label applied
+- [ ] Cover matches the page template and text is not over Mona's face
+
+## 5-A.6 Affiliate post-publication registration
+
+For every affiliate media that asks for a comment:
+
+1. Confirm the media belongs to the affiliate campaign.
+2. Take the exact numeric Media ID from the official Instagram/Meta API
+   response — never reconstruct or guess it.
+3. Record media type (`post` / `reel` / `story`) and the publish time in
+   ISO 8601.
+4. Call the official portal endpoint with `Idempotency-Key` set to
+   `instagram:<media_id>`.
+5. Never print the token in output, logs or reports.
+6. An idempotent duplicate response means no new record was created — that is a
+   success, not an error.
+7. Report the Media-ID registration result **separately** from the publish
+   result. Registering a Media ID does **not** mean the campaign is approved or
+   that commission is payable.
+
+## 5-A.7 Per-category success metrics
+
+Success is never measured by views alone (§17). Each category has its own
+indicator:
+
+| Category | Primary indicators |
+|---|---|
+| Safety & family | Saves, shares, profile visits, bio clicks |
+| Fun & excitement | Reach, retention, likes, shares |
+| Tournament | Comments, registration clicks, DMs, reservations |
+| Affiliate | Keyword comments, private replies, link clicks, qualified sign-ups |
+| Venue & facilities | Profile visits, calls, reservation clicks, DMs |
+| Community & friends | Shares, tags, comments, repeat visits |
+
+Always report the measurement window. Visible views and likes must never be
+interpreted as revenue, reservations or confirmed conversions.
 
 
 ---
@@ -722,7 +807,22 @@ This is the only valid affiliate flow. It matches the portal code as of
 2026-09-14 and the document `Doc/affiliate-instagram-plan-fa.md` (v2). Every
 piece of affiliate content must be built on it.
 
-1. The partner comments the campaign keyword (default `SQUAD`) under the Reel/post.
+1. The partner comments the campaign keyword under the Reel/post. The keyword
+   is **language-specific and must match the language of that content**:
+
+   | Language | Comment keyword |
+   |---|---|
+   | Turkish | `Hazır` |
+   | Persian | `آماده` |
+   | English | `Ready` |
+   | Russian | `Готово` |
+
+   ⚠️ The portal's configured default is currently `SQUAD`. Until the portal
+   campaign settings are updated to accept these four keywords, affiliate
+   content must not be published with a keyword the portal will not recognize.
+   Verify the configured keyword before publishing (open issue, HANDOFF §3).
+
+   For Turkish content the approved hook may open with `Hazır mısın?`.
 2. The system sends a Private Reply with guidance and a button — **containing no link**.
 3. The partner follows `@bazinopro`.
 4. The partner presses the "I followed" button (`partner_follow_check`).
@@ -743,6 +843,22 @@ passed, and placing a link in a public Private Reply.
 
 **Retired from v1:** system messaging the friend, the friend commenting a code
 (now `friend_flow_retired`), and `share_confirmed_by_friend_code`.
+
+**Approved guidance message** (the fixed wording sent after the keyword
+comment; translated per content language, meaning must not change without
+authorization):
+
+> پیج را فالو کن و بر روی دکمه فالو دارم بزن تا لینک دعوت اختصاصی خودت برات ارسال بشه بعد این لینک را برای دوستات بفرست. دوستانت با ثبت نام از طریق این لینک، کوپن تخفیف دریافت می کنند و تو هم از این به بعد از هر بار پرداخت آن ها در Bazino کمسیون دریافت می کنی.
+
+**Hard affiliate rules:**
+
+- Never fabricate a code or an invite link, and never hand-edit an issued link.
+- Never ask for an Instagram password.
+- Never claim an individual share, like or follow is confirmed by Meta unless it
+  was actually verified through the permitted path.
+- Never promise guaranteed earnings. Commission counts and payment terms are
+  stated only from the official source.
+- Media ID is taken from the official publish/Meta API response only (§5-A.6).
 
 KPIs: `Link activation rate` and `Link spread rate`.
 
