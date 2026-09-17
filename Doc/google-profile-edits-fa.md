@@ -72,3 +72,29 @@ wheelchair=yes
 ⚠️ `smoking=no` و `wheelchair=yes` بر اساس فرض وارد شدند — اگر اشتباه‌اند به من بگویید تا اصلاح کنم.
 
 📌 داده OSM به Maps.me، Organic Maps، Komoot، Facebook و ده‌ها اپ دیگر خوراک می‌دهد. ظرف چند دقیقه در OSM و چند روز در بقیه ظاهر می‌شود.
+
+---
+
+# پیوست ۳ — kibrisisletmeleri.com (۲۰۲۶-۰۹-۱۷) ✅ ثبت شد
+
+**حساب:** `Bazinopro@gmail.com` · رمز در `/home/user/cdp/kibris_pw.txt`
+**وضعیت:** «Firma kaydı oluşturuldu. Yönetici onayından sonra yayınlanır.» — در صف تأیید مدیر
+**بدون کپچا، بدون تأیید ایمیل** — ثبت پایه کاملاً رایگان
+
+| فیلد | مقدار |
+|---|---|
+| Firma Adı | BAZINO - PS5 Gaming Center |
+| Sektör | Restaurant ve Cafe & Bar ⚠️ |
+| İl / İlçe | İskele / Long beach |
+| Adres | Long Beach, Mackenzie Square, Vista Mare, Lobby, No. 5 |
+| Telefon / WhatsApp | +90 539 133 37 47 |
+| E-posta | Bazinopro@gmail.com |
+| Web | https://bazino.pro |
+| Hakkında | متن ترکی کامل (کافه + فروش اکسسوری) |
+
+⚠️ **نکته سکتور:** فهرست ۳۲ سکتور دارد و **هیچ دسته گیمینگ/اینترنت‌کافه‌ای ندارد**. نزدیک‌ترین `Restaurant ve Cafe & Bar` انتخاب شد چون کافه واقعاً بخشی از کسب‌وکار است. اگر ترجیح می‌دهید عوض شود، از پنل قابل ویرایش است.
+
+📌 پیام سیستم گفت ایمیل اطلاع‌رسانی به مدیر ارسال نشد (مشکل SMTP خودشان). اگر چند روز تأیید نشد، از طریق «İletişim» پیگیری کنید.
+
+## ⬜ گالری و لوگو
+فرم جای لوگو و تا ۱۰ عکس گالری دارد — هنوز آپلود نشده چون فایلی در دسترس نیست.
