@@ -1,0 +1,129 @@
+# پرامپت ۳ از ۳ — ثانیه ۲۰ تا ۳۰ (مونا رو به دوربین)
+
+**وضعیت:** ✅ تأییدشده توسط مالک
+**فریم اول:** آخرین فریم ویدئوی ۲ (بچه‌ها روی مبل در حال بازی) — با نام `frame_1` آپلود شود
+**تصویر مرجع مونا:** `Assets/mona/mona-brandwear-fullbody-01.png`
+**تصویر مرجع محیط:** `Assets/club/club-wide-03.jpeg`
+
+```
+Create a 10-second vertical 9:16 premium cinematic advertising video,
+realistic premium commercial style, 1080x1920.
+
+FIRST FRAME: Use the attached image named frame_1 as the exact opening
+frame of this video. All motion must begin from that frame and continue
+naturally from it.
+
+CHARACTER REFERENCE — MONA
+Use the uploaded image of the woman as the EXACT VISUAL REFERENCE for the
+character "Mona", the BAZINO brand influencer. Preserve her facial features,
+hairstyle, skin tone, body proportions and elegant look exactly as shown in
+the uploaded reference image. Do not create a different woman. Her face must
+match the reference in every frame.
+
+CHARACTER LOCK — the children, identical in all three videos:
+GIRL, age 8: long curly light-brown hair past the shoulders, plain white
+short-sleeved t-shirt, blue denim jeans.
+BOY, age 10: short messy light-brown hair, plain white t-shirt, dark blue
+denim jeans.
+Same two children as the previous two videos, same faces, same clothing,
+no variation.
+
+ENVIRONMENT REFERENCE — CRITICAL
+Use the uploaded interior photograph of the BAZINO gaming centre as the
+PRIMARY VISUAL REFERENCE for the entire environment. Recreate that interior
+closely: the long narrow room, matte black walls and ceiling, warm wood-plank
+flooring, a row of very large wall-mounted flat-screen televisions along one
+wall, deep blue LED backlighting glowing behind each screen, low black sofas
+facing the screens, recessed white ceiling spotlights, and the dark reception
+counter near the entrance.
+
+This venue uses CONSOLE GAMING on large wall-mounted televisions with sofa
+seating. It does NOT have desktop computers, desk monitors, or gaming chairs.
+This must read as the SAME LOCATION as the previous video.
+
+CONTINUITY
+Continue directly from the previous video: the two children are already
+seated on the low black sofa, playing with console controllers, lit by the
+blue glow of the large screen.
+
+SHOT SEQUENCE
+
+0.0-2.0s — Held two-shot of the children playing, exactly as the previous
+video ended. Mona enters from frame right in soft focus foreground, walking
+naturally into position. Camera begins a slow dolly back to accommodate her.
+
+2.0-3.0s — Focus pulls from the children to Mona as she settles and turns to
+face camera. She is standing, relaxed, warm confident smile. 50mm, shallow
+depth of field. The children remain clearly visible over her shoulder,
+playing happily in the background bokeh.
+
+3.0-8.5s — Mona speaks directly to camera, addressing parents like a friendly
+social-media host, not a salesperson. Natural gestures, steady eye contact
+with the lens. Camera holds still on a medium shot.
+
+8.5-10.0s — Mona finishes with a warm closing smile. Camera holds completely
+steady. Behind her the children laugh at something on screen. A subtle BAZINO
+logo appears as a small clean lower-third graphic — not a full-screen card,
+not covering Mona's face.
+
+DIALOGUE — Turkish, natural delivery, accurate lip synchronisation
+Mona: "Çocuklarınızı Bazino'ya gönderin, siz de rahatça dinlenin."
+Delivered warmly and unhurried across roughly five seconds.
+
+ON-SCREEN GAME CONTENT — IMPORTANT
+The television screens must show only age-appropriate content: a football or
+racing game, or colourful abstract motion graphics. Absolutely no combat, no
+fighting, no weapons, no shooters, no blood. This is a family-safety
+advertisement featuring young children.
+
+ON-SCREEN TEXT — Turkish, top third, persistent for the full 10 seconds
+"Çocuklar oynasın, siz rahatlayın!"
+Bold modern sans-serif, white with a soft drop shadow. Clear of the top 250px
+and bottom 400px. Never overlapping Mona's face.
+
+AUDIO
+Soft ambient room tone, distant controller clicks and children's laughter
+under the dialogue. The synth pad from the previous videos resolves gently
+and fades out on the final frame. Mona's voice is the clear foreground.
+
+GRADE
+Deep blue LED interior palette matching the reference photograph. Rich blacks,
+clean skin tones on Mona, strong blue accents behind her. Mona lit slightly
+warmer than the background so she separates from the blue.
+
+FINAL SHOT
+Hold on Mona looking directly into the camera with a friendly smile, the
+children still playing behind her in the same BAZINO interior. Steady frame,
+no camera movement in the final second. This is the closing frame of the
+three-part reel.
+
+CONSTRAINTS
+Natural acting, realistic facial expressions, accurate Turkish lip sync,
+smooth cinematic camera movement, high-end commercial production quality.
+No subtitles other than the specified top text. No brand logos other than
+BAZINO. No prices, discounts, or promotional claims.
+```
+
+## اصلاحات نسبت به نسخه اولیه
+
+| مورد | تغییر |
+|---|---|
+| دیالوگ مونا | کوتاه شد — نسخه اصلی ~۶ ثانیه گفتار بود و در ۱۰ ثانیه جا نمی‌شد |
+| 🔴 `gaming desks, monitors, gaming chairs` | حذف شد — بازینو کنسول + مبل + تلویزیون دیواری است |
+| 🔴 رده سنی | محتوای صفحه‌ها به بازی ورزشی/مسابقه‌ای محدود شد |
+| قفل شخصیت بچه‌ها | اضافه شد |
+| `frame_1` | اضافه شد |
+| «subtle brand presence» | مشخص شد: لوگوی کوچک lower-third در ثانیه آخر |
+
+### دیالوگ
+
+**نسخه تأییدشده (۵ ثانیه):**
+```
+Çocuklarınızı Bazino'ya gönderin, siz de rahatça dinlenin.
+```
+
+**نسخه کامل اولیه (~۶ ثانیه — فقط اگر ورود مونا حذف شود):**
+```
+Çocuklarınızı Bazino'ya gönderin, siz de gönül rahatlığıyla dinlenin
+veya işlerinize bakın!
+```
