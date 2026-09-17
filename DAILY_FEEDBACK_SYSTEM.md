@@ -75,7 +75,9 @@
 
 هر رکورد متریک باید به این ابعاد وصل شود تا تحلیل معنادار باشد:
 
-`campaign_id` · `content_pillar` · `language` (tr/fa/en/ru) · `format` (reel/carousel/story/post/telegram_post/telegram_outreach/blog_article) · `channel` (instagram/telegram/blog) · `hook_type` · `posting_time` · `mona_featured` (bool) · `cta_type`
+`campaign_id` · `content_pillar` · `language` (tr/fa/en/ru) · `format` (reel/story/telegram_post/telegram_outreach/blog_article — کاروسل فعلاً استفاده نمی‌شود) · `channel` (instagram/telegram/blog) · `hook_type` · `posting_time` · `mona_featured` (bool) · `cta_type` · `slot_type` (fixed/growth)
+
+`slot_type` تفکیک می‌کند که ریل از سه اسلات ثابت آمده یا از بچ رشد (اسکیل §۵-A.۱.۱) — این دو معیار موفقیت متفاوتی دارند و نباید با هم مقایسه شوند.
 
 بدون این ابعاد، Manus فقط می‌تواند بگوید «این پست بهتر بود» — با آن‌ها می‌تواند بگوید «Reelهای ترکی با حضور مونا و هوک سؤالی، نرخ ذخیره بالاتری دارند».
 
