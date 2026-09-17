@@ -565,16 +565,17 @@ This is the single most important visual rule of the project. The audience must 
 - ✅ **AI disclosure.** Mona is identified as a digital/virtual character of BAZINO in the profile bio. She does not repeatedly call herself an AI in content, but the brand never claims she is a real human. AI-generated content is labeled according to Meta policy.
 - ✅ In content that earns commission, the Paid Partnership label is used.
 
-## 6-A.4 OTHER BRAND CHARACTERS — YOUNA AND LEA
+## 6-A.4 OTHER BRAND CHARACTERS — YOUNA, LEA AND HASTI
 
-Besides Mona, the project has two child/teen characters. They follow the **same
-face-consistency golden rule** as Mona (§6-A.1) and the same enforcement
-procedure (§6-A.2).
+Besides Mona, the project has three further recurring characters. They follow
+the **same face-consistency golden rule** as Mona (§6-A.1) and the same
+enforcement procedure (§6-A.2).
 
 | Character | Role | Apparent age | Mandatory reference |
 |---|---|---|---|
 | **Youna** | Teenage boy — competitive gaming, tournaments, affiliate | 15-16 | `Assets/youna/youna-portrait-avatar-01.jpg` |
 | **Lea** | Young girl — BAZINO SAFE, family content | 10-12 | `Assets/lea/lea-portrait-avatar-01.jpg` |
+| **Hasti** | Mother — parent-facing content, BAZINO SAFE | 32-38 | `Assets/hasti/hasti-portrait-avatar-01.jpg` |
 
 Full identity sheets: **`Doc/brand-characters-fa.md`**.
 

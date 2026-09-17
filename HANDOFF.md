@@ -242,6 +242,7 @@ bazino-advertising-campaign/
 | **مونا / Mona** | اینفلوئنسر رسمی | زن جوان | `Assets/mona/mona-portrait-avatar-01.png` |
 | **یونا / Youna** | نوجوان پسر — تورنمنت/افیلیت | ۱۵–۱۶ | `Assets/youna/youna-portrait-avatar-01.jpg` |
 | **لیا / Lea** | دختربچه — SAFE/خانواده | ۱۰–۱۲ | `Assets/lea/lea-portrait-avatar-01.jpg` |
+| **هستی / Hasti** | مادر — والدین/SAFE | ۳۲–۳۸ | `Assets/hasti/hasti-portrait-avatar-01.jpg` |
 
 شناسنامه کامل: **`Doc/brand-characters-fa.md`** · قواعد: `SKILL.md` §6-A
 🔴 Youna و Lea زیر ۱۸‌اند — هرگز کنار محتوای خشن یا بازی +۱۶/+۱۸ نشان داده نشوند.
