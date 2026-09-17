@@ -844,8 +844,32 @@ piece of affiliate content must be built on it.
 system message or post to the friend, promising a coupon before the link gate is
 passed, and placing a link in a public Private Reply.
 
-**Retired from v1:** system messaging the friend, the friend commenting a code
-(now `friend_flow_retired`), and `share_confirmed_by_friend_code`.
+**Portal-enforced format rules** (`server/publishing/publish.ts` rejects the
+post otherwise — these are not preferences):
+
+| Rule | Error code |
+|---|---|
+| Affiliate content can never be a Story | `STORY_NOT_AFFILIATE` |
+| Affiliate content can never be a single image | `AFFILIATE_FOUR_SLIDES_REQUIRED` |
+| An affiliate carousel must be **exactly 4 slides with a Turkish caption** | `AFFILIATE_FOUR_SLIDES_TURKISH_CAPTION` |
+| Affiliate posts are scheduled only in **batches of exactly 3** | `THREE_POSTS_REQUIRED` |
+
+⚠️ **Two engines exist in the portal** (`igEngine.ts` v3 and `campaignV4.ts`
+v4) and they disagree on the keyword: v3 reads a single `SQUAD`, v4 reads the
+four language keywords above. Neither is retired. Confirm which path is live
+before publishing affiliate content. Full analysis: `PORTAL_CAMPAIGN_AUDIT.md`.
+
+**Intended to be retired in v1:** system messaging the friend, the friend
+commenting a numeric code, and `share_confirmed_by_friend_code`.
+
+🔴 **Not actually retired in code (verified 2026-09-17).** `campaignV4.ts:66`
+still creates a `friend` role from a six-digit comment, still writes
+`share_confirmed_by_friend_code`, and the `partner2` message in all four
+languages still instructs the friend to comment the code. The identifier
+`friend_flow_retired` does not exist anywhere in the repository. Only the
+`partner-invite` endpoint is genuinely retired (HTTP 410). Until the owner
+decides whether the code flow stays or goes, do not describe it as retired in
+published content.
 
 **Approved guidance message** (the fixed wording sent after the keyword
 comment; translated per content language, meaning must not change without
