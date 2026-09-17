@@ -565,7 +565,29 @@ This is the single most important visual rule of the project. The audience must 
 - ✅ **AI disclosure.** Mona is identified as a digital/virtual character of BAZINO in the profile bio. She does not repeatedly call herself an AI in content, but the brand never claims she is a real human. AI-generated content is labeled according to Meta policy.
 - ✅ In content that earns commission, the Paid Partnership label is used.
 
-## 6-A.4 RELATION TO MANUS
+## 6-A.4 OTHER BRAND CHARACTERS — YOUNA AND LEA
+
+Besides Mona, the project has two child/teen characters. They follow the **same
+face-consistency golden rule** as Mona (§6-A.1) and the same enforcement
+procedure (§6-A.2).
+
+| Character | Role | Apparent age | Mandatory reference |
+|---|---|---|---|
+| **Youna** | Teenage boy — competitive gaming, tournaments, affiliate | 15-16 | `Assets/youna/youna-portrait-avatar-01.jpg` |
+| **Lea** | Young girl — BAZINO SAFE, family content | 10-12 | `Assets/lea/lea-portrait-avatar-01.jpg` |
+
+Full identity sheets: **`Doc/brand-characters-fa.md`**.
+
+**Additional rules for minors.** Because Youna and Lea are under 18:
+
+- They must **never** appear alongside violent content, weapons, or 16+/18+
+  games. Screens behind them show only sport, racing or abstract visuals.
+  (This is the age-rating contradiction recorded in `HANDOFF.md` blocker 3.)
+- They are never depicted in a glamorous way or with emphasis on appearance.
+- The brand never claims they are real BAZINO customers — they are AI-generated
+  characters, disclosed per Meta policy.
+
+## 6-A.5 RELATION TO MANUS
 
 When Manus generates Mona media, the reference images and the identity constraints above must be part of the generation task. A Manus output that violates facial or body consistency is a **failed generation** and must be regenerated, never published.
 
