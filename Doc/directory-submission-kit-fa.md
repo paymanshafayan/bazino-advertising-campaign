@@ -342,7 +342,7 @@ KKTC, esports, turnuva, tournament, VIP gaming, игровой клуб, Иск�
 | # | پلتفرم | وضعیت | تاریخ | لینک پروفایل | یادداشت |
 |---|---|---|---|---|---|
 | ۱ | OpenStreetMap | ⬜ | | | نیازمند مختصات GPS |
-| ۲ | kimibilin.com | 🟡 حساب ساخته شد، فرم ۸۰٪ پر | ۲۰۲۶-۰۹-۱۷ | user: `Bazinopro` | دسته و منطقه و ساعت کاری دستی لازم دارند |
+| ۲ | kimibilin.com | ✅ ثبت شد — «Onay Bekliyor» | ۲۰۲۶-۰۹-۱۷ | user: `Bazinopro` | در صف تأیید مدیر |
 | ۳ | finditnorthcyprus.com | ⬜ | | | |
 | ۴ | Cyprus-FAQ (پروفایل) | ⬜ | | | |
 | ۴ب | Cyprus-FAQ (رویداد) | 🔒 بلاک | | | منتظر ساعت رسمی تورنمنت |
