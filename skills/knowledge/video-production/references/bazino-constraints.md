@@ -75,6 +75,31 @@ Prices or tariffs · discounts · tournament prizes · tournament rules · capac
 number of stations · customer counts · rankings ("the best in Cyprus") ·
 "100% safe" · "constantly supervised" · commission figures
 
+### 3.1.1 🔴 No facts in a Reel — always refer to the site
+*(owner instruction, 2026-09-18)*
+
+> «هیچ وقت اطلاعات را در ریل نمی‌دهیم، فقط ارجاع داده می‌شود به سایت.»
+
+A Reel never carries a time, a price, a prize, a capacity or a condition — not
+even a verified one. Those live on `bazino.pro`, which can be corrected in
+seconds; a published Reel cannot.
+
+| ❌ Never in a Reel | ✅ Instead |
+|---|---|
+| "Saturday 20:00" | "Her cumartesi" |
+| "5000 TL prize" | nothing — the site says it |
+| "Entry 200 TL" | nothing |
+| "16 players" | nothing |
+
+Approved tournament CTA, and the only place a URL may appear:
+
+```
+Detaylar ve kayıt: bazino.pro
+```
+
+This rule is stricter than the truth rule in 3.3. The truth rule bans
+*unverified* facts; this bans *all* facts, verified or not.
+
 ### 3.2 The tournament
 
 An FC 2026 tournament runs **every Saturday** since 12 September 2026. The
