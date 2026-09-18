@@ -287,4 +287,5 @@ protocol being proven.
 
 | Date | Change |
 |---|---|
+| 2026-09-18 | Implemented: `tools/bazino-bridge/` — desktop app + GitHub bus transport. Transport verified end to end (agent push -> API read). Phase 2 (Chrome extension) dropped by the owner; the desktop app removes the paste step instead. |
 | 2026-09-18 | Created. Measured sandbox egress; found `api.github.com` reachable; identified VPN as an `arena.site` workaround rather than an architectural need; surveyed six comparable GitHub projects. |
