@@ -240,22 +240,70 @@ function Test-ChromeDebug {
     }
 }
 
+function Test-ProfileInUse {
+    # True when a Chrome process is already running against our profile folder.
+    # Chrome keeps a lock file there for the lifetime of the instance.
+    $lock = Join-Path $script:Cfg.ProfileDir 'lockfile'
+    if (Test-Path $lock) { return $true }
+
+    try {
+        $esc = [regex]::Escape($script:Cfg.ProfileDir)
+        $hit = Get-CimInstance Win32_Process -Filter "Name='chrome.exe'" -ErrorAction Stop |
+               Where-Object { $_.CommandLine -and $_.CommandLine -match $esc }
+        return [bool]$hit
+    } catch {
+        return $false
+    }
+}
+
 function Start-AgentChrome {
+    # Never open a second window against the same profile: Chrome would either
+    # refuse the lock or hand the tabs to the existing instance, and the owner
+    # would have to sign in to Google again.
+
+    if (Test-ChromeDebug) {
+        Write-Log "Chrome is already listening - reusing it" 'ok'
+        return $true
+    }
+
+    if (Test-ProfileInUse) {
+        Write-Log "A Chrome instance already owns this profile - waiting for its debug port" 'warn'
+        for ($i = 1; $i -le 15; $i++) {
+            Start-Sleep -Milliseconds 700
+            if (Test-ChromeDebug) {
+                Write-Log "Chrome ready - $($script:State.ChromeVer)" 'ok'
+                return $true
+            }
+        }
+        Write-Log "That Chrome was started without the debug flag." 'error'
+        Write-Log "Close every Chrome window using the Bazino profile, then press Connect again." 'error'
+        return $false
+    }
+
     $exe = Find-ChromePath
     if (-not $exe) {
         Write-Log "Chrome not found on this machine" 'error'
         return $false
     }
+
+    $firstRun = -not (Test-Path (Join-Path $script:Cfg.ProfileDir 'Default'))
+    if ($firstRun) {
+        Write-Log "First run - a fresh profile is being created" 'info'
+        Write-Log "Sign in to Bazinopro@gmail.com in that window. It is remembered from then on." 'warn'
+    }
     Write-Log "Launching Chrome with the debug port open" 'info'
 
+    # Same flags every time, so the profile stays valid and the login persists.
     $args = @(
         "--remote-debugging-port=$($script:Cfg.ChromePort)"
         "--remote-allow-origins=*"
         "--user-data-dir=`"$($script:Cfg.ProfileDir)`""
         "--no-first-run"
         "--no-default-browser-check"
-        "about:blank"
+        "--restore-last-session"
     )
+    if ($firstRun) { $args += 'https://accounts.google.com' } else { $args += 'about:blank' }
+
     Start-Process -FilePath $exe -ArgumentList $args | Out-Null
 
     for ($i = 1; $i -le 20; $i++) {
@@ -361,7 +409,7 @@ function Repair-Bridge {
     Start-Sleep -Seconds $backoff
 
     if (-not (Test-ChromeDebug)) {
-        Write-Log "Chrome is gone - relaunching" 'warn'
+        Write-Log "Chrome is gone - reconnecting" 'warn'
         if (-not (Start-AgentChrome)) { return $false }
     }
     if (-not (Connect-ChromeSocket)) { return $false }
@@ -416,12 +464,8 @@ function Start-Bridge {
 
     Write-Log "Starting bridge" 'info'
     if (-not (Test-GitHub))  { return }
-    if (-not (Test-ChromeDebug)) {
-        Write-Log "Chrome debug port closed - launching Chrome" 'info'
-        if (-not (Start-AgentChrome)) { return }
-    } else {
-        Write-Log "Chrome already listening - $($script:State.ChromeVer)" 'ok'
-    }
+    # Start-AgentChrome reuses a live instance and never opens a duplicate.
+    if (-not (Start-AgentChrome)) { return }
     if (-not (Connect-ChromeSocket)) { return }
 
     $script:State.Running    = $true
@@ -721,7 +765,7 @@ if ($SelfTest) {
     $required = @(
         'Write-Log','Get-Settings','Save-Token','Read-Token','Invoke-GitHub',
         'Test-GitHub','Get-BusCommands','Push-BusResult','Find-ChromePath',
-        'Test-ChromeDebug','Start-AgentChrome','Connect-ChromeSocket','Send-Cdp',
+        'Test-ChromeDebug','Test-ProfileInUse','Start-AgentChrome','Connect-ChromeSocket','Send-Cdp',
         'Receive-CdpFrame','Receive-Cdp','Repair-Bridge','Invoke-BridgeCycle','Start-Bridge',
         'Stop-Bridge','New-StatusRow','Update-Status','Show-Settings','New-MainWindow'
     )
