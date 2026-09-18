@@ -200,7 +200,8 @@ UPDATE settings SET value = '35.2634752' WHERE key = 'club_map_lat';
 UPDATE settings SET value = '33.9088575' WHERE key = 'club_map_lng';
 ```
 
-و رکورد `social_links` را با سه لینک جدید بازنویسی کن.
+و رکورد `social_links` را با **پنج لینک** بخش ۱-ب بازنویسی کن (ردیف یوتیوب با
+مقدار فعلی‌اش حفظ شود).
 
 **روش ترجیحی (§۲۷ API-First):** اگر پنل مدیریت این فیلدها را دارد — و دارد
 (`AdminPanelTab.tsx:3996-4018`) — از همان مسیر انجام بده، نه SQL مستقیم.
