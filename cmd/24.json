@@ -1,0 +1,1 @@
+{"id":95197,"sessionId":"FA9A6ED0B7A1B88CC9B9CA831C94F48E","method":"Runtime.evaluate","params":{"expression":"(document.body.innerText.match(/[a-zA-Z0-9._%+-]+@gmail\\.com/)||['not found'])[0]","returnByValue":true,"awaitPromise":true}}
