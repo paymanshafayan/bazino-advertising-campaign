@@ -95,12 +95,30 @@ jobs:
 
       - name: Verify the executable launches
         shell: pwsh
+        timeout-minutes: 3
         run: |
           $ErrorActionPreference = 'Stop'
-          # -SelfTest exits immediately; proves the packaged exe is not corrupt.
+
+          # Built with -noConsole, so the exe writes its self-test to a file.
+          # Never use -Wait here: a GUI host that fails to exit would hang the job.
+          $log = Join-Path $env:TEMP 'bazino-selftest.log'
+          if (Test-Path $log) { Remove-Item $log -Force }
+
           $p = Start-Process -FilePath 'dist/BazinoBridge.exe' `
-                             -ArgumentList '-SelfTest' `
-                             -PassThru -Wait -NoNewWindow
+                             -ArgumentList '-SelfTest' -PassThru
+
+          if (-not $p.WaitForExit(90000)) {
+            try { $p.Kill() } catch { }
+            Write-Host "::error::Packaged exe did not exit within 90 s"
+            if (Test-Path $log) { Get-Content $log | ForEach-Object { Write-Host "  $_" } }
+            exit 1
+          }
+
+          if (Test-Path $log) {
+            Write-Host "--- self-test output ---"
+            Get-Content $log | ForEach-Object { Write-Host "  $_" }
+          }
+
           if ($p.ExitCode -ne 0) {
             Write-Host "::error::Packaged exe self-test failed (exit $($p.ExitCode))"
             exit 1

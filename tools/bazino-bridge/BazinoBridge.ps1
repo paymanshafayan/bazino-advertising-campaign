@@ -653,7 +653,20 @@ function New-MainWindow {
 
 if ($SelfTest) {
     # CI path: prove every function parses and the basic ones behave.
-    Write-Host "Bazino Bridge self-test"
+    #
+    # Packaged with -noConsole there is no stdout, so Write-Host can block and
+    # the process never exits. Everything goes to a file instead, and we leave
+    # with [Environment]::Exit, which terminates a WinForms host reliably
+    # (plain `exit` does not).
+    $selfTestLog = Join-Path ([IO.Path]::GetTempPath()) 'bazino-selftest.log'
+    function Write-Test {
+        param([string]$Text)
+        Add-Content -Path $selfTestLog -Value $Text -Encoding UTF8
+        try { Write-Host $Text } catch { }   # console may not exist
+    }
+    Set-Content -Path $selfTestLog -Value '' -Encoding UTF8
+
+    Write-Test "Bazino Bridge self-test"
     $required = @(
         'Write-Log','Get-Settings','Save-Token','Read-Token','Invoke-GitHub',
         'Test-GitHub','Get-BusCommands','Push-BusResult','Find-ChromePath',
@@ -666,23 +679,23 @@ if ($SelfTest) {
         if (-not (Get-Command $fn -ErrorAction SilentlyContinue)) { $missing += $fn }
     }
     if ($missing.Count -gt 0) {
-        Write-Host "MISSING: $($missing -join ', ')"
-        exit 1
+        Write-Test "MISSING: $($missing -join ', ')"
+        [Environment]::Exit(1)
     }
-    Write-Host "All $($required.Count) functions defined"
+    Write-Test "All $($required.Count) functions defined"
 
     Write-Log "logger works" 'ok'
-    if ($script:LogLines.Count -ne 1) { Write-Host "Logger failed"; exit 1 }
+    if ($script:LogLines.Count -ne 1) { Write-Test "Logger failed"; exit 1 }
 
     $chrome = Find-ChromePath
-    Write-Host "Chrome path: $(if ($chrome) { $chrome } else { 'not installed (fine on CI)' })"
+    Write-Test "Chrome path: $(if ($chrome) { $chrome } else { 'not installed (fine on CI)' })"
 
     Add-Type -AssemblyName System.Windows.Forms -ErrorAction SilentlyContinue
     Add-Type -AssemblyName System.Drawing -ErrorAction SilentlyContinue
-    Write-Host "WinForms assemblies load"
+    Write-Test "WinForms assemblies load"
 
-    Write-Host "SELF-TEST PASSED"
-    exit 0
+    Write-Test "SELF-TEST PASSED"
+    [Environment]::Exit(0)
 }
 
 $form = New-MainWindow
