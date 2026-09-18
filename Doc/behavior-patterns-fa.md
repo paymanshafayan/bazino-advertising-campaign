@@ -49,7 +49,7 @@
 
 **فعال‌سازی:** «مقدمات ساخت ویدئو را آماده کن» · «ریل امروز را بسازیم»
 **وضعیت:** ✅ فعال — یک بار اجرا شد (ریل BAZINO SAFE، ۲۰۲۶-۰۹-۱۷)
-**مرجع کامل:** `SKILL.md` §6-B · صنعت و نحو: `skills/bazino-video-prompt-director/`
+**مرجع کامل:** `SKILL.md` §6-B · صنعت و نحو: `skills/knowledge/video-production/`
 
 ## فازها
 
@@ -76,7 +76,7 @@
 ## فایل‌های لازم
 
 `Doc/brand-characters-fa.md` · `Assets/club/` · `Assets/<character>/` ·
-`skills/bazino-video-prompt-director/`
+`skills/knowledge/video-production/`
 
 ## خروجی
 

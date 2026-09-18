@@ -36,7 +36,7 @@ companion_documents:
 
 # 0. NON-NEGOTIABLE PROJECT PRINCIPLES
 
-These eight rules override every other instruction, brief or convenience.
+These nine rules override every other instruction, brief or convenience.
 
 1. **Mona's face and body consistency** in every visual output (§6-A.1).
 2. **Truth rule.** Never invent a promise, number, date, prize, discount,
@@ -54,6 +54,9 @@ These eight rules override every other instruction, brief or convenience.
    four-step behaviour-pattern cycle runs. The repository of patterns is
    `Doc/behavior-patterns-fa.md` and it is read at the start of any recurring
    mission.
+9. **Knowledge before action** (§32). Before starting any mission, load its
+   knowledge skill from `skills/knowledge/`. If none exists, research it —
+   GitHub first — and build it before proceeding.
 
 ---
 
@@ -607,7 +610,7 @@ This section governs the PREPARATION of everything needed before generation:
 scenario, prompts, first frames, reference files. It does not cover the
 generation itself — the owner runs that in Google Flow.
 
-Craft and syntax live in `skills/bazino-video-prompt-director/`. Read it in
+Craft and syntax live in `skills/knowledge/video-production/`. Read it in
 full before writing a single prompt.
 
 ## 6-B.0 The six iron rules
@@ -676,7 +679,7 @@ library. Say so explicitly in the prompt.
 
 For each clip, in order:
 
-1. Build the prompt per `bazino-video-prompt-director`.
+1. Build the prompt per `knowledge/video-production`.
 2. Run the three-gate check (dramaturgy · Omni syntax · BAZINO rules).
 3. Present it in chat as a copy-ready block, plus the list of files to attach.
 4. State what you changed and why, if revising.
@@ -1639,3 +1642,125 @@ Every pattern carries:
   it. The repository is an index of method, not a second copy of the skill.
 
 ---
+
+---
+
+# 32. KNOWLEDGE — MISSION-SPECIFIC EXPERTISE
+
+Before starting any mission, load the external expertise for it.
+
+| §31 Behaviour patterns | §32 Knowledge |
+|---|---|
+| *How we did it* | *How it is best done* |
+| From our own experience | From external authoritative sources |
+| Our errors and the owner's corrections | Industry standard and research |
+
+Repository: **`skills/knowledge/`** — one knowledge **skill** per mission type,
+not a plain document. A skill can carry reference files, a frontmatter
+description and a loading order; a flat document cannot.
+
+⚠️ Unlike §31, this section is **not** permanently in memory. It is consulted
+**at the start of a mission**, and only the relevant skill is loaded.
+
+## 32.1 The three-step cycle — runs BEFORE every mission
+
+Applies to every mission, including daily and pre-defined ones.
+
+### Step 1 — Check
+
+Does `skills/knowledge/<mission>/SKILL.md` exist? Use the behaviour-pattern name
+from §31 so the two stay aligned.
+
+### Step 2 — If missing → research and build it
+
+**2a. GitHub first — always.**
+
+Search GitHub before the open web. Reasons: agent skills are published there in
+a directly reusable form, and **feedback is measurable** — stars, forks, open
+issues, commit recency, and whether real people report it working.
+
+What to check on a candidate repository:
+
+| Signal | What it tells you |
+|---|---|
+| Stars and forks | Adoption |
+| Last commit date | Whether it tracks a moving target |
+| Open vs. closed issues | Whether the author maintains it |
+| README specificity | Whether it is real work or a keyword farm |
+| Licence | Whether we may reuse it, and under what attribution |
+
+If a strong, current skill exists — **use it**. Adapt it to BAZINO rather than
+writing from nothing. Honour its licence and record attribution.
+
+If several good ones exist and their strengths do not conflict, **merge** them.
+That is how `skills/knowledge/video-production/` was built.
+
+**2b. Then the open web.**
+
+Official documentation, peer-reviewed or industry-standard material, and sources
+with strong real-world feedback. Read several; a single blog post is not a
+knowledge base.
+
+**2c. Merge into one skill.**
+
+- Merge, do not stack side by side
+- Resolve contradictions explicitly — state which source won and why
+- Note what is disputed rather than smoothing it over
+- Record every source URL
+
+Then use it immediately for this mission.
+
+### Step 3 — If present → load and apply
+
+Read it fully before starting. Use it throughout. If the mission shows the
+knowledge is wrong, outdated or incomplete, **update it and log the change** —
+same automatic-update principle as §31.
+
+## 32.2 Knowledge skill structure
+
+Frontmatter `name` and `description`, then:
+
+1. **Mission** — which mission this serves
+2. **Last researched** — date, so staleness is visible
+3. **Primary sources** — where it came from
+4. **Core principles** — the non-negotiable fundamentals
+5. **Standards and specifications** — concrete numbers, formats, limits
+6. **Best practice** — what strong operators actually do
+7. **Common mistakes** — documented failure modes
+8. **Disputed or unverified** — where sources disagree
+9. **Sources** — every URL with a one-line note on what it contributed
+10. **Changelog** — dated updates
+
+Reference files go in `references/` beside the SKILL.md.
+
+## 32.3 Monthly staleness check — automatic
+
+Every night, after the owner declares the day finished, **every skill in
+`skills/knowledge/` is checked**. This runs **without asking permission**
+(owner instruction, 2026-09-18).
+
+For each skill older than one month since its last update:
+
+1. **Check the original source first.** If it is a GitHub repository, look for
+   new commits or releases since our last update. If there is a newer version,
+   update our skill from that same source.
+2. **If the original has not moved**, search more widely for newer sources and
+   update from those.
+3. **Log the result either way** — including "checked, nothing new", so the same
+   check is not repeated tomorrow.
+
+Full routine in `HANDOFF.md`.
+
+## 32.4 Quality rules
+
+- **Merge, never stack.** A knowledge skill is a synthesis, not a link dump.
+- **Cite everything.** A claim without a source is an opinion.
+- **Date everything.** Platform specs move; a figure from last year may be wrong.
+- **Contradiction is information.** When sources disagree, say so and choose,
+  with the reason.
+- **Project constraints win.** Where best practice conflicts with a BAZINO rule
+  or an owner instruction, the BAZINO rule governs — record the conflict so it
+  is not rediscovered every time.
+- **Knowledge is not permission.** Finding a best practice is not authority to
+  act on it. Rule 0 still governs.
+

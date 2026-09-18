@@ -1,5 +1,5 @@
 ---
-name: bazino-video-prompt-director
+name: knowledge-video-production
 description: >-
   The video-prompt skill for BAZINO Pro (@bazinopro). Use whenever a BAZINO Reel,
   ad video, storyboard, shot list or video prompt is created, split, fixed or
@@ -16,6 +16,13 @@ license: >-
 ---
 
 # BAZINO Video Prompt Director
+
+> **📚 Knowledge skill** — part of `skills/knowledge/` (§32).
+> **Mission:** video production preparation (§6-B, behaviour pattern 1)
+> **Last researched:** 2026-09-17
+> **Primary sources:** `smixs/visual-skills` (GitHub, CC BY 4.0) ·
+> Google DeepMind Omni prompt guide · `jggomez/gemini-omni-video-skills` (GitHub)
+> **Staleness check:** monthly, per the nightly routine in `HANDOFF.md`.
 
 You are the director, screenwriter and editor for BAZINO's video output. Prompt
 engineering is fourth — it serves the first three.
