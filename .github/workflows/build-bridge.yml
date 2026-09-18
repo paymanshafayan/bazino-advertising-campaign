@@ -1,0 +1,146 @@
+name: Build Bazino Bridge
+
+on:
+  push:
+    branches:
+      - 'arena/**'
+      - main
+    paths:
+      - 'tools/bazino-bridge/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show PowerShell version
+        shell: pwsh
+        run: $PSVersionTable | Format-List
+
+      - name: Syntax check BazinoBridge.ps1
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $path = 'tools/bazino-bridge/BazinoBridge.ps1'
+          $errors = $null
+          $tokens = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path $path).Path, [ref]$tokens, [ref]$errors) | Out-Null
+          if ($errors -and $errors.Count -gt 0) {
+            Write-Host "::error::PowerShell parse errors found:"
+            foreach ($e in $errors) {
+              $line = $e.Extent.StartLineNumber
+              Write-Host "::error file=$path,line=$line::$($e.Message)"
+            }
+            exit 1
+          }
+          Write-Host "Syntax OK - $($tokens.Count) tokens parsed"
+
+      - name: Smoke test - headless self-check
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          & 'tools/bazino-bridge/BazinoBridge.ps1' -SelfTest
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "::error::Self-test failed with exit code $LASTEXITCODE"
+            exit 1
+          }
+          Write-Host "Self-test passed"
+
+      - name: Install ps2exe
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Install-Module -Name ps2exe -Scope CurrentUser -Force -AllowClobber
+          Import-Module ps2exe
+          Write-Host "ps2exe version: $((Get-Module ps2exe).Version)"
+
+      - name: Build executable
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+
+          $iconArg = @{}
+          if (Test-Path 'tools/bazino-bridge/icon.ico') {
+            $iconArg['iconFile'] = (Resolve-Path 'tools/bazino-bridge/icon.ico').Path
+          }
+
+          Invoke-ps2exe `
+            -inputFile  (Resolve-Path 'tools/bazino-bridge/BazinoBridge.ps1').Path `
+            -outputFile 'dist/BazinoBridge.exe' `
+            -noConsole `
+            -title       'Bazino Bridge' `
+            -description 'CDP bridge between the Bazino agent and Chrome' `
+            -company     'BAZINO' `
+            -product     'Bazino Bridge' `
+            -version     '1.0.0' `
+            @iconArg
+
+          if (-not (Test-Path 'dist/BazinoBridge.exe')) {
+            Write-Host "::error::Build produced no executable"
+            exit 1
+          }
+          $size = [math]::Round((Get-Item 'dist/BazinoBridge.exe').Length / 1MB, 2)
+          Write-Host "Built dist/BazinoBridge.exe - $size MB"
+
+      - name: Verify the executable launches
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $p = Start-Process -FilePath 'dist/BazinoBridge.exe' `
+                             -ArgumentList '-SelfTest' `
+                             -PassThru -Wait -NoNewWindow
+          if ($p.ExitCode -ne 0) {
+            Write-Host "::error::Packaged exe self-test failed (exit $($p.ExitCode))"
+            exit 1
+          }
+          Write-Host "Packaged exe runs correctly"
+
+      - name: Generate checksum
+        shell: pwsh
+        run: |
+          $hash = (Get-FileHash 'dist/BazinoBridge.exe' -Algorithm SHA256).Hash
+          $hash | Out-File 'dist/BazinoBridge.exe.sha256' -Encoding ascii
+          Write-Host "SHA256: $hash"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BazinoBridge
+          path: |
+            dist/BazinoBridge.exe
+            dist/BazinoBridge.exe.sha256
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Summary
+        shell: pwsh
+        if: always()
+        run: |
+          $size = if (Test-Path 'dist/BazinoBridge.exe') {
+            "$([math]::Round((Get-Item 'dist/BazinoBridge.exe').Length / 1MB, 2)) MB"
+          } else { 'not built' }
+          $hash = if (Test-Path 'dist/BazinoBridge.exe.sha256') {
+            (Get-Content 'dist/BazinoBridge.exe.sha256').Trim()
+          } else { '-' }
+
+          @"
+          ## Bazino Bridge build
+
+          | Item | Value |
+          |---|---|
+          | Executable | $size |
+          | SHA256 | ``$hash`` |
+          | Commit | ``$env:GITHUB_SHA`` |
+
+          Download it from the **Artifacts** section at the bottom of this page.
+          "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
