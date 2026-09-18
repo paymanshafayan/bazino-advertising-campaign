@@ -27,6 +27,9 @@ const REPO   = 'bazino-advertising-campaign';
 const BRANCH = 'cdp-bus';
 const WORK   = path.join(os.tmpdir(), 'cdp-bus-work');
 
+let _id = Date.now() % 100000;
+const nextId = () => ++_id;
+
 const sh = (cmd, opts = {}) =>
   execSync(cmd, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...opts }).trim();
 
@@ -138,17 +141,56 @@ async function status() {
         console.log(JSON.stringify(await send(arg), null, 2));
         break;
 
-      case 'eval':
-        console.log(JSON.stringify(await send({
-          id: Date.now() % 100000,
+      case 'eval': {
+        // Runtime.* needs a page session; the browser-level endpoint has no
+        // JS context of its own. Attach to the first page target, then run.
+        const t = await send({ id: nextId(), method: 'Target.getTargets' });
+        const page = (t.result?.targetInfos || []).find((x) => x.type === 'page');
+        if (!page) throw new Error('No page target open in Chrome');
+
+        const att = await send({
+          id: nextId(),
+          method: 'Target.attachToTarget',
+          params: { targetId: page.targetId, flatten: true },
+        });
+        const sessionId = att.result?.sessionId;
+        if (!sessionId) throw new Error('Could not attach to the tab');
+
+        const r = await send({
+          id: nextId(),
+          sessionId,
           method: 'Runtime.evaluate',
           params: { expression: arg, returnByValue: true, awaitPromise: true },
-        }), null, 2));
+        });
+        console.log(JSON.stringify(r, null, 2));
         break;
+      }
+
+      case 'nav': {
+        const t = await send({ id: nextId(), method: 'Target.getTargets' });
+        const page = (t.result?.targetInfos || []).find((x) => x.type === 'page');
+        if (!page) throw new Error('No page target open in Chrome');
+
+        const att = await send({
+          id: nextId(),
+          method: 'Target.attachToTarget',
+          params: { targetId: page.targetId, flatten: true },
+        });
+        const sessionId = att.result?.sessionId;
+
+        const r = await send({
+          id: nextId(),
+          sessionId,
+          method: 'Page.navigate',
+          params: { url: arg },
+        });
+        console.log(JSON.stringify(r, null, 2));
+        break;
+      }
 
       case 'targets':
         console.log(JSON.stringify(await send({
-          id: Date.now() % 100000,
+          id: nextId(),
           method: 'Target.getTargets',
         }), null, 2));
         break;
@@ -158,7 +200,7 @@ async function status() {
         break;
 
       default:
-        console.log('usage: agent-bus.js init | send <json> | eval <js> | targets | status');
+        console.log('usage: agent-bus.js init | send <json> | eval <js> | nav <url> | targets | status');
         process.exit(1);
     }
   } catch (e) {

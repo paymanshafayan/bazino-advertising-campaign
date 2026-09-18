@@ -295,7 +295,8 @@ function Send-Cdp {
     [void]$script:State.Socket.SendAsync($seg, [System.Net.WebSockets.WebSocketMessageType]::Text, $true, $ct).GetAwaiter().GetResult()
 }
 
-function Receive-Cdp {
+function Receive-CdpFrame {
+    # Reads exactly one complete websocket message.
     param([int]$TimeoutMs = 30000)
     $ct     = [Threading.CancellationToken]::None
     $buffer = [byte[]]::new(1048576)
@@ -313,6 +314,32 @@ function Receive-Cdp {
     } while (-not $res.EndOfMessage)
 
     return [Text.Encoding]::UTF8.GetString($ms.ToArray())
+}
+
+function Receive-Cdp {
+    # Returns the reply whose id matches $ExpectId. CDP interleaves unsolicited
+    # events with command replies, so returning the next frame that arrives
+    # hands back the wrong payload. Events are logged and skipped.
+    param(
+        [int]$TimeoutMs = 30000,
+        [int]$ExpectId  = -1
+    )
+    $sw = [Diagnostics.Stopwatch]::StartNew()
+
+    while ($sw.ElapsedMilliseconds -lt $TimeoutMs) {
+        $remaining = $TimeoutMs - $sw.ElapsedMilliseconds
+        $frame = Receive-CdpFrame -TimeoutMs $remaining
+
+        if ($ExpectId -lt 0) { return $frame }
+
+        $id = $null
+        try { $id = ($frame | ConvertFrom-Json).id } catch { }
+
+        if ($null -eq $id) { continue }          # event, not a reply
+        if ([int]$id -eq $ExpectId) { return $frame }
+        # a stale reply from an earlier command - drop it and keep waiting
+    }
+    throw "No CDP reply with id $ExpectId within $TimeoutMs ms"
 }
 
 # ============================================================ recovery
@@ -355,8 +382,10 @@ function Invoke-BridgeCycle {
 
     foreach ($c in $cmds) {
         try {
+            $wantId = -1
+            try { $wantId = [int]($c.Payload | ConvertFrom-Json).id } catch { }
             Send-Cdp -Json $c.Payload
-            $reply = Receive-Cdp
+            $reply = Receive-Cdp -ExpectId $wantId
             Push-BusResult -Seq $c.Seq -Json $reply
             $script:State.LastSeq = $c.Seq
             $script:State.Received++
@@ -693,7 +722,7 @@ if ($SelfTest) {
         'Write-Log','Get-Settings','Save-Token','Read-Token','Invoke-GitHub',
         'Test-GitHub','Get-BusCommands','Push-BusResult','Find-ChromePath',
         'Test-ChromeDebug','Start-AgentChrome','Connect-ChromeSocket','Send-Cdp',
-        'Receive-Cdp','Repair-Bridge','Invoke-BridgeCycle','Start-Bridge',
+        'Receive-CdpFrame','Receive-Cdp','Repair-Bridge','Invoke-BridgeCycle','Start-Bridge',
         'Stop-Bridge','New-StatusRow','Update-Status','Show-Settings','New-MainWindow'
     )
     $missing = @()
