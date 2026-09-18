@@ -40,8 +40,8 @@
 | عرض جغرافیایی | `35.2628` | `35.2634752` |
 | طول جغرافیایی | `33.9084` | `33.9088575` |
 | اینستاگرام | `https://instagram.com/bazino` | `https://instagram.com/bazinopro` |
-| تلگرام | `https://t.me/bazino` | 🔴 **حذف شود** — تأیید نشده |
-| یوتیوب | `https://youtube.com/bazino` | 🔴 **حذف شود** — تأیید نشده |
+| تلگرام | `https://t.me/bazino` | `https://t.me/bazinopro` ✅ تأییدشده توسط مالک |
+| یوتیوب | `https://youtube.com/bazino` | ⏳ **دست نزن** — کانال به‌زودی اضافه می‌شود، URL نهایی را مالک می‌دهد |
 | فیسبوک | (وجود ندارد) | `https://facebook.com/bazinopro` ✅ افزوده شود |
 | واتساپ | (وجود ندارد) | `https://wa.me/905391333747` ✅ افزوده شود |
 
@@ -54,16 +54,17 @@ ru: Искеле, Лонг Бич, площадь Маккензи, Vista Mare, 
 tr: İskele, Long Beach, Mackenzie Meydanı, Vista Mare, Lobi, No. 5
 ```
 
-### 🔴 درباره تلگرام و یوتیوب — مهم
+### درباره تلگرام و یوتیوب
 
-نام کانال تلگرام رسمی **هنوز توسط مالک تأیید نشده** و کانال یوتیوب **وجود ندارد**.
+**تلگرام ✅ تأیید شد (۲۰۲۶-۰۹-۱۸).** کانال رسمی: `https://t.me/bazinopro`
+مقدار قدیمی `t.me/bazino` غلط است و باید اصلاح شود.
 
-`t.me/bazino` و `youtube.com/bazino` مقادیر حدسی seed هستند. طبق قانون صداقت
-پروژه، **لینک تأییدنشده منتشر نمی‌شود**. این دو ردیف را از فهرست پیش‌فرض حذف کن،
-نه اینکه با حدس دیگری جایگزین کنی.
+**یوتیوب ⏳ به‌زودی اضافه می‌شود.** مالک اعلام کرد کانال در راه است.
+تا وقتی URL نهایی را ندهد، **ردیف یوتیوب را دست نزن** — نه حذفش کن، نه با حدس
+جایگزینش کن. مقدار فعلی `youtube.com/bazino` سر جایش می‌ماند تا مالک آدرس واقعی
+را بدهد.
 
-اگر بعداً مالک نام واقعی را داد، از پنل مدیریت اضافه می‌شود — نیازی به تغییر کد
-نیست چون این فهرست از `siteSettings` قابل ویرایش است.
+⚠️ اگر مالک URL یوتیوب را پیش از اجرای این بچ داد، در همین جدول جایگزین شود.
 
 ---
 
@@ -92,13 +93,18 @@ tr: İskele, Long Beach, Mackenzie Meydanı, Vista Mare, Lobi, No. 5
 
 ### ۱-ب. لینک‌های شبکه اجتماعی (خطوط ۱۴۰–۱۴۲)
 
-سه ردیف فعلی با این جایگزین شوند:
+دو ردیف اول اصلاح شوند، ردیف سوم دست‌نخورده بماند، و دو ردیف جدید اضافه شود:
 
 ```ts
 { id: '1', name: 'اینستاگرام کلوپ', platform: 'instagram', url: 'https://instagram.com/bazinopro' },
-{ id: '2', name: 'فیسبوک کلوپ', platform: 'facebook', url: 'https://facebook.com/bazinopro' },
-{ id: '3', name: 'واتساپ', platform: 'whatsapp', url: 'https://wa.me/905391333747' },
+{ id: '2', name: 'کانال تلگرام', platform: 'telegram', url: 'https://t.me/bazinopro' },
+{ id: '3', name: 'یوتیوب کلوپ', platform: 'youtube', url: 'https://youtube.com/bazino' },
+{ id: '4', name: 'فیسبوک کلوپ', platform: 'facebook', url: 'https://facebook.com/bazinopro' },
+{ id: '5', name: 'واتساپ', platform: 'whatsapp', url: 'https://wa.me/905391333747' },
 ```
+
+⚠️ **ردیف ۳ (یوتیوب) عمداً دست‌نخورده ماند.** کانال به‌زودی ساخته می‌شود و URL
+نهایی را مالک می‌دهد. تا آن موقع مقدار فعلی بماند.
 
 ⚠️ اگر `platform` یک union type محدود است، مقادیر `facebook` و `whatsapp` را به
 تعریف تایپ اضافه کن و مطمئن شو `getSocialIcon` برایشان آیکون دارد. اگر آیکون
@@ -118,8 +124,8 @@ tr: İskele, Long Beach, Mackenzie Meydanı, Vista Mare, Lobi, No. 5
 | خط | تغییر |
 |---|---|
 | ۷۴ | `instagram.com/bazino` → `instagram.com/bazinopro` |
-| ۷۵ | ردیف تلگرام → **حذف** یا جایگزینی با فیسبوک `facebook.com/bazinopro` |
-| ۷۶ | ردیف یوتیوب → **حذف** یا جایگزینی با واتساپ `wa.me/905391333747` |
+| ۷۵ | `t.me/bazino` → `t.me/bazinopro` |
+| ۷۶ | ردیف یوتیوب → ⏳ **دست نزن** تا مالک URL را بدهد |
 | ۱۳۸۱ | fallback آدرس چهارزبانه → متن جدید (بخش ۱) |
 | ۱۴۴۹ | `parseFloat(... \|\| '35.2628')` → `'35.2634752'` |
 | ۱۴۵۰ | `parseFloat(... \|\| '33.9084')` → `'33.9088575'` |
@@ -167,8 +173,8 @@ const DEFAULT_LNG = 33.9088575;
 | خط | تغییر |
 |---|---|
 | ۳۹۸ | `instagram.com/bazino` → `instagram.com/bazinopro` |
-| ۳۹۹ | تلگرام → حذف یا فیسبوک |
-| ۴۰۰ | یوتیوب → حذف یا واتساپ |
+| ۳۹۹ | `t.me/bazino` → `t.me/bazinopro` |
+| ۴۰۰ | یوتیوب → ⏳ **دست نزن** |
 | ۳۹۹۶ | `placeholder` آدرس → متن جدید |
 | ۳۹۹۷ | مقدار پیش‌فرض آدرس چهارزبانه → متن جدید |
 | ۴۰۱۳ | `placeholder="35.2628"` → `"35.2634752"` |
@@ -233,7 +239,8 @@ UPDATE settings SET value = '33.9088575' WHERE key = 'club_map_lng';
 # نباید هیچ خروجی بدهند
 grep -rn "zzigil" --include=*.ts --include=*.tsx . | grep -v node_modules
 grep -rn "35\.2628\|33\.9084" --include=*.ts --include=*.tsx . | grep -v node_modules
-grep -rnE "(instagram\.com|t\.me|youtube\.com)/bazino([^p]|$)" --include=*.ts --include=*.tsx . | grep -v node_modules
+grep -rnE "(instagram\.com|t\.me)/bazino([^p]|$)" --include=*.ts --include=*.tsx . | grep -v node_modules
+# یوتیوب عمداً بررسی نمی‌شود — تا اطلاع ثانوی دست‌نخورده می‌ماند
 ```
 
 سپس:
