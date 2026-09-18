@@ -659,6 +659,20 @@ function New-MainWindow {
 
 # ============================================================ entry point
 
+# Hard exit. In a ps2exe -noConsole build neither `exit` nor
+# [Environment]::Exit reliably terminates the host once WinForms assemblies are
+# loaded, so the last resort is killing our own process.
+function Stop-SelfTest {
+    param([int]$Code)
+    try { [Console]::Out.Flush() } catch { }
+    try { [Environment]::Exit($Code) } catch { }
+    try {
+        $p = Get-Process -Id $PID -ErrorAction Stop
+        if ($Code -eq 0) { $p.Kill() } else { $p.Kill() }
+    } catch { }
+    exit $Code
+}
+
 if ($SelfTest) {
     # CI path: prove every function parses and the basic ones behave.
     #
@@ -688,7 +702,7 @@ if ($SelfTest) {
     }
     if ($missing.Count -gt 0) {
         Write-Test "MISSING: $($missing -join ', ')"
-        [Environment]::Exit(1)
+        Stop-SelfTest 1
     }
     Write-Test "All $($required.Count) functions defined"
 
@@ -698,12 +712,19 @@ if ($SelfTest) {
     $chrome = Find-ChromePath
     Write-Test "Chrome path: $(if ($chrome) { $chrome } else { 'not installed (fine on CI)' })"
 
-    Add-Type -AssemblyName System.Windows.Forms -ErrorAction SilentlyContinue
-    Add-Type -AssemblyName System.Drawing -ErrorAction SilentlyContinue
-    Write-Test "WinForms assemblies load"
+    # Only probe WinForms when running as a plain script. Inside the packaged
+    # exe these assemblies are already loaded, and touching them here starts a
+    # message pump that keeps the process alive after the test finishes.
+    if (-not $env:BAZINO_SELFTEST) {
+        Add-Type -AssemblyName System.Windows.Forms -ErrorAction SilentlyContinue
+        Add-Type -AssemblyName System.Drawing -ErrorAction SilentlyContinue
+        Write-Test "WinForms assemblies load"
+    } else {
+        Write-Test "WinForms probe skipped (packaged exe)"
+    }
 
     Write-Test "SELF-TEST PASSED"
-    [Environment]::Exit(0)
+    Stop-SelfTest 0
 }
 
 $form = New-MainWindow
