@@ -36,7 +36,7 @@ companion_documents:
 
 # 0. NON-NEGOTIABLE PROJECT PRINCIPLES
 
-These seven rules override every other instruction, brief or convenience.
+These eight rules override every other instruction, brief or convenience.
 
 1. **Mona's face and body consistency** in every visual output (§6-A.1).
 2. **Truth rule.** Never invent a promise, number, date, prize, discount,
@@ -50,6 +50,10 @@ These seven rules override every other instruction, brief or convenience.
 6. **This skill governs.** It is read first and wins every conflict.
 7. **Affiliate flow v2 only** (§14-A). The friend-comments-a-code flow is
    retired.
+8. **Self-learning is not optional** (§31). After every completed mission the
+   four-step behaviour-pattern cycle runs. The repository of patterns is
+   `Doc/behavior-patterns-fa.md` and it is read at the start of any recurring
+   mission.
 
 ---
 
@@ -1546,3 +1550,92 @@ into one continuous operating cycle:
 > **Research → Plan → Create → Publish → Measure → Learn → Improve → Repeat**
 
 Always prefer evidence over assumptions, existing APIs over unnecessary development, meaningful content over content volume, and continuous improvement over repetitive publishing.
+
+---
+
+# 31. SELF-LEARNING — BEHAVIOUR PATTERN CAPTURE
+
+After every completed mission, capture how the work was done, so the next run of
+the same mission starts from the best known method instead of from zero.
+
+This is **procedural** knowledge — *how I work*. It is distinct from §18 Learning
+Memory, which holds **marketing** knowledge — *what content performed*.
+
+Repository: **`Doc/behavior-patterns-fa.md`**
+
+## 31.1 The four-step cycle — runs after EVERY completed mission
+
+**Step 1 — Extract the pattern.**
+Write down how the mission was actually done:
+- the phases, in order
+- decisions that had to be made, and what informed them
+- errors made and what they cost
+- what the owner corrected
+- which files, tools or references were needed
+
+**Step 2 — Check the repository.**
+Read `Doc/behavior-patterns-fa.md`. Does a pattern for this mission already
+exist? Match on the nature of the work, not on wording.
+
+**Step 3 — If it exists → compare and update AUTOMATICALLY.**
+Compare this run against the recorded pattern. If the run revealed anything the
+pattern lacked — a step, an error, a shortcut, a constraint — **update the
+pattern immediately and commit it. No approval needed** (owner instruction,
+2026-09-18; consistent with Rule 3 on automatic documentation).
+Log every change in the pattern's changelog with its date.
+If nothing is new, state that and change nothing.
+
+**Step 4 — If it does not exist → propose, then save.**
+Present to the owner:
+- a proposed mission name
+- the full draft pattern
+- one line on what triggered it
+
+**Wait for approval.** On approval, add it to `Doc/behavior-patterns-fa.md`.
+Without approval, nothing is saved — Rule 0.
+
+> **Asymmetry is deliberate.** Updating an existing pattern is automatic because
+> the owner already approved that pattern's existence. Creating a new one needs
+> approval because it is a new claim about how work should be done.
+
+## 31.2 What counts as a mission
+
+A unit of work with a recognisable start and end that could plausibly recur.
+
+| Is a mission | Is not |
+|---|---|
+| Preparing a video batch | Answering one question |
+| Registering in a directory | Reading one file |
+| Building a prompt for the portal agent | Fixing one typo |
+| Auditing code against documentation | A single git push |
+| Extracting rules from a document | A one-line edit |
+
+If unsure whether something is a mission — ask.
+
+## 31.3 Pattern structure
+
+Every pattern carries:
+
+1. **Name** — what the mission is called
+2. **Trigger** — the words or situation that start it
+3. **Status** — how many times run · `⚠️ untested` until run twice
+4. **Phases** — the ordered steps
+5. **Iron rules** — each paired with the real error that produced it
+6. **Required files** — what must be read or attached
+7. **Deliverable** — what "done" looks like
+8. **Not part of this** — explicit boundaries
+9. **Changelog** — dated updates
+
+## 31.4 Rules
+
+- Errors are recorded as iron rules **together with the mistake that caused
+  them**. A rule without its story gets ignored; a rule with a scar does not.
+- **An owner correction is the highest-value input.** It always enters the
+  pattern, immediately.
+- Patterns describe **how**, never **whether**. Rule 0 still governs — a pattern
+  is not permission to act without approval.
+- A pattern that has not been used twice stays marked `⚠️ untested`.
+- Patterns may point at a fuller document (e.g. §6-B) rather than duplicating
+  it. The repository is an index of method, not a second copy of the skill.
+
+---
