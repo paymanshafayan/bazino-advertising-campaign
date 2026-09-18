@@ -18,6 +18,14 @@ param(
     [switch]$SelfTest
 )
 
+# ps2exe does not reliably bind switch parameters in a -noConsole build, so the
+# self-test is also detectable from the raw command line and an env var. CI sets
+# BAZINO_SELFTEST=1, which needs no parameter binding at all.
+if (-not $SelfTest) {
+    if ($env:BAZINO_SELFTEST -eq '1') { $SelfTest = $true }
+    elseif ([Environment]::GetCommandLineArgs() -contains '-SelfTest') { $SelfTest = $true }
+}
+
 $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
