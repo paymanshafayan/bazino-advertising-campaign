@@ -343,6 +343,25 @@ function Send-Cdp {
     [void]$script:State.Socket.SendAsync($seg, [System.Net.WebSockets.WebSocketMessageType]::Text, $true, $ct).GetAwaiter().GetResult()
 }
 
+function Clear-CdpBacklog {
+    # Page.navigate and friends make Chrome emit a burst of events. Anything
+    # still buffered belongs to an earlier command, so drop it before sending
+    # the next one - otherwise the backlog grows and every call gets slower.
+    $dropped = 0
+    while ($script:State.Socket -and
+           $script:State.Socket.State -eq [System.Net.WebSockets.WebSocketState]::Open) {
+        try {
+            $frame = Receive-CdpFrame -TimeoutMs 120
+            if (-not $frame) { break }
+            $dropped++
+            if ($dropped -gt 500) { break }   # pathological burst, stop draining
+        } catch {
+            break   # nothing waiting, which is the normal exit
+        }
+    }
+    if ($dropped -gt 0) { Write-Log "Dropped $dropped stale CDP frames" 'info' }
+}
+
 function Receive-CdpFrame {
     # Reads exactly one complete websocket message.
     param([int]$TimeoutMs = 30000)
@@ -431,16 +450,26 @@ function Invoke-BridgeCycle {
     foreach ($c in $cmds) {
         try {
             $wantId = -1
-            try { $wantId = [int]($c.Payload | ConvertFrom-Json).id } catch { }
+            $method = ''
+            try {
+                $parsed = $c.Payload | ConvertFrom-Json
+                $wantId = [int]$parsed.id
+                $method = [string]$parsed.method
+            } catch { }
+
+            Clear-CdpBacklog
+
+            # Navigation keeps Chrome busy far longer than a normal call.
+            $limit = if ($method -like 'Page.navigate*') { 45000 } else { 25000 }
+
             Send-Cdp -Json $c.Payload
-            $reply = Receive-Cdp -ExpectId $wantId
+            $reply = Receive-Cdp -ExpectId $wantId -TimeoutMs $limit
             Push-BusResult -Seq $c.Seq -Json $reply
             $script:State.LastSeq = $c.Seq
             $script:State.Received++
             $script:State.ConsecFails = 0
 
-            $method = 'unknown'
-            try { $method = ($c.Payload | ConvertFrom-Json).method } catch { }
+            if (-not $method) { $method = 'unknown' }
             Write-Log "seq $($c.Seq)  ->  $method" 'info'
         } catch {
             $script:State.Errors++
@@ -766,7 +795,7 @@ if ($SelfTest) {
         'Write-Log','Get-Settings','Save-Token','Read-Token','Invoke-GitHub',
         'Test-GitHub','Get-BusCommands','Push-BusResult','Find-ChromePath',
         'Test-ChromeDebug','Test-ProfileInUse','Start-AgentChrome','Connect-ChromeSocket','Send-Cdp',
-        'Receive-CdpFrame','Receive-Cdp','Repair-Bridge','Invoke-BridgeCycle','Start-Bridge',
+        'Clear-CdpBacklog','Receive-CdpFrame','Receive-Cdp','Repair-Bridge','Invoke-BridgeCycle','Start-Bridge',
         'Stop-Bridge','New-StatusRow','Update-Status','Show-Settings','New-MainWindow'
     )
     $missing = @()

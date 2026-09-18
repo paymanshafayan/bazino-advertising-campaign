@@ -89,7 +89,7 @@ function init() {
   console.log(`Bus branch '${BRANCH}' ready.`);
 }
 
-async function send(payload, { timeoutMs = 60000 } = {}) {
+async function send(payload, { timeoutMs = 90000 } = {}) {
   const seq = nextSeq();
   const msg = typeof payload === 'string' ? payload : JSON.stringify(payload);
 
@@ -100,7 +100,7 @@ async function send(payload, { timeoutMs = 60000 } = {}) {
 
   const started = Date.now();
   while (Date.now() - started < timeoutMs) {
-    await sleep(2000);
+    await sleep(1200);
     try {
       const raw = sh(
         `gh api repos/${OWNER}/${REPO}/contents/res/${seq}.json?ref=${BRANCH} --jq .content`
