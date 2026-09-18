@@ -93,6 +93,34 @@ jobs:
           $size = [math]::Round((Get-Item 'dist/BazinoBridge.exe').Length / 1MB, 2)
           Write-Host "Built dist/BazinoBridge.exe - $size MB"
 
+      - name: Inspect the built exe
+        shell: pwsh
+        run: |
+          $f = Get-Item 'dist/BazinoBridge.exe'
+          $kb = [math]::Round($f.Length / 1KB, 1)
+          Write-Host "Size on disk: $kb KB ($($f.Length) bytes)"
+
+          # A ps2exe wrapper is small by design - the payload is the embedded
+          # script, not a bundled runtime - but under ~20 KB means the script
+          # never made it in.
+          if ($f.Length -lt 20000) {
+            Write-Host "::error::Executable is only $kb KB - the script was probably not embedded"
+            exit 1
+          }
+
+          $v = $f.VersionInfo
+          Write-Host "Product:  $($v.ProductName)"
+          Write-Host "Version:  $($v.FileVersion)"
+          Write-Host "Company:  $($v.CompanyName)"
+
+          $bytes = [IO.File]::ReadAllBytes($f.FullName)
+          $mz = [Text.Encoding]::ASCII.GetString($bytes[0..1])
+          if ($mz -ne 'MZ') {
+            Write-Host "::error::Not a valid Windows executable (header: $mz)"
+            exit 1
+          }
+          Write-Host "Valid PE executable"
+
       - name: Generate checksum
         shell: pwsh
         run: |
@@ -150,7 +178,7 @@ jobs:
         if: always()
         run: |
           $size = if (Test-Path 'dist/BazinoBridge.exe') {
-            "$([math]::Round((Get-Item 'dist/BazinoBridge.exe').Length / 1MB, 2)) MB"
+            "$([math]::Round((Get-Item 'dist/BazinoBridge.exe').Length / 1KB, 1)) KB"
           } else { 'not built' }
           $hash = if (Test-Path 'dist/BazinoBridge.exe.sha256') {
             (Get-Content 'dist/BazinoBridge.exe.sha256').Trim()
