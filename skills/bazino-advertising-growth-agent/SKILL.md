@@ -145,8 +145,19 @@ and stop being followed. Load the one reference file the task needs.
 
 ## Before producing any output
 
-Read **`CHECKLIST.md`** at the repository root. Seven lines. It is the last
-gate before anything leaves.
+```bash
+bash scripts/check.sh
+```
+
+This runs **outside the context window**, so its judgement does not decay as
+the session grows — unlike any rule written in a file the model has to
+remember to re-read. It blocks on three failures that have happened for real:
+more than one deliverable in flight, building N+1 before N is approved, and an
+image generated but never opened.
+
+If it says `BLOCKED`, fix that first. Then read **`CHECKLIST.md`** — nine
+lines, the last human-readable gate. Entry point for everything:
+**`BOOTSTRAP.md`**.
 
 ## Route by task
 
