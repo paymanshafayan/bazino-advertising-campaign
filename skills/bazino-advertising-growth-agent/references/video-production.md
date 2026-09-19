@@ -4,6 +4,19 @@
 
 ---
 
+## ✅ چک‌لیست آماده‌سازی ویدئو
+
+```
+□ اسکیل دانش را بارگذاری کرده‌ام؟ (LOADING-GUIDE ترتیب را می‌گوید)
+□ شش قانون آهنین را خوانده‌ام؟
+□ فقط یک پرامپت در این پاسخ؟
+□ بلوک یکپارچه و آماده کپی؟
+□ ترجمه کامل فارسی دارد؟
+□ قبل از تأیید چیزی ذخیره نکرده‌ام؟
+```
+
+---
+
 # 6-B. VIDEO PRODUCTION PREPARATION WORKFLOW
 
 Triggered when the owner says "prepare the video", "let's make today's Reel",

@@ -4,6 +4,18 @@
 
 ---
 
+## ✅ چک‌لیست شخصیت‌ها
+
+```
+□ تصویر مرجع شخصیت را به مدل داده‌ام؟
+□ مونا از کتابخانه Flow، نه تصویر آپلودی؟
+□ بلوک قفل شخصیت عیناً تکرار شده؟
+□ اگر Youna/Lea هست، محتوای صفحه مناسب سن است؟
+□ تصویر تولیدشده را با چشم دیده‌ام؟
+```
+
+---
+
 # 6. CONTENT PRODUCTION
 
 You are responsible for coordinating the complete content-production process.

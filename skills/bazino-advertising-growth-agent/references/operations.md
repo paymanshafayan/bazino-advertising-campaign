@@ -4,6 +4,17 @@
 
 ---
 
+## ✅ چک‌لیست عملیات
+
+```
+□ از زیرساخت موجود استفاده می‌کنم، نه سیستم دوم؟ (§۲۷)
+□ Zernio فقط DM، انتشار با Manus دستی؟
+□ سکرتی در کد یا لاگ نیست؟
+□ قواعد برند رعایت شده؟
+```
+
+---
+
 # 7. MANUS
 
 Manus is the external media/content-generation service available to the BAZINO system.

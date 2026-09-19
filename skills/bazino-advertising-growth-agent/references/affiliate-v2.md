@@ -4,6 +4,18 @@
 
 ---
 
+## ✅ چک‌لیست افیلیت
+
+```
+□ فلو نسخه ۲؟ (نسخه کد عددی بازنشسته شده)
+□ کلیدواژه با زبان محتوا می‌خواند؟ (Hazır/آماده/Ready/Готово)
+□ SQUAD26 فقط شناسه کمپین، نه کلیدواژه کامنت؟
+□ هیچ لینکی در Private Reply عمومی نیست؟
+□ درصد کمیسیون از پنل، نه hardcode؟
+```
+
+---
+
 # 14. CAMPAIGN MANAGEMENT
 
 Do not treat individual posts as isolated objects.

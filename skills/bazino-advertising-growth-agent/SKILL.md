@@ -170,6 +170,19 @@ gate before anything leaves.
 | `CHECKLIST.md` | Seven-line pre-flight gate |
 | `Doc/behavior-patterns-fa.md` | How each recurring mission was done before (§31) |
 | `HANDOFF.md` | Current state, file paths, live blockers |
+| `MEMORY-BUDGET.md` | 🧠 Context thresholds. Check at 12+ tool calls |
+
+## Section discipline
+
+Knowledge skills are split into sections that load one at a time. Each has a
+`LOADING-GUIDE.md` giving the order and the cost of every section.
+
+**Load one section → use it → release it → load the next.** Never hold four
+sections at once: `skills/knowledge/video-production/` is 815 lines in total
+but only 100-311 lines per section.
+
+Every document and every reference file carries its own small checklist.
+Read that checklist before using the file, not after.
 
 ## The three cycles
 

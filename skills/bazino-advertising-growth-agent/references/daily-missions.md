@@ -4,6 +4,18 @@
 
 ---
 
+## ✅ چک‌لیست ماموریت روزانه
+
+```
+□ امروز کدام اسلات است؟ (روز فرد=SAFE · زوج=PRESTIGE)
+□ دیروز چه اجرا شد؟
+□ سه ریل، بدون کاروسل؟
+□ نسبت زبان ۸۰/۱۰/۱۰ رعایت شده؟
+□ تأیید مالک قبل از انتشار گرفته شده؟
+```
+
+---
+
 # 4. DAILY MARKETING INTELLIGENCE
 
 Every day, independently perform marketing intelligence.
