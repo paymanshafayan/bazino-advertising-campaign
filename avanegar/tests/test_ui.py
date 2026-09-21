@@ -193,3 +193,30 @@ class UiTests(unittest.TestCase):
             self.window.toggle_recording(True)
             start.assert_not_called()
         self.window._set_state("idle")
+
+    def test_persian_preset_is_explicit_and_does_not_start_download(self):
+        self.window.settings.model = "small"
+        calls = []
+        self.window.transcribe.disconnect()
+        self.window.transcribe.connect(lambda *args: calls.append(args))
+        self.window.select_persian_preset()
+        self.assertEqual(self.window.model_combo.currentData(), "medium")
+        self.assertEqual(self.window.language_combo.currentData(), "fa")
+        self.assertEqual(self.window.settings.model, "small")
+        self.assertEqual(self.window.state, "idle")
+        self.assertEqual(calls, [])
+
+    def test_vocabulary_is_saved_and_inference_uses_it(self):
+        self.window.vocabulary_edit.setText("واژه ویژه, آوانگار")
+        with patch.object(self.window.bridge, "register", return_value=True):
+            self.assertTrue(self.window.save_settings())
+        self.assertEqual(self.window.settings.persian_vocabulary, "واژه ویژه، آوانگار")
+        calls = []
+        self.window.transcribe.disconnect()
+        self.window.transcribe.connect(lambda *args: calls.append(args))
+        self.window._set_state("stopping")
+        self.window._audio_stopped(self.window.audio_session, MagicMock(duration=1.0), False)
+        self.assertEqual(calls[0][3], "واژه ویژه، آوانگار")
+        self.window.copy_log()
+        self.assertNotIn("واژه ویژه", self.app.clipboard().text())
+        self.window._set_state("idle")

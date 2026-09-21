@@ -25,10 +25,20 @@ class SettingsTests(unittest.TestCase):
         self.assertEqual(settings.language, "en")
 
     def test_round_trip_unicode(self):
-        expected = Settings(model="base", language="ar", hotkey="ctrl_alt_f9", device_name="میکروفون", auto_paste=False)
+        expected = Settings(model="base", language="ar", hotkey="ctrl_alt_f9", device_name="میکروفون", auto_paste=False, persian_vocabulary="نام محصول، آوانگار")
         expected.save(self.path)
         self.assertEqual(Settings.load(self.path), expected)
         self.assertFalse(self.path.with_suffix(".tmp").exists())
+
+    def test_missing_vocabulary_migrates_without_changing_model(self):
+        self.path.write_text('{"model": "small", "language": "fa"}')
+        settings = Settings.load(self.path)
+        self.assertEqual(settings.model, "small")
+        self.assertEqual(settings.persian_vocabulary, "آوانگار")
+
+    def test_blank_vocabulary_survives_reload(self):
+        Settings(persian_vocabulary="").save(self.path)
+        self.assertEqual(Settings.load(self.path).persian_vocabulary, "")
 
     def test_invalid_json_is_safe(self):
         for value in ('{"model":', 'null', '[]', '42', '"foo"'):

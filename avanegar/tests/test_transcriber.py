@@ -76,3 +76,39 @@ class TranscriberTests(unittest.TestCase):
         self.worker.run(AudioClip(np.ones(16000, dtype=np.float32), 16000), "base", "fa")
         self.assertEqual(self.results, [])
         self.assertIn("decoding failed", self.errors[0])
+
+    def test_persian_vocabulary_is_passed_as_hint_not_logged(self):
+        with self.assertLogs("avanegar", level="INFO") as captured:
+            self.worker.run(AudioClip(np.full(16000, 0.1, dtype=np.float32), 16000), "small", "fa", "واژهٔ خصوصی, نام شرکت")
+        self.assertEqual(self.model.transcribe.call_args.kwargs["hotwords"], "واژهٔ خصوصی، نام شرکت")
+        self.assertNotIn("واژهٔ خصوصی", "\n".join(captured.output))
+        self.assertIn("persian_vocabulary_enabled=True", "\n".join(captured.output))
+
+    def test_persian_hints_are_not_injected_into_other_languages(self):
+        for language in ("en", "ar", "auto"):
+            with self.subTest(language=language):
+                self.worker.run(AudioClip(np.full(16000, 0.1, dtype=np.float32), 16000), "small", language, "آوانگار")
+                self.assertIsNone(self.model.transcribe.call_args.kwargs["hotwords"])
+
+    def test_blank_vocabulary_disables_hint(self):
+        self.worker.run(AudioClip(np.full(16000, 0.1, dtype=np.float32), 16000), "small", "fa", "")
+        self.assertIsNone(self.model.transcribe.call_args.kwargs["hotwords"])
+
+    def test_recognized_words_are_not_silently_replaced(self):
+        original = "این مده با آبا نگار نبیشتی شده"
+        self.model.transcribe.return_value = ([SimpleNamespace(text=original)], None)
+        self.worker.run(AudioClip(np.full(16000, 0.1, dtype=np.float32), 16000), "small", "fa", "آوانگار")
+        self.assertEqual(self.results[-1], (original, False))
+
+    def test_no_speech_does_not_output_vocabulary(self):
+        self.model.transcribe.return_value = ([], None)
+        self.worker.run(AudioClip(np.zeros(16000, dtype=np.float32), 16000), "small", "fa", "آوانگار")
+        self.assertEqual(self.results[-1], ("", False))
+
+    def test_audio_level_diagnostics_are_numeric_not_audio_or_text(self):
+        with self.assertLogs("avanegar", level="INFO") as captured:
+            self.worker.run(AudioClip(np.full(16000, 0.0001, dtype=np.float32), 16000), "small", "fa")
+        log = "\n".join(captured.output)
+        self.assertIn("Audio level is low", log)
+        self.assertIn("rms_dbfs=-80.0", log)
+        self.assertNotIn("سلام دنیا", log)

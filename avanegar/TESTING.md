@@ -57,3 +57,11 @@ Do not claim these manual checks passed based solely on mocked unit tests or the
 - Native Windows: no SendInput/Qt/audio callbacks inline in the low-level keyboard hook; actions are drained outside it.
 
 The reported hardware-specific freeze has not been reproduced on the user's microphone here. These tests cover the blocking path and races, but the new build still needs a real-device hold/release test.
+
+## Version 1.2.0 — Persian recognition controls
+
+- Persian-only optional `hotwords` hints, bounded/normalized with explicit opt-out and backward-compatible settings.
+- The Persian/Medium preset only changes the form until the user saves/prepares it. Existing model selection is not silently migrated; no extra model download is initiated by the preset itself.
+- Tests cover hint plumbing through UI/worker, no hints in English/Arabic/auto, no canned correction of the reported sentence, no output invented by application code for an empty decoder result, and no vocabulary/transcript in logs.
+- Numeric RMS/peak/clipping diagnostics are not recognition-quality scores; neither automatic gain nor a guessed transcription is applied.
+- No real user recording was supplied for this change. Unit tests use mocked model output and do NOT establish a reduction in Persian word-error rate. Compare multiple real spoken sentences on the user's microphone with Small versus Medium and with hints on/off.

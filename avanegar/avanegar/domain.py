@@ -4,6 +4,8 @@ import json
 import os
 from pathlib import Path
 
+from .vocabulary import DEFAULT_VOCABULARY, normalize_vocabulary
+
 APP_NAME = "Avanegar"
 MAX_RECORDING_SECONDS = 300
 MODELS = {"base": "سریع · Base", "small": "متعادل · Small", "medium": "دقیق‌تر · Medium"}
@@ -29,6 +31,7 @@ class Settings:
     hotkey: str = "ctrl_win"
     device_name: str = ""
     auto_paste: bool = True
+    persian_vocabulary: str = DEFAULT_VOCABULARY
 
     @classmethod
     def load(cls, path: Path) -> "Settings":
@@ -41,6 +44,7 @@ class Settings:
                 language=raw.get("language") if raw.get("language") in LANGUAGES else "fa",
                 hotkey=raw.get("hotkey") if raw.get("hotkey") in HOTKEYS else "ctrl_win",
                 device_name=raw.get("device_name", "") if isinstance(raw.get("device_name", ""), str) else "",
+                persian_vocabulary=normalize_vocabulary(raw.get("persian_vocabulary", DEFAULT_VOCABULARY)),
                 auto_paste=raw.get("auto_paste", True) if isinstance(raw.get("auto_paste", True), bool) else True,
             )
         except (OSError, ValueError, TypeError):

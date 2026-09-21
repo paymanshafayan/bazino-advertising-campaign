@@ -7,7 +7,7 @@ from PySide6.QtCore import Qt, QThread, QTimer, Signal, QUrl
 from PySide6.QtGui import QAction, QColor, QIcon, QPainter, QPen, QPixmap, QDesktopServices
 from PySide6.QtWidgets import (
     QApplication, QCheckBox, QComboBox, QFileDialog, QFrame, QHBoxLayout,
-    QLabel, QListWidget, QListWidgetItem, QMainWindow, QMenu, QMessageBox,
+    QLabel, QListWidget, QListWidgetItem, QLineEdit, QMainWindow, QMenu, QMessageBox,
     QProgressBar, QPushButton, QStackedWidget, QSystemTrayIcon, QTextEdit,
     QVBoxLayout, QWidget, QScrollArea,
 )
@@ -17,6 +17,7 @@ from .audio_service import AudioService
 from .diagnostics import configure_logging, close_logging
 from .help_text import MICROPHONE_HELP
 from . import __version__
+from .vocabulary import MAX_VOCABULARY_LENGTH, normalize_vocabulary
 
 from .domain import HOTKEYS, LANGUAGES, MAX_RECORDING_SECONDS, MODELS, Settings, can_insert
 from .transcriber import Transcriber
@@ -50,6 +51,7 @@ QTextEdit, QListWidget { background: white; border: 1px solid #e2e9e5; border-ra
 QTextEdit { font-size: 16px; }
 QListWidget::item { padding: 9px; border-bottom: 1px solid #eef2f0; }
 QListWidget::item:selected { background: #e1f2e9; color: #185e50; }
+QLineEdit { background: white; border: 1px solid #d8e3dd; border-radius: 8px; padding: 10px; }
 QComboBox { background: white; border: 1px solid #d8e3dd; border-radius: 8px; padding: 10px; min-width: 200px; }
 QComboBox QAbstractItemView { background: white; selection-background-color: #c5e8dc; }
 QCheckBox { spacing: 10px; }
@@ -105,7 +107,7 @@ class Waveform(QWidget):
 
 
 class MainWindow(QMainWindow):
-    transcribe = Signal(object, str, str)
+    transcribe = Signal(object, str, str, str)
 
     def __init__(self, directory: Path):
         super().__init__()
@@ -240,6 +242,9 @@ class MainWindow(QMainWindow):
         self.shortcut_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.shortcut_label.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         box.addWidget(self.shortcut_label)
+        self.engine_label = label("", "Subtitle")
+        self.engine_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        box.addWidget(self.engine_label)
         buttons = QHBoxLayout()
         buttons.addStretch()
         self.record_button = QPushButton("شروع ضبط")
@@ -302,7 +307,16 @@ class MainWindow(QMainWindow):
         form.setSpacing(13)
         self.language_combo = self._combo(form, "زبان گفتار", LANGUAGES, self.settings.language)
         self.model_combo = self._combo(form, "مدل تشخیص گفتار", MODELS, self.settings.model)
-        form.addWidget(label("Base: حدود ۱۵۰ مگابایت • Small: حدود ۵۰۰ مگابایت • Medium: حدود ۱٫۵ گیگابایت\nSmall برای شروع فارسی پیشنهاد می‌شود. مدل بزرگ‌تر به حافظه و زمان بیشتری نیاز دارد.", "Subtitle", True))
+        form.addWidget(label("Base: حدود ۱۵۰ مگابایت • Small: حدود ۵۰۰ مگابایت • Medium: حدود ۱٫۵ گیگابایت\nاگر Small در فارسی خطا دارد، Medium را امتحان کنید؛ دریافت جداگانه، حافظه و زمان بیشتری لازم دارد. دقت تضمین‌شده نیست.", "Subtitle", True))
+        self.persian_preset_button = QPushButton("انتخاب پیشنهادی برای دقت فارسی: Medium")
+        self.persian_preset_button.clicked.connect(self.select_persian_preset)
+        form.addWidget(self.persian_preset_button)
+        form.addWidget(label("واژه‌های ویژهٔ فارسی (اختیاری)", "Section"))
+        self.vocabulary_edit = QLineEdit(self.settings.persian_vocabulary)
+        self.vocabulary_edit.setMaxLength(MAX_VOCABULARY_LENGTH)
+        self.vocabulary_edit.setPlaceholderText("مثلاً: آوانگار، نام شرکت، نام محصول")
+        form.addWidget(self.vocabulary_edit)
+        form.addWidget(label("حداکثر ۳۰۰ نویسه؛ واژه‌ها را با ویرگول جدا کنید. فقط در زبان فارسی اعمال می‌شود. این راهنمای املایی است، نه آموزش مدل یا جایگزینی متن. برای خاموش کردن، کادر را خالی کنید. واژه‌ها محلی در تنظیمات ذخیره می‌شوند و در Log نمی‌آیند.", "Subtitle", True))
         self.device_combo = self._combo(form, "میکروفون", {"": "پیش‌فرض ویندوز"}, "")
         self.device_combo.setMinimumWidth(0)
         self.device_combo.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
@@ -331,6 +345,13 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.settings_notice)
         layout.addStretch()
         return page
+
+    def select_persian_preset(self):
+        if self.state != "idle":
+            return
+        self.language_combo.setCurrentIndex(self.language_combo.findData("fa"))
+        self.model_combo.setCurrentIndex(self.model_combo.findData("medium"))
+        self.settings_notice.setText("فارسی و Medium انتخاب شد؛ هنوز ذخیره یا دانلود نشده است. برای اعمال و دریافت حدود ۱٫۵ گیگابایت، «آماده‌سازی مدل» را بزنید. اگر کند بود، به Small برگردید.")
 
     @staticmethod
     def _combo(form, title, options, current):
@@ -442,6 +463,7 @@ class MainWindow(QMainWindow):
     def _update_shortcut_status(self):
         suffix = "" if self.hotkey_registered else "  —  غیرفعال"
         self.shortcut_label.setText(HOTKEYS[self.settings.hotkey][0] + suffix)
+        self.engine_label.setText(f"مدل: {self.settings.model.capitalize()}  |  زبان: {LANGUAGES[self.settings.language]}")
 
     def save_settings(self):
         if self.state != "idle":
@@ -450,6 +472,7 @@ class MainWindow(QMainWindow):
             model=self.model_combo.currentData(), language=self.language_combo.currentData(),
             device_name=self.device_combo.currentData(), hotkey=self.hotkey_combo.currentData(),
             auto_paste=self.auto_paste.isChecked(),
+            persian_vocabulary=normalize_vocabulary(self.vocabulary_edit.text()),
         )
         old_hotkey = self.settings.hotkey
         if IS_WINDOWS and not self.bridge.register(new.hotkey):
@@ -525,7 +548,7 @@ class MainWindow(QMainWindow):
         self.record_button.style().unpolish(self.record_button)
         self.record_button.style().polish(self.record_button)
         self.cancel_button.setEnabled(state in ("starting", "recording", "stopping"))
-        for widget in (self.save_button, self.prepare_button, self.model_combo, self.language_combo, self.device_combo, self.hotkey_combo, self.auto_paste, self.refresh_button):
+        for widget in (self.save_button, self.prepare_button, self.model_combo, self.language_combo, self.device_combo, self.hotkey_combo, self.auto_paste, self.refresh_button, self.vocabulary_edit, self.persian_preset_button):
             widget.setEnabled(state == "idle")
         self.progress_bar.setVisible(busy)
         self.wave.active = recording
@@ -613,7 +636,7 @@ class MainWindow(QMainWindow):
         self._set_state("processing")
         self.status.setText("در حال تبدیل…")
         self.notice.setText("بخشی از صدا از دست رفته است؛ متن را بررسی کنید." if had_overflow else "ضبط پایان یافت. تبدیل روی همین دستگاه انجام می‌شود؛ برای درج خودکار در همان پنجره بمانید.")
-        self.transcribe.emit(clip, self.settings.model, self.settings.language)
+        self.transcribe.emit(clip, self.settings.model, self.settings.language, self.settings.persian_vocabulary)
 
     def _audio_failed(self, session, message):
         if session == self.audio_session:
@@ -634,7 +657,7 @@ class MainWindow(QMainWindow):
         self._set_state("processing")
         self.status.setText("آماده‌سازی مدل…")
         self._navigate(0)
-        self.transcribe.emit(None, self.settings.model, self.settings.language)
+        self.transcribe.emit(None, self.settings.model, self.settings.language, self.settings.persian_vocabulary)
 
     def _progress(self, message):
         logger.info("Transcription stage: %s", message)
