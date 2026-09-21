@@ -21,6 +21,8 @@ class SafeFormatter(logging.Formatter):
         for prefix in (home, home.replace("\\", "/")):
             text = text.replace(prefix, "<USER_HOME>")
         text = re.sub(r"(?i)(token|authorization|signature|sig|api_key)=([^\s&]+)", r"\1=<REDACTED>", text)
+        text = re.sub(r"(?i)Bearer\s+[^\s\"']+", "Bearer <REDACTED>", text)
+        text = re.sub(r"sk-[A-Za-z0-9_-]+", "<API_KEY_REDACTED>", text)
         return text[:16000]
 
 

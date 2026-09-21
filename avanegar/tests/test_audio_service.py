@@ -102,3 +102,85 @@ class AudioServiceTests(unittest.TestCase):
         self.service.start(8, "")
         self.wait_for(lambda: errors)
         self.assertEqual(errors[0], (8, "RuntimeError: permission denied"))
+
+    def test_open_failure_redetects_and_retries_default_once(self):
+        from avanegar.audio import MicrophoneUnavailable
+        started, fallback = [], []
+        self.recorder.start.side_effect = [MicrophoneUnavailable("missing"), None]
+        self.recorder.refresh_devices.return_value = [(1, "default input")]
+        self.service.started.connect(started.append)
+        self.service.fallback_used.connect(fallback.append)
+        self.service.start(3, "missing input", True)
+        self.wait_for(lambda: started)
+        self.assertEqual(self.recorder.start.call_count, 2)
+        self.assertEqual(self.recorder.start.call_args.args[0], "")
+        self.assertFalse(self.service._stop_event.is_set())
+        self.assertEqual(fallback, [3])
+        self.recorder.refresh_devices.assert_called_once()
+        self.recorder.close.assert_called_with(signal_stop=False)
+
+    def test_recovery_failure_is_not_an_infinite_loop(self):
+        from avanegar.audio import MicrophoneUnavailable
+        errors = []
+        self.recorder.start.side_effect = MicrophoneUnavailable("not available")
+        self.recorder.refresh_devices.return_value = [(1, "default input")]
+        self.service.failed.connect(lambda *args: errors.append(args))
+        self.service.start(1, "missing", True)
+        self.wait_for(lambda: errors)
+        self.assertEqual(self.recorder.start.call_count, 2)
+        self.recorder.refresh_devices.assert_called_once()
+
+    def test_opt_out_prevents_recovery(self):
+        from avanegar.audio import MicrophoneUnavailable
+        errors = []
+        self.recorder.start.side_effect = MicrophoneUnavailable("not available")
+        self.service.failed.connect(lambda *args: errors.append(args))
+        self.service.start(1, "missing", False)
+        self.wait_for(lambda: errors)
+        self.recorder.start.assert_called_once()
+        self.recorder.refresh_devices.assert_not_called()
+
+    def test_release_during_recovery_never_restarts_recording(self):
+        from avanegar.audio import MicrophoneUnavailable
+        scanning, stopped = threading.Event(), []
+        self.recorder.start.side_effect = MicrophoneUnavailable("missing")
+        def rescan():
+            scanning.set()
+            self.gate.wait(2)
+            return [(1, "default input")]
+        self.recorder.refresh_devices.side_effect = rescan
+        self.service.stopped.connect(lambda *args: stopped.append(args))
+        self.service.start(1, "missing", True)
+        self.wait_for(scanning.is_set)
+        self.service.stop(1)
+        self.gate.set()
+        self.wait_for(lambda: stopped)
+        self.recorder.start.assert_called_once()
+
+    def test_no_signal_redetects_without_uploading_or_reopening(self):
+        started, empty, stopped = [], [], []
+        self.recorder.stop.return_value = MagicMock(duration=1.0, has_signal=False)
+        self.recorder.refresh_devices.return_value = [(0, "input")]
+        self.service.started.connect(started.append)
+        self.service.no_audio.connect(lambda *args: empty.append(args))
+        self.service.stopped.connect(lambda *args: stopped.append(args))
+        self.service.start(1, "", True)
+        self.wait_for(lambda: started)
+        self.service._capture_began = time.monotonic() - 1
+        self.service.stop(1)
+        self.wait_for(lambda: empty)
+        self.recorder.refresh_devices.assert_called_once()
+        self.recorder.start.assert_called_once()
+        self.assertEqual(stopped, [])
+
+    def test_cancel_never_triggers_device_recovery(self):
+        started, stopped = [], []
+        self.recorder.stop.return_value = MagicMock(duration=1.0, has_signal=False)
+        self.service.started.connect(started.append)
+        self.service.stopped.connect(lambda *args: stopped.append(args))
+        self.service.start(1, "", True)
+        self.wait_for(lambda: started)
+        self.service._capture_began = time.monotonic() - 1
+        self.service.stop(1, discard=True)
+        self.wait_for(lambda: stopped)
+        self.recorder.refresh_devices.assert_not_called()

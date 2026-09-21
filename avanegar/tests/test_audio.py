@@ -67,3 +67,33 @@ class RecorderTests(unittest.TestCase):
                 recorder.start()
             stream.close.assert_called_once()
             self.assertIsNone(recorder._stream)
+
+    def test_recovery_cleanup_does_not_fake_user_release(self):
+        import threading
+        event = threading.Event()
+        recorder = Recorder()
+        recorder._stop_requested = event
+        recorder.close(signal_stop=False)
+        self.assertFalse(event.is_set())
+        recorder.close()
+        self.assertTrue(event.is_set())
+
+    def test_rescan_requires_closed_stream(self):
+        recorder = Recorder()
+        recorder._stream = MagicMock()
+        with patch.object(sd, "_terminate") as terminate:
+            with self.assertRaises(RuntimeError):
+                recorder.refresh_devices()
+            terminate.assert_not_called()
+
+    def test_closed_device_list_can_be_reinitialized(self):
+        with patch.object(sd, "_terminate") as terminate, patch.object(sd, "_initialize") as initialize, patch.object(Recorder, "devices", return_value=[]):
+            self.assertEqual(Recorder().refresh_devices(), [])
+            terminate.assert_called_once()
+            initialize.assert_called_once()
+
+    def test_rescan_can_recover_after_prior_initialization_failed(self):
+        with patch.object(sd, "_initialized", 0, create=True), patch.object(sd, "_terminate") as terminate, patch.object(sd, "_initialize") as initialize, patch.object(Recorder, "devices", return_value=[]):
+            Recorder().refresh_devices()
+            terminate.assert_not_called()
+            initialize.assert_called_once()

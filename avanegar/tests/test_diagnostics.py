@@ -57,3 +57,10 @@ class DiagnosticsTests(unittest.TestCase):
         self.logger.info("still usable")
         self.assertIn("still usable", buffer.snapshot()[1])
         self.assertIn("Log file unavailable", buffer.snapshot()[1])
+
+    def test_api_keys_and_bearer_headers_are_redacted(self):
+        self.logger.error("Authorization: Bearer demo-secret sk-test-another-secret")
+        _, text = self.buffer.snapshot()
+        self.assertNotIn("demo-secret", text)
+        self.assertNotIn("sk-test-another-secret", text)
+        self.assertIn("REDACTED", text)

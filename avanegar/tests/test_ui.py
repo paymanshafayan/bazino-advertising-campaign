@@ -29,9 +29,18 @@ class UiTests(unittest.TestCase):
         self.addCleanup(self.directory.cleanup)
         with patch("avanegar.ui.QSystemTrayIcon.isSystemTrayAvailable", return_value=False), \
              patch("avanegar.ui.DesktopBridge.register", return_value=True), \
-             patch("avanegar.ui.Recorder.devices", return_value=[]):
+             patch("avanegar.ui.AudioService.refresh_devices"):
             self.window = MainWindow(Path(self.directory.name))
         self.addCleanup(self.cleanup_window)
+        self.window._scan_finished()
+        self.window.settings.cloud_consent = True
+        self.window.cloud_consent.setChecked(True)
+        key_patch = patch.object(self.window.key_store, "get", return_value="fake-test-key")
+        key_patch.start()
+        self.addCleanup(key_patch.stop)
+        scan_patch = patch.object(self.window.audio, "refresh_devices")
+        scan_patch.start()
+        self.addCleanup(scan_patch.stop)
         self.window.show()
         self.app.processEvents()
 
@@ -194,17 +203,38 @@ class UiTests(unittest.TestCase):
             start.assert_not_called()
         self.window._set_state("idle")
 
-    def test_persian_preset_is_explicit_and_does_not_start_download(self):
-        self.window.settings.model = "small"
+    def test_cloud_consent_required_before_opening_microphone(self):
+        self.window.settings.cloud_consent = False
+        with patch.object(self.window.audio, "start") as start:
+            self.window.toggle_recording()
+            start.assert_not_called()
+            self.assertEqual(self.window.pages.currentIndex(), 1)
+
+    def test_no_tray_notifications_exist(self):
+        import inspect
+        self.assertNotIn("showMessage", inspect.getsource(MainWindow))
+        self.window.tray = MagicMock()
+        self.window._failed("error")
+        self.window._completed("result", False)
+        self.window.tray.showMessage.assert_not_called()
+
+    def test_no_audio_recovery_does_not_transcribe_or_paste(self):
         calls = []
         self.window.transcribe.disconnect()
         self.window.transcribe.connect(lambda *args: calls.append(args))
-        self.window.select_persian_preset()
-        self.assertEqual(self.window.model_combo.currentData(), "medium")
-        self.assertEqual(self.window.language_combo.currentData(), "fa")
-        self.assertEqual(self.window.settings.model, "small")
+        self.window._set_state("stopping")
+        self.window._audio_no_audio(self.window.audio_session, "detected again")
         self.assertEqual(self.window.state, "idle")
+        self.assertEqual(self.window.target, 0)
         self.assertEqual(calls, [])
+        self.assertIn("detected again", self.window.notice.text())
+
+    def test_missing_api_key_is_visible_without_notification(self):
+        self.window.key_store.get.return_value = ""
+        with patch.object(self.window.audio, "start") as start:
+            self.window.toggle_recording()
+            start.assert_not_called()
+        self.assertIn("API", self.window.notice.text())
 
     def test_vocabulary_is_saved_and_inference_uses_it(self):
         self.window.vocabulary_edit.setText("واژه ویژه, آوانگار")
@@ -216,7 +246,8 @@ class UiTests(unittest.TestCase):
         self.window.transcribe.connect(lambda *args: calls.append(args))
         self.window._set_state("stopping")
         self.window._audio_stopped(self.window.audio_session, MagicMock(duration=1.0), False)
-        self.assertEqual(calls[0][3], "واژه ویژه، آوانگار")
+        self.assertEqual(calls[0][2], "واژه ویژه، آوانگار")
+        self.assertTrue(calls[0][3])
         self.window.copy_log()
         self.assertNotIn("واژه ویژه", self.app.clipboard().text())
         self.window._set_state("idle")

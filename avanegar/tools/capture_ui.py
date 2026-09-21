@@ -16,8 +16,9 @@ output.mkdir(parents=True, exist_ok=True)
 with tempfile.TemporaryDirectory() as directory:
     with patch("avanegar.ui.QSystemTrayIcon.isSystemTrayAvailable", return_value=False), \
          patch("avanegar.ui.DesktopBridge.register", return_value=True), \
-         patch("avanegar.ui.Recorder.devices", return_value=[]):
+         patch("avanegar.ui.AudioService.refresh_devices"):
         window = MainWindow(Path(directory))
+    window._scan_finished()
     window.resize(1080, 820)
     window.show()
     for index, name in enumerate(("dictation", "settings", "help", "log")):

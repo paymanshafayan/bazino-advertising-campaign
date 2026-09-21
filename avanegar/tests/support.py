@@ -13,6 +13,8 @@ def ensure_audio_import():
         fake = types.ModuleType("sounddevice")
         fake.PortAudioError = type("PortAudioError", (Exception,), {})
         fake.CallbackStop = type("CallbackStop", (Exception,), {})
+        fake._terminate = MagicMock()
+        fake._initialize = MagicMock()
         fake.InputStream = MagicMock()
         fake.query_devices = MagicMock(return_value=[])
         fake.check_input_settings = MagicMock()

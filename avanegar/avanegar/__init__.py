@@ -1,3 +1,3 @@
-"""Avanegar: local Persian dictation for Windows."""
+"""Avanegar: cloud Persian dictation for Windows."""
 
-__version__ = "1.2.0"
+__version__ = "2.0.0"

@@ -1,9 +1,4 @@
-import os
 import sys
-
-# Prevent the model hub's Windows symlink warning; no administrator access needed.
-os.environ.setdefault("HF_HUB_DISABLE_SYMLINKS_WARNING", "1")
-os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
 
 from PySide6.QtCore import QLockFile
 from PySide6.QtGui import QFont

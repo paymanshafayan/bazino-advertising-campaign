@@ -18,8 +18,16 @@ class AudioClip:
     sample_rate: int
 
     @property
+    def has_signal(self) -> bool:
+        return bool(self.samples.size and np.isfinite(self.samples).all() and np.max(np.abs(self.samples)) > 0.0001)
+
+    @property
     def duration(self) -> float:
         return len(self.samples) / self.sample_rate
+
+
+class MicrophoneUnavailable(RuntimeError):
+    pass
 
 
 class Recorder:
@@ -39,19 +47,34 @@ class Recorder:
         # Names (rather than changing indices) are persisted across launches.
         return [(i, d["name"]) for i, d in enumerate(sd.query_devices()) if d["max_input_channels"] > 0]
 
+    def refresh_devices(self):
+        if self._stream is not None:
+            raise RuntimeError("بازیابی دستگاه فقط پس از بستن میکروفون مجاز است.")
+        # PortAudio caches its device list. All PortAudio enumeration/open/close
+        # belongs to the ONE audio worker; never reinitialize a stuck/live stream.
+        # A previous failed initialization can leave the counter at zero.
+        if getattr(sd, "_initialized", 1) > 0:
+            sd._terminate()
+        sd._initialize()
+        return self.devices()
+
     def start(self, device_name: str = "", stop_event=None) -> None:
         if self._stream is not None:
             raise RuntimeError("ضبط دیگری در حال اجراست.")
         self._stop_requested = stop_event if stop_event is not None else threading.Event()
         with self._lock:
             self._chunks = []
+            self._frames = 0
+            self.level = 0.0
+            self.had_overflow = False
+            self.limit_reached = False
         if self._stop_requested.is_set():
             return
         device = None
         if device_name:
             device = next((i for i, name in self.devices() if name == device_name), None)
             if device is None:
-                raise RuntimeError("میکروفون انتخاب‌شده متصل نیست. در تنظیمات، میکروفون دیگری انتخاب کنید.")
+                raise MicrophoneUnavailable("میکروفون انتخاب‌شده متصل نیست. در تنظیمات، میکروفون دیگری انتخاب کنید.")
         try:
             sd.check_input_settings(device=device, channels=1, dtype="float32", samplerate=16000)
             self.sample_rate = 16000
@@ -103,8 +126,9 @@ class Recorder:
             self.level = 0.0
         return AudioClip(samples, self.sample_rate)
 
-    def close(self):
-        self._stop_requested.set()
+    def close(self, *, signal_stop=True):
+        if signal_stop:
+            self._stop_requested.set()
         stream, self._stream = self._stream, None
         if stream is not None:
             try:

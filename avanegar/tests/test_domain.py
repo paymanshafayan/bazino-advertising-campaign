@@ -25,15 +25,16 @@ class SettingsTests(unittest.TestCase):
         self.assertEqual(settings.language, "en")
 
     def test_round_trip_unicode(self):
-        expected = Settings(model="base", language="ar", hotkey="ctrl_alt_f9", device_name="میکروفون", auto_paste=False, persian_vocabulary="نام محصول، آوانگار")
+        expected = Settings(language="ar", hotkey="ctrl_alt_f9", device_name="میکروفون", auto_paste=False, persian_vocabulary="نام محصول، آوانگار")
         expected.save(self.path)
         self.assertEqual(Settings.load(self.path), expected)
         self.assertFalse(self.path.with_suffix(".tmp").exists())
 
-    def test_missing_vocabulary_migrates_without_changing_model(self):
+    def test_local_settings_migrate_without_cloud_consent(self):
         self.path.write_text('{"model": "small", "language": "fa"}')
         settings = Settings.load(self.path)
-        self.assertEqual(settings.model, "small")
+        self.assertFalse(hasattr(settings, "model"))
+        self.assertFalse(settings.cloud_consent)
         self.assertEqual(settings.persian_vocabulary, "آوانگار")
 
     def test_blank_vocabulary_survives_reload(self):

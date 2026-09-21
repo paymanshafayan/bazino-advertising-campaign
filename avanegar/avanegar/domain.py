@@ -8,7 +8,7 @@ from .vocabulary import DEFAULT_VOCABULARY, normalize_vocabulary
 
 APP_NAME = "Avanegar"
 MAX_RECORDING_SECONDS = 300
-MODELS = {"base": "سریع · Base", "small": "متعادل · Small", "medium": "دقیق‌تر · Medium"}
+CLOUD_MODEL = "gpt-4o-transcribe"
 LANGUAGES = {"fa": "فارسی", "en": "English", "ar": "العربية", "auto": "تشخیص خودکار"}
 HOTKEYS = {
     "ctrl_win": ("Ctrl + Win", 0, 0),
@@ -26,12 +26,13 @@ def data_directory() -> Path:
 
 @dataclass
 class Settings:
-    model: str = "small"
     language: str = "fa"
     hotkey: str = "ctrl_win"
     device_name: str = ""
     auto_paste: bool = True
     persian_vocabulary: str = DEFAULT_VOCABULARY
+    cloud_consent: bool = False
+    auto_recover_microphone: bool = True
 
     @classmethod
     def load(cls, path: Path) -> "Settings":
@@ -40,7 +41,8 @@ class Settings:
             if not isinstance(raw, dict):
                 return cls()
             return cls(
-                model=raw.get("model") if raw.get("model") in MODELS else "small",
+                cloud_consent=raw.get("cloud_consent") is True,
+                auto_recover_microphone=raw.get("auto_recover_microphone", True) if isinstance(raw.get("auto_recover_microphone", True), bool) else True,
                 language=raw.get("language") if raw.get("language") in LANGUAGES else "fa",
                 hotkey=raw.get("hotkey") if raw.get("hotkey") in HOTKEYS else "ctrl_win",
                 device_name=raw.get("device_name", "") if isinstance(raw.get("device_name", ""), str) else "",
