@@ -19,7 +19,7 @@ from .help_text import MICROPHONE_HELP
 from . import __version__
 from .vocabulary import MAX_VOCABULARY_LENGTH, normalize_vocabulary
 
-from .domain import HOTKEYS, LANGUAGES, MAX_RECORDING_SECONDS, CLOUD_MODEL, Settings, can_insert
+from .domain import HOTKEYS, LANGUAGES, MAX_RECORDING_SECONDS, CLOUD_MODEL, PROCESSING_MODES, LOCAL_MODELS, Settings, can_insert
 from .transcriber import Transcriber
 from .windows import DesktopBridge, IS_WINDOWS
 
@@ -107,7 +107,8 @@ class Waveform(QWidget):
 
 
 class MainWindow(QMainWindow):
-    transcribe = Signal(object, str, str, bool)
+    transcribe = Signal(object, str, str, bool, str, str)
+    inspect_model_cache = Signal(str)
 
     def __init__(self, directory: Path):
         super().__init__()
@@ -149,14 +150,17 @@ class MainWindow(QMainWindow):
         self.hotkey_registered = self.bridge.register(self.settings.hotkey)
         self._update_shortcut_status()
         self.worker_thread = QThread(self)
-        self.worker = Transcriber(self.key_store)
+        self.worker = Transcriber(self.key_store, model_directory=directory / "models")
         self.worker.moveToThread(self.worker_thread)
         self.transcribe.connect(self.worker.run)
+        self.inspect_model_cache.connect(self.worker.inspect_cache)
+        self.worker.cache_status.connect(self._model_cache_status)
         self.worker.progress.connect(self._progress)
         self.worker.completed.connect(self._completed)
         self.worker.failed.connect(self._failed)
         self.worker_thread.finished.connect(self.worker.deleteLater)
         self.worker_thread.start()
+        self._engine_selection_changed()
         self.timer = QTimer(self)
         self.timer.setInterval(80)
         self.timer.timeout.connect(self._tick)
@@ -201,8 +205,8 @@ class MainWindow(QMainWindow):
             side.addWidget(button)
             self.nav.append(button)
         side.addStretch()
-        side.addWidget(label("تبدیل ابری با اینترنت", wrap=True))
-        privacy = label("ارسال صدا با HTTPS\nنیازمند اعتبار API", wrap=True)
+        side.addWidget(label("محلی یا ابری؛ به انتخاب شما", wrap=True))
+        privacy = label("محلی: بدون ارسال صدا\nابری: نیازمند اعتبار API", wrap=True)
         privacy.setStyleSheet("color: #9bb7b8; font-size: 12px; line-height: 1.5;")
         side.addWidget(privacy)
         side.addSpacing(22)
@@ -236,7 +240,8 @@ class MainWindow(QMainWindow):
         box = QVBoxLayout(card)
         box.setContentsMargins(24, 18, 24, 18)
         badge_row = QHBoxLayout()
-        badge_row.addWidget(label("پردازش ابری  •  سرویس OpenAI", "Badge"))
+        self.mode_badge = label("", "Badge")
+        badge_row.addWidget(self.mode_badge)
         badge_row.addStretch()
         self.clock = label("00:00 / 05:00", "Timer")
         self.clock.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
@@ -272,7 +277,7 @@ class MainWindow(QMainWindow):
         self.progress_bar.hide()
         box.addWidget(self.progress_bar)
         layout.addWidget(card)
-        self.notice = label("ابتدا در تنظیمات، کلید API را وارد و ارسال صدا به OpenAI را تأیید کنید. هیچ مدل محلی دانلود نمی‌شود.", "Subtitle", True)
+        self.notice = label("در تنظیمات، حالت محلی یا ابری را انتخاب و ذخیره کنید. در حالت محلی، ابتدا مدل‌های قبلی بررسی می‌شوند.", "Subtitle", True)
         layout.addWidget(self.notice)
         heading = QHBoxLayout()
         heading.addWidget(label("متن شما", "Section"))
@@ -303,7 +308,7 @@ class MainWindow(QMainWindow):
         self.history.setToolTip("۱۰ گفتار آخر، فقط در حافظه. برای باز کردن، روی متن کلیک کنید.")
         self.history.itemClicked.connect(lambda item: self.result.setPlainText(item.data(Qt.ItemDataRole.UserRole)))
         layout.addWidget(self.history, 1)
-        layout.addWidget(label("صدا روی دیسک این برنامه ذخیره نمی‌شود؛ برای تبدیل به OpenAI ارسال می‌شود. متن نشست با خروج کامل پاک می‌شود.", "Subtitle", True))
+        layout.addWidget(label("صدا روی دیسک این برنامه ذخیره نمی‌شود. فقط در حالت ابری ارسال می‌شود؛ متن نشست با خروج کامل پاک می‌شود.", "Subtitle", True))
         self._text_changed()
         return page
 
@@ -315,30 +320,51 @@ class MainWindow(QMainWindow):
         form.setContentsMargins(24, 24, 24, 24)
         form.setSpacing(13)
         self.language_combo = self._combo(form, "زبان گفتار", LANGUAGES, self.settings.language)
-        form.addWidget(label("سرویس ابری OpenAI · " + CLOUD_MODEL, "Section"))
-        form.addWidget(label("این نسخه فقط آنلاین است؛ دانلود مدل و پردازش محلی حذف شده‌اند. API هزینه و اعتبار مستقل دارد؛ اشتراک ChatGPT جای اعتبار API نیست.", "Subtitle", True))
-        form.addWidget(label("کلید API — فقط داخل برنامه وارد کنید", "Section"))
+        self.mode_combo = self._combo(form, "روش تبدیل گفتار", PROCESSING_MODES, self.settings.mode)
+        form.addWidget(label("انتخاب فقط پس از ذخیره اعمال می‌شود. در صورت خطا، حالت محلی و ابری خودکار جای یکدیگر را نمی‌گیرند.", "Subtitle", True))
+        self.local_panel = QWidget()
+        local_form = QVBoxLayout(self.local_panel)
+        local_form.setContentsMargins(0, 0, 0, 0)
+        self.local_model_combo = self._combo(local_form, "مدل محلی", LOCAL_MODELS, self.settings.local_model)
+        local_form.addWidget(label("Base حدود ۱۵۰ مگابایت • Small حدود ۵۰۰ مگابایت • Medium حدود ۱٫۵ گیگابایت. مدل بزرگ‌تر به حافظه و زمان بیشتری نیاز دارد. برای استفاده از مدل کاملِ موجود، اینترنت یا کلید API لازم نیست.", "Subtitle", True))
+        self.local_cache_label = label("در حال بررسی پوشهٔ مدل‌ها…", "Subtitle", True)
+        self.local_cache_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        local_form.addWidget(self.local_cache_label)
+        self.model_folder_button = QPushButton("باز کردن پوشهٔ مدل‌های قبلی")
+        self.model_folder_button.clicked.connect(self.open_models_folder)
+        local_form.addWidget(self.model_folder_button)
+        self.cache_check_button = QPushButton("بررسی دوبارهٔ مدل — بدون دانلود")
+        self.cache_check_button.clicked.connect(self._engine_selection_changed)
+        local_form.addWidget(self.cache_check_button)
+        form.addWidget(self.local_panel)
+        self.cloud_panel = QWidget()
+        cloud_form = QVBoxLayout(self.cloud_panel)
+        cloud_form.setContentsMargins(0, 0, 0, 0)
+        cloud_form.addWidget(label("سرویس ابری OpenAI · " + CLOUD_MODEL, "Section"))
+        cloud_form.addWidget(label("در این حالت، صدا برای تبدیل به OpenAI ارسال می‌شود. API هزینه و اعتبار مستقل دارد؛ اشتراک ChatGPT جای اعتبار API نیست.", "Subtitle", True))
+        cloud_form.addWidget(label("کلید API — فقط داخل برنامه وارد کنید", "Section"))
         self.api_key_edit = QLineEdit()
         self.api_key_edit.setEchoMode(QLineEdit.EchoMode.Password)
         self.api_key_edit.setMaxLength(4096)
         self.api_key_edit.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.api_key_edit.setPlaceholderText("برای حفظ کلید ذخیره‌شده، خالی بگذارید")
-        form.addWidget(self.api_key_edit)
+        cloud_form.addWidget(self.api_key_edit)
         self.key_status = label("", "Subtitle", True)
-        form.addWidget(self.key_status)
+        cloud_form.addWidget(self.key_status)
         self.delete_key_button = QPushButton("حذف کلید ذخیره‌شده")
         self.delete_key_button.clicked.connect(self.delete_api_key)
-        form.addWidget(self.delete_key_button)
+        cloud_form.addWidget(self.delete_key_button)
         self.cloud_consent = QCheckBox("ارسال ضبط و واژه‌های راهنما به OpenAI را تأیید می‌کنم")
         self.cloud_consent.setChecked(self.settings.cloud_consent)
-        form.addWidget(self.cloud_consent)
-        form.addWidget(label("ارسال پس از پایان هر ضبط انجام می‌شود. نگهداری داده در سرویس تابع سیاست OpenAI است؛ آوانگار نمی‌تواند حذف فوری از سرور را تضمین کند. کلید در ویندوز با DPAPI همین حساب رمز می‌شود، نه در settings.json یا Log.", "Subtitle", True))
+        cloud_form.addWidget(self.cloud_consent)
+        cloud_form.addWidget(label("ارسال پس از پایان هر ضبط انجام می‌شود. نگهداری داده در سرویس تابع سیاست OpenAI است؛ آوانگار نمی‌تواند حذف فوری از سرور را تضمین کند. کلید در ویندوز با DPAPI همین حساب رمز می‌شود، نه در settings.json یا Log.", "Subtitle", True))
+        form.addWidget(self.cloud_panel)
         form.addWidget(label("واژه‌های ویژهٔ فارسی (اختیاری)", "Section"))
         self.vocabulary_edit = QLineEdit(self.settings.persian_vocabulary)
         self.vocabulary_edit.setMaxLength(MAX_VOCABULARY_LENGTH)
         self.vocabulary_edit.setPlaceholderText("مثلاً: آوانگار، نام شرکت، نام محصول")
         form.addWidget(self.vocabulary_edit)
-        form.addWidget(label("حداکثر ۳۰۰ نویسه؛ واژه‌ها را با ویرگول جدا کنید. فقط در زبان فارسی اعمال می‌شود. این راهنمای املایی است، نه آموزش مدل یا جایگزینی متن. برای خاموش کردن، کادر را خالی کنید. واژه‌ها در تنظیمات ذخیره و همراه ضبط به سرویس فرستاده می‌شوند؛ در Log نمی‌آیند.", "Subtitle", True))
+        form.addWidget(label("حداکثر ۳۰۰ نویسه؛ واژه‌ها را با ویرگول جدا کنید. فقط در زبان فارسی اعمال می‌شود. این راهنمای املایی است، نه آموزش مدل یا جایگزینی متن. برای خاموش کردن، کادر را خالی کنید. واژه‌ها در تنظیمات ذخیره می‌شوند؛ در حالت محلی فقط روی دستگاه استفاده و در حالت ابری همراه ضبط ارسال می‌شوند. در Log نمی‌آیند.", "Subtitle", True))
         self.device_combo = self._combo(form, "میکروفون", {"": "پیش‌فرض ویندوز"}, "")
         self.device_combo.setMinimumWidth(0)
         self.device_combo.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
@@ -362,15 +388,43 @@ class MainWindow(QMainWindow):
         self.save_button.setObjectName("Primary")
         self.save_button.clicked.connect(self.save_settings)
         self.prepare_button = QPushButton("آزمون اتصال ابری")
-        self.prepare_button.clicked.connect(self.check_connection)
+        self.prepare_button.clicked.connect(self.prepare_engine)
         actions.addWidget(self.save_button)
         actions.addWidget(self.prepare_button)
         form.addLayout(actions)
         layout.addWidget(card)
-        self.settings_notice = label("کلید را ذخیره و اتصال را آزمایش کنید. اعلان‌های ویندوز کاملاً خاموش‌اند؛ وضعیت و خطا فقط در برنامه و Log دیده می‌شود.", "Subtitle", True)
+        self.settings_notice = label("در حالت محلی، آماده‌سازی ابتدا همان پوشهٔ مدل‌های قبلی را بررسی می‌کند؛ در حالت ابری، کلید و اتصال آزمایش می‌شوند. اعلان‌ها خاموش‌اند.", "Subtitle", True)
         layout.addWidget(self.settings_notice)
+        self.mode_combo.currentIndexChanged.connect(self._engine_selection_changed)
+        self.local_model_combo.currentIndexChanged.connect(self._engine_selection_changed)
         layout.addStretch()
         return page
+
+    def _engine_selection_changed(self):
+        local = self.mode_combo.currentData() == "local"
+        self.local_panel.setVisible(local)
+        self.cloud_panel.setVisible(not local)
+        self.prepare_button.setText("بررسی و آماده‌سازی مدل محلی" if local else "آزمون اتصال ابری")
+        if local:
+            self.local_cache_label.setText(f"در حال بررسی مدل {self.local_model_combo.currentData()} در:\n{self.directory / 'models'}")
+            self.inspect_model_cache.emit(self.local_model_combo.currentData())
+
+    def _model_cache_status(self, model, path):
+        if model != self.local_model_combo.currentData():
+            return
+        if path:
+            self.local_cache_label.setText(f"مدل {model} موجود است؛ دانلود دوباره لازم نیست.\n{path}")
+        else:
+            self.local_cache_label.setText(f"مدل کامل {model} پیدا نشد یا فایل‌ها ناقص‌اند. هنگام آماده‌سازی دریافت/تکمیل می‌شود.\nمسیر بررسی: {self.directory / 'models'}")
+
+    def open_models_folder(self):
+        folder = self.directory / "models"
+        try:
+            folder.mkdir(parents=True, exist_ok=True)
+            if not QDesktopServices.openUrl(QUrl.fromLocalFile(str(folder))):
+                self.settings_notice.setText(f"پوشه را دستی باز کنید: {folder}")
+        except OSError:
+            self.settings_notice.setText("پوشهٔ مدل‌ها قابل ایجاد نیست؛ دسترسی و فضای دیسک را بررسی کنید.")
 
     def _refresh_key_status(self):
         try:
@@ -389,7 +443,9 @@ class MainWindow(QMainWindow):
         except OSError:
             self.settings_notice.setText("حذف کلید انجام نشد؛ دسترسی فایل را بررسی کنید.")
 
-    def _cloud_ready(self):
+    def _engine_ready(self):
+        if self.settings.mode == "local":
+            return True
         if not self.settings.cloud_consent:
             self.notice.setText("ابتدا در تنظیمات، ارسال صدا به سرویس OpenAI را تأیید و ذخیره کنید.")
             return False
@@ -414,7 +470,7 @@ class MainWindow(QMainWindow):
     def _help_page(self):
         page, layout = self._page("سه قدم تا نوشتن با صدا", "برای Windows 10 و 11، نسخهٔ ۶۴ بیتی")
         for title, text in [
-            ("۱  /  یک‌بار آماده شوید", "میکروفون را وصل کنید. در تنظیمات ویندوز، دسترسی برنامه‌های دسکتاپ به میکروفون را روشن کنید. سپس در تنظیمات آوانگار، کلید OpenAI API را ذخیره، ارسال صدا را تأیید و اتصال ابری را آزمایش کنید. اینترنت و اعتبار API در هر تبدیل لازم است؛ مدل محلی وجود ندارد."),
+            ("۱  /  یک‌بار آماده شوید", "میکروفون را وصل کنید. در تنظیمات ویندوز، دسترسی برنامه‌های دسکتاپ به میکروفون را روشن کنید. در تنظیمات روش تبدیل را انتخاب کنید: محلی، با آماده‌سازی یا استفاده از مدل قبلی در پوشهٔ models؛ یا ابری، با کلید و اعتبار OpenAI API و تأیید ارسال صدا. مدل محلی موجود بدون اینترنت و بدون کلید کار می‌کند."),
             ("۲  /  نشانگر را جای متن بگذارید", "در Word، مرورگر، پیام‌رسان یا هر کادر متنی استاندارد کلیک کنید. کلیدهای Ctrl + Win را با هم نگه دارید. پس از نمایش «دارم می‌شنوم» صحبت کنید؛ با رها کردن یکی از کلیدها ضبط تمام و تبدیل آغاز می‌شود. فشار دوباره برای پایان لازم نیست. دکمهٔ داخل برنامه همچنان با کلیک شروع و با کلیک دوم پایان می‌دهد. هر ضبط تا ۵ دقیقه است."),
             ("۳  /  کمی صبر کنید؛ متن درج می‌شود", "تا پایان تبدیل، پنجرهٔ مقصد را عوض نکنید. اگر درج خودکار خاموش باشد یا پنجره عوض شده باشد، متن در آوانگار آمادهٔ کپی است. ضبط با دکمهٔ داخل برنامه نیز فقط متن را در آوانگار نمایش می‌دهد."),
             ("چند نکتهٔ کاربردی", "بستن پنجره، برنامه را کنار ساعت ویندوز نگه می‌دارد (در صورت وجود سینی سیستم). برای خروج کامل، از منوی آیکن کنار ساعت «خروج» را بزنید. برای پنجره‌های دارای دسترسی Administrator، صفحهٔ ورود ویندوز و بعضی بازی‌ها، درج خودکار تضمین نمی‌شود. متن را پیش از ارسال بازبینی کنید."),
@@ -426,7 +482,7 @@ class MainWindow(QMainWindow):
             box.addWidget(label(title, "Section"))
             box.addWidget(label(text, None, True))
             layout.addWidget(card)
-        layout.addWidget(label("حریم خصوصی: ضبط و واژه‌های راهنما با HTTPS به OpenAI ارسال می‌شوند. فایل صوتی و تاریخچهٔ متن روی دیسک این برنامه ذخیره نمی‌شوند. سیاست نگهداری سرویس مستقل از برنامه است. متن کپی‌شده ممکن است در تاریخچه یا همگام‌سازی کلیپ‌بورد ویندوز باقی بماند.", "Subtitle", True))
+        layout.addWidget(label("حریم خصوصی: در حالت محلی صدا و واژه‌ها از دستگاه خارج نمی‌شوند؛ فقط دریافت اولیهٔ مدل از اینترنت است. در حالت ابری، ضبط و واژه‌های راهنما با HTTPS به OpenAI ارسال می‌شوند. فایل صوتی و تاریخچهٔ متن روی دیسک این برنامه ذخیره نمی‌شوند. سیاست نگهداری سرویس مستقل از برنامه است. متن کپی‌شده ممکن است در تاریخچه یا همگام‌سازی کلیپ‌بورد ویندوز باقی بماند.", "Subtitle", True))
         permission_card = QFrame()
         permission_card.setObjectName("Card")
         permission_layout = QVBoxLayout(permission_card)
@@ -545,12 +601,16 @@ class MainWindow(QMainWindow):
     def _update_shortcut_status(self):
         suffix = "" if self.hotkey_registered else "  —  غیرفعال"
         self.shortcut_label.setText(HOTKEYS[self.settings.hotkey][0] + suffix)
-        self.engine_label.setText(f"OpenAI · {CLOUD_MODEL}  |  {LANGUAGES[self.settings.language]}")
+        local = self.settings.mode == "local"
+        self.mode_badge.setText("پردازش محلی • بدون ارسال صدا" if local else "پردازش ابری • OpenAI")
+        engine = f"محلی · {self.settings.local_model.capitalize()}" if local else f"OpenAI · {CLOUD_MODEL}"
+        self.engine_label.setText(f"{engine}  |  {LANGUAGES[self.settings.language]}")
 
     def save_settings(self):
         if self.state != "idle":
             return False
         new = Settings(
+            mode=self.mode_combo.currentData(), local_model=self.local_model_combo.currentData(),
             language=self.language_combo.currentData(),
             device_name=self.device_combo.currentData(), hotkey=self.hotkey_combo.currentData(),
             auto_paste=self.auto_paste.isChecked(),
@@ -559,7 +619,7 @@ class MainWindow(QMainWindow):
             persian_vocabulary=normalize_vocabulary(self.vocabulary_edit.text()),
         )
         try:
-            if self.api_key_edit.text().strip():
+            if new.mode == "cloud" and self.api_key_edit.text().strip():
                 self.key_store.save(self.api_key_edit.text())
                 self.api_key_edit.clear()
             self._refresh_key_status()
@@ -584,7 +644,7 @@ class MainWindow(QMainWindow):
         self.settings = new
         self.hotkey_registered = self.bridge.registered
         self._update_shortcut_status()
-        self.settings_notice.setText("تنظیمات ذخیره شد. با «آزمون اتصال ابری» کلید و دسترسی را بررسی کنید؛ صدایی در این آزمون ارسال نمی‌شود.")
+        self.settings_notice.setText("تنظیمات ذخیره شد. حالت فعال روی صفحهٔ ضبط دیده می‌شود؛ برای بررسی مدل محلی یا اتصال ابری دکمهٔ آماده‌سازی را بزنید.")
         return True
 
     def _setup_tray(self):
@@ -636,7 +696,7 @@ class MainWindow(QMainWindow):
         self.record_button.style().unpolish(self.record_button)
         self.record_button.style().polish(self.record_button)
         self.cancel_button.setEnabled(state in ("starting", "recording", "stopping"))
-        for widget in (self.save_button, self.prepare_button, self.language_combo, self.device_combo, self.hotkey_combo, self.auto_paste, self.refresh_button, self.vocabulary_edit, self.api_key_edit, self.delete_key_button, self.cloud_consent, self.auto_recover):
+        for widget in (self.save_button, self.prepare_button, self.language_combo, self.device_combo, self.hotkey_combo, self.auto_paste, self.refresh_button, self.vocabulary_edit, self.api_key_edit, self.delete_key_button, self.cloud_consent, self.auto_recover, self.mode_combo, self.local_model_combo, self.model_folder_button, self.cache_check_button):
             widget.setEnabled(state == "idle")
         self.progress_bar.setVisible(busy)
         self.wave.active = recording
@@ -655,7 +715,7 @@ class MainWindow(QMainWindow):
         if self.state == "recording":
             self._finish_recording()
         elif self.state == "idle":
-            if not self._cloud_ready():
+            if not self._engine_ready():
                 self._navigate(1)
                 return
             self.target = self.bridge.foreground() if from_hotkey else 0
@@ -725,8 +785,9 @@ class MainWindow(QMainWindow):
             return
         self._set_state("processing")
         self.status.setText("در حال تبدیل…")
-        self.notice.setText("بخشی از صدا از دست رفته است؛ متن را بررسی کنید." if had_overflow else "ضبط پایان یافت. صدا برای تبدیل به OpenAI ارسال می‌شود؛ برای درج خودکار در همان پنجره بمانید.")
-        self.transcribe.emit(clip, self.settings.language, self.settings.persian_vocabulary, self.settings.cloud_consent)
+        operation = "تبدیل محلی انجام می‌شود؛ صدا ارسال نمی‌شود." if self.settings.mode == "local" else "صدا برای تبدیل به OpenAI ارسال می‌شود."
+        self.notice.setText("بخشی از صدا از دست رفته است؛ متن را بررسی کنید." if had_overflow else "ضبط پایان یافت. " + operation + " برای درج خودکار در همان پنجره بمانید.")
+        self.transcribe.emit(clip, self.settings.language, self.settings.persian_vocabulary, self.settings.cloud_consent, self.settings.mode, self.settings.local_model)
 
     def _audio_failed(self, session, message):
         if session == self.audio_session and self.state in ("starting", "stopping", "recording", "audio_stalled"):
@@ -739,15 +800,15 @@ class MainWindow(QMainWindow):
             self._finish_recording()
             self.notice.setText("در حال لغو ضبط و آزاد کردن میکروفون…")
 
-    def check_connection(self):
-        if not self.save_settings() or not self._cloud_ready():
+    def prepare_engine(self):
+        if not self.save_settings() or not self._engine_ready():
             return
         self.target = 0
         self.discard_result = False
         self._set_state("processing")
-        self.status.setText("بررسی اتصال ابری…")
+        self.status.setText("بررسی مدل محلی…" if self.settings.mode == "local" else "بررسی اتصال ابری…")
         self._navigate(0)
-        self.transcribe.emit(None, self.settings.language, self.settings.persian_vocabulary, self.settings.cloud_consent)
+        self.transcribe.emit(None, self.settings.language, self.settings.persian_vocabulary, self.settings.cloud_consent, self.settings.mode, self.settings.local_model)
 
     def _progress(self, message):
         logger.info("Transcription stage: %s", message)
@@ -762,8 +823,12 @@ class MainWindow(QMainWindow):
         if self.discard_result:
             return
         if prepare_only:
-            self.status.setText("اتصال و کلید تأیید شد")
-            self.notice.setText("کلید و دسترسی به مدل تأیید شد؛ اعتبار و سهمیهٔ تبدیل در اولین درخواست صوتی مشخص می‌شود.")
+            if self.settings.mode == "local":
+                self.status.setText("مدل محلی آماده است")
+                self.notice.setText("اکنون با همین مدل بدون اینترنت و بدون ارسال صدا می‌توانید تبدیل کنید.")
+            else:
+                self.status.setText("اتصال و کلید تأیید شد")
+                self.notice.setText("کلید و دسترسی به مدل تأیید شد؛ اعتبار و سهمیهٔ تبدیل در اولین درخواست صوتی مشخص می‌شود.")
             return
         if not text:
             self.status.setText("گفتاری تشخیص داده نشد")

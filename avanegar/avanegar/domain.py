@@ -9,6 +9,8 @@ from .vocabulary import DEFAULT_VOCABULARY, normalize_vocabulary
 APP_NAME = "Avanegar"
 MAX_RECORDING_SECONDS = 300
 CLOUD_MODEL = "gpt-4o-transcribe"
+PROCESSING_MODES = {"local": "محلی · روی همین دستگاه", "cloud": "ابری · OpenAI"}
+LOCAL_MODELS = {"base": "Base · سبک‌تر", "small": "Small · متعادل", "medium": "Medium · بزرگ‌تر"}
 LANGUAGES = {"fa": "فارسی", "en": "English", "ar": "العربية", "auto": "تشخیص خودکار"}
 HOTKEYS = {
     "ctrl_win": ("Ctrl + Win", 0, 0),
@@ -26,6 +28,8 @@ def data_directory() -> Path:
 
 @dataclass
 class Settings:
+    mode: str = "local"
+    local_model: str = "small"
     language: str = "fa"
     hotkey: str = "ctrl_win"
     device_name: str = ""
@@ -40,7 +44,14 @@ class Settings:
             raw = json.loads(path.read_text(encoding="utf-8"))
             if not isinstance(raw, dict):
                 return cls()
+            # Preserve 2.0 cloud users; 1.x model users and fresh installs stay local.
+            mode = raw.get("mode")
+            if mode not in PROCESSING_MODES:
+                mode = "cloud" if "cloud_consent" in raw and "model" not in raw else "local"
+            model = raw.get("local_model", raw.get("model", "small"))
             return cls(
+                mode=mode,
+                local_model=model if model in LOCAL_MODELS else "small",
                 cloud_consent=raw.get("cloud_consent") is True,
                 auto_recover_microphone=raw.get("auto_recover_microphone", True) if isinstance(raw.get("auto_recover_microphone", True), bool) else True,
                 language=raw.get("language") if raw.get("language") in LANGUAGES else "fa",

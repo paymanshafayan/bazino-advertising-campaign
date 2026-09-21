@@ -33,6 +33,9 @@ class UiTests(unittest.TestCase):
             self.window = MainWindow(Path(self.directory.name))
         self.addCleanup(self.cleanup_window)
         self.window._scan_finished()
+        self.window.settings.mode = "cloud"
+        self.window.mode_combo.setCurrentIndex(self.window.mode_combo.findData("cloud"))
+        self.window._update_shortcut_status()
         self.window.settings.cloud_consent = True
         self.window.cloud_consent.setChecked(True)
         key_patch = patch.object(self.window.key_store, "get", return_value="fake-test-key")
@@ -251,3 +254,39 @@ class UiTests(unittest.TestCase):
         self.window.copy_log()
         self.assertNotIn("واژه ویژه", self.app.clipboard().text())
         self.window._set_state("idle")
+
+    def test_local_mode_requires_neither_cloud_consent_nor_key(self):
+        self.window.settings.mode = "local"
+        self.window.settings.cloud_consent = False
+        self.window.key_store.get.return_value = ""
+        with patch.object(self.window.audio, "start") as start:
+            self.window.toggle_recording()
+        start.assert_called_once()
+        self.assertEqual(self.window.state, "starting")
+        self.window._set_state("idle")
+
+    def test_mode_and_model_selection_saved_and_sent_to_worker(self):
+        self.window.mode_combo.setCurrentIndex(self.window.mode_combo.findData("local"))
+        self.window.local_model_combo.setCurrentIndex(self.window.local_model_combo.findData("medium"))
+        with patch.object(self.window.bridge, "register", return_value=True):
+            self.assertTrue(self.window.save_settings())
+        self.assertEqual(self.window.settings.mode, "local")
+        self.assertEqual(self.window.settings.local_model, "medium")
+        self.assertIn("محلی", self.window.mode_badge.text())
+        requests = []
+        self.window.transcribe.disconnect()
+        self.window.transcribe.connect(lambda *args: requests.append(args))
+        self.window._set_state("stopping")
+        self.window._audio_stopped(self.window.audio_session, MagicMock(duration=1), False)
+        self.assertEqual(requests[0][4:], ("local", "medium"))
+        self.window._set_state("idle")
+
+    def test_cache_status_shows_existing_path_without_triggering_transcription(self):
+        requests = []
+        self.window.transcribe.disconnect()
+        self.window.transcribe.connect(lambda *args: requests.append(args))
+        model = self.window.local_model_combo.currentData()
+        self.window._model_cache_status(model, "C:/Users/test/AppData/Local/Avanegar/models/snapshot")
+        self.assertIn("دانلود دوباره لازم نیست", self.window.local_cache_label.text())
+        self.assertIn("Avanegar/models", self.window.local_cache_label.text())
+        self.assertEqual(requests, [])

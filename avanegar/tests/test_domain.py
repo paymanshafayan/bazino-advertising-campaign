@@ -25,7 +25,7 @@ class SettingsTests(unittest.TestCase):
         self.assertEqual(settings.language, "en")
 
     def test_round_trip_unicode(self):
-        expected = Settings(language="ar", hotkey="ctrl_alt_f9", device_name="میکروفون", auto_paste=False, persian_vocabulary="نام محصول، آوانگار")
+        expected = Settings(mode="cloud", local_model="medium", language="ar", hotkey="ctrl_alt_f9", device_name="میکروفون", auto_paste=False, persian_vocabulary="نام محصول، آوانگار")
         expected.save(self.path)
         self.assertEqual(Settings.load(self.path), expected)
         self.assertFalse(self.path.with_suffix(".tmp").exists())
@@ -33,9 +33,28 @@ class SettingsTests(unittest.TestCase):
     def test_local_settings_migrate_without_cloud_consent(self):
         self.path.write_text('{"model": "small", "language": "fa"}')
         settings = Settings.load(self.path)
-        self.assertFalse(hasattr(settings, "model"))
+        self.assertEqual(settings.mode, "local")
+        self.assertEqual(settings.local_model, "small")
         self.assertFalse(settings.cloud_consent)
         self.assertEqual(settings.persian_vocabulary, "آوانگار")
+
+    def test_old_medium_selection_survives_upgrade(self):
+        self.path.write_text('{"model": "medium", "language": "fa"}')
+        settings = Settings.load(self.path)
+        self.assertEqual(settings.mode, "local")
+        self.assertEqual(settings.local_model, "medium")
+
+    def test_cloud_20_settings_stay_cloud(self):
+        self.path.write_text('{"cloud_consent": true, "language": "fa"}')
+        settings = Settings.load(self.path)
+        self.assertEqual(settings.mode, "cloud")
+        self.assertTrue(settings.cloud_consent)
+
+    def test_explicit_local_choice_wins_over_remembered_cloud_consent(self):
+        Settings(mode="local", local_model="medium", cloud_consent=True).save(self.path)
+        restored = Settings.load(self.path)
+        self.assertEqual(restored.mode, "local")
+        self.assertEqual(restored.local_model, "medium")
 
     def test_blank_vocabulary_survives_reload(self):
         Settings(persian_vocabulary="").save(self.path)

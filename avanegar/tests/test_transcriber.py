@@ -1,4 +1,6 @@
 import unittest
+from pathlib import Path
+import tempfile
 from unittest.mock import MagicMock
 import numpy as np
 
@@ -16,7 +18,9 @@ class TranscriberTests(unittest.TestCase):
         self.client = MagicMock()
         self.client.transcribe.return_value = "سلام دنیا"
         self.factory = MagicMock(return_value=self.client)
-        self.worker = Transcriber(self.keys, self.factory)
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.worker = Transcriber(self.keys, self.factory, model_directory=Path(directory.name) / "models")
         self.results, self.errors = [], []
         self.worker.completed.connect(lambda *args: self.results.append(args))
         self.worker.failed.connect(self.errors.append)
@@ -66,4 +70,43 @@ class TranscriberTests(unittest.TestCase):
             self.worker.run(self.clip, "fa", "", True)
         self.assertNotIn("SECRET", "\n".join(log.output))
         self.assertNotIn("private text", "\n".join(log.output))
+        self.assertEqual(len(self.errors), 1)
+
+    def test_local_works_without_cloud_key_or_consent(self):
+        from unittest.mock import patch
+        local = MagicMock()
+        local.transcribe.return_value = "متن محلی"
+        with patch("avanegar.transcriber.LocalEngine", return_value=local):
+            self.worker.run(self.clip, "fa", "آوانگار", False, "local", "small")
+        self.assertEqual(self.results, [("متن محلی", False)])
+        self.keys.get.assert_not_called()
+        self.factory.assert_not_called()
+        self.assertEqual(local.transcribe.call_args.args[1], "small")
+
+    def test_local_preparation_does_not_test_cloud_connection(self):
+        from unittest.mock import patch
+        local = MagicMock()
+        with patch("avanegar.transcriber.LocalEngine", return_value=local):
+            self.worker.run(None, "fa", "", False, "local", "medium")
+        local.prepare.assert_called_once()
+        self.keys.get.assert_not_called()
+        self.factory.assert_not_called()
+        self.assertEqual(self.results, [("", True)])
+
+    def test_failed_local_never_falls_back_to_cloud(self):
+        from unittest.mock import patch
+        local = MagicMock()
+        local.transcribe.side_effect = RuntimeError("invalid local weights")
+        with patch("avanegar.transcriber.LocalEngine", return_value=local):
+            self.worker.run(self.clip, "fa", "", True, "local", "small")
+        self.assertEqual(len(self.errors), 1)
+        self.factory.assert_not_called()
+        self.keys.get.assert_not_called()
+
+    def test_failed_cloud_never_downloads_a_local_model(self):
+        from unittest.mock import patch
+        self.client.transcribe.side_effect = CloudError("offline")
+        with patch("avanegar.transcriber.LocalEngine") as local:
+            self.worker.run(self.clip, "fa", "", True, "cloud", "medium")
+        local.assert_not_called()
         self.assertEqual(len(self.errors), 1)

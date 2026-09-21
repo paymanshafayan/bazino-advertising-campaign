@@ -1,4 +1,8 @@
 import sys
+import os
+
+os.environ.setdefault("HF_HUB_DISABLE_SYMLINKS_WARNING", "1")
+os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
 
 from PySide6.QtCore import QLockFile
 from PySide6.QtGui import QFont
