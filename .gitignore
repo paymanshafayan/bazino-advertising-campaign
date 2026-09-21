@@ -1,0 +1,10 @@
+# Avanegar local environments, model caches and generated bundles
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+avanegar/build/
+avanegar/dist/
+avanegar/models/
+avanegar/*.log

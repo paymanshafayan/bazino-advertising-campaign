@@ -1,0 +1,6 @@
+PySide6==6.8.3
+sounddevice==0.5.1
+numpy==2.2.4
+faster-whisper==1.1.1
+# faster-whisper 1.1.1 imports requests but doesn't declare it itself.
+requests==2.32.5
