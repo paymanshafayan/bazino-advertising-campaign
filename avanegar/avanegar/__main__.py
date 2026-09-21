@@ -10,6 +10,7 @@ from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QApplication, QMessageBox
 
 from .domain import data_directory
+from .diagnostics import install_exception_logging
 from .ui import MainWindow
 
 
@@ -30,6 +31,7 @@ def main():
     if not lock.tryLock(100):
         QMessageBox.information(None, "آوانگار", "آوانگار از قبل باز است؛ آیکن کنار ساعت ویندوز را بررسی کنید.")
         return 0
+    install_exception_logging()
     window = MainWindow(directory)
     window.show()
     try:

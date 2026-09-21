@@ -54,7 +54,8 @@ class RecorderTests(unittest.TestCase):
             self.assertEqual(recorder.sample_rate, 48000)
             self.assertEqual(create.call_args.kwargs["samplerate"], 48000)
             recorder.stop()
-            stream.stop.assert_called_once()
+            stream.abort.assert_called_once()
+            stream.stop.assert_not_called()
             stream.close.assert_called_once()
 
     def test_failed_start_closes_stream(self):

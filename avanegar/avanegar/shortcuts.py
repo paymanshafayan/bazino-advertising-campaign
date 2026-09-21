@@ -1,40 +1,53 @@
-"""State machine for a bare Ctrl+Win gesture, independent of Win32/Qt.
-
-A gesture fires once when BOTH modifiers have been released. Other keys cancel
-it, so normal Windows shortcuts such as Ctrl+Win+D keep their usual meaning.
-"""
+"""Push-to-talk key state machine. No typed characters are stored."""
 CTRL_KEYS = frozenset((0x11, 0xA2, 0xA3))
 WIN_KEYS = frozenset((0x5B, 0x5C))
-CHORD_KEYS = CTRL_KEYS | WIN_KEYS
+SHIFT_KEYS = frozenset((0x10, 0xA0, 0xA1))
+ALT_KEYS = frozenset((0x12, 0xA4, 0xA5))
+GROUPS = {
+    "ctrl_win": (CTRL_KEYS, WIN_KEYS),
+    "ctrl_shift_space": (CTRL_KEYS, SHIFT_KEYS, frozenset((0x20,))),
+    "ctrl_alt_f9": (CTRL_KEYS, ALT_KEYS, frozenset((0x78,))),
+}
 
 
-class ModifierChord:
-    def __init__(self, held=()):
+class HoldShortcut:
+    def __init__(self, name="ctrl_win", held=()):
+        self.groups = GROUPS[name]
+        self.allowed = frozenset().union(*self.groups)
         self.held = set(held)
-        self.armed = False
-        self.blocked = bool(self.held)
+        self.active = False
+        self.used = bool(self.held)
 
-    def feed(self, key: int, down: bool) -> tuple[bool, bool]:
-        """Return (mask_start_menu, activate). Repeated keydown never repeats."""
+    def feed(self, key: int, down: bool) -> tuple[bool, str | None]:
+        """Start on the completed chord; stop on first required-key release.
+
+        Additional keys cancel/discard an active recording (e.g. Ctrl+Win+D).
+        A gesture cannot rearm until all its keys have been released.
+        """
         if down:
             if key in self.held:
-                return False, False
+                return False, None
             self.held.add(key)
-            if key not in CHORD_KEYS:
-                self.blocked = True
         else:
             if key not in self.held:
-                return False, False
+                return False, None
             self.held.remove(key)
-        ctrl = bool(self.held & CTRL_KEYS)
-        win = bool(self.held & WIN_KEYS)
-        mask = False
-        if ctrl and win and not self.blocked and not (self.held - CHORD_KEYS):
-            mask = not self.armed or (down and key in WIN_KEYS)
-            self.armed = True
-        if not (self.held & CHORD_KEYS):
-            activate = self.armed and not self.blocked
-            self.armed = False
-            self.blocked = bool(self.held)
-            return mask, activate
-        return mask, False
+        complete = all(self.held & group for group in self.groups)
+        extra = bool(self.held - self.allowed)
+        action = None
+        if self.active:
+            if extra:
+                self.active = False
+                action = "cancel"
+            elif not complete:
+                self.active = False
+                action = "stop"
+        elif complete and not extra and not self.used:
+            self.active = True
+            self.used = True
+            action = "start"
+        if extra:
+            self.used = True
+        if not (self.held & self.allowed):
+            self.used = bool(self.held)
+        return action == "start" and bool(self.allowed & WIN_KEYS), action

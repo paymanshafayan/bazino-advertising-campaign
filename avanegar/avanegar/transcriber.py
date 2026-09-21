@@ -1,6 +1,8 @@
 """One persistent worker: model loading and decoding never block the UI."""
 import gc
 import io
+import logging
+import time
 import os
 from pathlib import Path
 import wave
@@ -10,6 +12,8 @@ from PySide6.QtCore import QObject, Signal, Slot
 
 from .audio import AudioClip
 from .models import resolve_model
+
+logger = logging.getLogger("avanegar.transcriber")
 
 
 class Transcriber(QObject):
@@ -25,6 +29,8 @@ class Transcriber(QObject):
 
     @Slot(object, str, str)
     def run(self, clip: AudioClip | None, model_name: str, language: str):
+        began = time.monotonic()
+        logger.info("Transcription request: model=%s language=%s prepare_only=%s duration=%.3f", model_name, language, clip is None, clip.duration if clip is not None else 0)
         try:
             if clip is not None and clip.duration < 0.35:
                 self.completed.emit("", False)
@@ -42,6 +48,7 @@ class Transcriber(QObject):
                     num_workers=1,
                 )
                 self._model_name = model_name
+                logger.info("Model ready: %s elapsed=%.2fs", model_name, time.monotonic() - began)
             if clip is None:
                 self.completed.emit("", True)
                 return
@@ -61,8 +68,10 @@ class Transcriber(QObject):
                 condition_on_previous_text=False,
             )
             text = " ".join(segment.text.strip() for segment in segments).strip()
+            logger.info("Decoding complete: elapsed=%.2fs has_text=%s", time.monotonic() - began, bool(text))
             self.completed.emit(text, False)
         except Exception as exc:
+            logger.exception("Transcription failed")
             self.failed.emit(
                 "تبدیل انجام نشد. برای اولین دریافت مدل، اینترنت و فضای دیسک را بررسی کنید. "
                 "اگر حافظه کافی نیست، مدل Base را انتخاب کنید.\n"

@@ -4,7 +4,7 @@ import sys
 import tempfile
 import time
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 from support import ensure_audio_import
@@ -49,21 +49,80 @@ class UiTests(unittest.TestCase):
         self.window._navigate(2)
         self.assertTrue(self.window.nav[2].isChecked())
 
-    def test_record_and_cancel_releases_audio(self):
-        with patch.object(self.window.recorder, "start") as start, patch.object(self.window.recorder, "stop") as stop:
+    def test_record_and_cancel_are_asynchronous(self):
+        with patch.object(self.window.audio, "start") as start, patch.object(self.window.audio, "stop") as stop:
             self.window.toggle_recording(False)
+            self.assertEqual(self.window.state, "starting")
+            self.window._audio_started(self.window.audio_session)
             self.assertEqual(self.window.state, "recording")
             self.assertFalse(self.window.save_button.isEnabled())
             self.window.cancel()
+            self.assertEqual(self.window.state, "stopping")
+            self.window._audio_stopped(self.window.audio_session, MagicMock(duration=1.0), False)
             self.assertEqual(self.window.state, "idle")
             start.assert_called_once()
             stop.assert_called_once()
 
-    def test_microphone_failure_remains_idle(self):
-        with patch.object(self.window.recorder, "start", side_effect=RuntimeError("denied")):
+    def test_microphone_failure_returns_to_idle(self):
+        with patch.object(self.window.audio, "start"):
             self.window.toggle_recording()
+            self.window._audio_failed(self.window.audio_session, "denied")
         self.assertEqual(self.window.state, "idle")
         self.assertIn("denied", self.window.notice.text())
+
+    def test_release_during_start_cannot_get_stuck_recording(self):
+        self.window.transcribe.disconnect()
+        requests = []
+        self.window.transcribe.connect(lambda *args: requests.append(args))
+        with patch.object(self.window.audio, "start"), patch.object(self.window.audio, "stop") as stop:
+            self.window._hotkey_press()
+            self.assertEqual(self.window.state, "starting")
+            self.window._hotkey_release()
+            self.assertEqual(self.window.state, "stopping")
+            self.window._audio_started(self.window.audio_session)
+            self.assertEqual(self.window.state, "stopping")
+            self.window._hotkey_release()
+            stop.assert_called_once()
+            self.window._audio_stopped(self.window.audio_session, MagicMock(duration=0.1), False)
+            self.assertEqual(len(requests), 1)
+            self.assertEqual(self.window.state, "processing")
+        self.window._set_state("idle")
+
+    def test_hotkey_release_does_not_stop_button_owned_recording(self):
+        with patch.object(self.window.audio, "start"), patch.object(self.window.audio, "stop") as stop:
+            self.window.toggle_recording(False)
+            self.window._audio_started(self.window.audio_session)
+            self.window._hotkey_release()
+            stop.assert_not_called()
+        self.window._set_state("idle")
+
+    def test_driver_timeout_keeps_logs_accessible_and_discards_late_audio(self):
+        with patch.object(self.window.audio, "start"), patch.object(self.window.audio, "stop"), patch.object(self.window.audio, "log_stack") as stack:
+            self.window._hotkey_press()
+            self.window._hotkey_release()
+            self.window.phase_started = time.monotonic() - 12
+            self.window._tick()
+            self.assertEqual(self.window.state, "audio_stalled")
+            stack.assert_called_once()
+            self.window._navigate(3)
+            self.window.copy_log()
+            self.assertIn("Microphone driver timeout", self.app.clipboard().text())
+            self.window._audio_stopped(self.window.audio_session, MagicMock(duration=1.0), False)
+            self.assertEqual(self.window.state, "idle")
+            self.assertEqual(self.window.result.toPlainText(), "")
+
+    def test_log_copy_excludes_transcript(self):
+        self.window._completed("SENSITIVE_TRANSCRIPT", False)
+        self.window.copy_log()
+        text = self.app.clipboard().text()
+        self.assertIn("Transcription completed", text)
+        self.assertNotIn("SENSITIVE_TRANSCRIPT", text)
+
+    def test_log_page_and_microphone_help_exist(self):
+        from avanegar.help_text import MICROPHONE_HELP
+        self.assertEqual(self.window.pages.count(), 4)
+        self.assertIn("Let desktop apps access your microphone", MICROPHONE_HELP)
+        self.assertIn("Allow desktop apps to access your microphone", MICROPHONE_HELP)
 
     def test_completed_text_history_is_bounded_and_editable(self):
         for i in range(12):
@@ -130,7 +189,7 @@ class UiTests(unittest.TestCase):
 
     def test_busy_ignores_hotkey(self):
         self.window._set_state("processing")
-        with patch.object(self.window.recorder, "start") as start:
+        with patch.object(self.window.audio, "start") as start:
             self.window.toggle_recording(True)
             start.assert_not_called()
         self.window._set_state("idle")

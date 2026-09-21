@@ -1,11 +1,15 @@
 """Bounded in-memory microphone recording; no audio files are written."""
 from dataclasses import dataclass
 import threading
+import logging
+
 
 import numpy as np
 import sounddevice as sd
 
 from .domain import MAX_RECORDING_SECONDS
+
+logger = logging.getLogger("avanegar.audio")
 
 
 @dataclass
@@ -24,6 +28,7 @@ class Recorder:
         self._chunks = []
         self._stream = None
         self._frames = 0
+        self._stop_requested = threading.Event()
         self.sample_rate = 16000
         self.level = 0.0
         self.had_overflow = False
@@ -34,9 +39,14 @@ class Recorder:
         # Names (rather than changing indices) are persisted across launches.
         return [(i, d["name"]) for i, d in enumerate(sd.query_devices()) if d["max_input_channels"] > 0]
 
-    def start(self, device_name: str = "") -> None:
+    def start(self, device_name: str = "", stop_event=None) -> None:
         if self._stream is not None:
             raise RuntimeError("ضبط دیگری در حال اجراست.")
+        self._stop_requested = stop_event if stop_event is not None else threading.Event()
+        with self._lock:
+            self._chunks = []
+        if self._stop_requested.is_set():
+            return
         device = None
         if device_name:
             device = next((i for i, name in self.devices() if name == device_name), None)
@@ -53,6 +63,9 @@ class Recorder:
             self.level = 0.0
             self.had_overflow = False
             self.limit_reached = False
+        if self._stop_requested.is_set():
+            return
+        logger.info("Opening microphone: device_index=%s rate=%s", device, self.sample_rate)
         stream = sd.InputStream(
             device=device, samplerate=self.sample_rate, channels=1,
             dtype="float32", callback=self._callback,
@@ -65,6 +78,8 @@ class Recorder:
         self._stream = stream
 
     def _callback(self, indata, frames, time_info, status):
+        if self._stop_requested.is_set():
+            raise sd.CallbackStop()
         if status:
             self.had_overflow = True
         with self._lock:
@@ -89,9 +104,13 @@ class Recorder:
         return AudioClip(samples, self.sample_rate)
 
     def close(self):
+        self._stop_requested.set()
         stream, self._stream = self._stream, None
         if stream is not None:
             try:
-                stream.stop()
+                # Do not drain/wait for more input after the user releases the keys.
+                # Native calls still run ONLY on the audio worker, never the UI.
+                stream.abort()
             finally:
                 stream.close()
+            logger.info("Microphone stream closed")

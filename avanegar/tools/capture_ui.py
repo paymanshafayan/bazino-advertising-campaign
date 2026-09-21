@@ -20,7 +20,7 @@ with tempfile.TemporaryDirectory() as directory:
         window = MainWindow(Path(directory))
     window.resize(1080, 820)
     window.show()
-    for index, name in enumerate(("dictation", "settings", "help")):
+    for index, name in enumerate(("dictation", "settings", "help", "log")):
         window._navigate(index)
         app.processEvents()
         window.grab().save(str(output / f"{name}.png"))

@@ -2,12 +2,16 @@
 import ctypes
 from ctypes import wintypes
 import os
+import logging
+from collections import deque
 import sys
 
 from PySide6.QtCore import QAbstractNativeEventFilter, QTimer
 
 from .domain import HOTKEYS
-from .shortcuts import ModifierChord
+from .shortcuts import HoldShortcut
+
+logger = logging.getLogger("avanegar.hotkey")
 
 IS_WINDOWS = sys.platform == "win32"
 HOTKEY_ID = 0xA701
@@ -72,15 +76,21 @@ if IS_WINDOWS:
 
 
 class DesktopBridge(QAbstractNativeEventFilter):
-    def __init__(self, app, on_hotkey):
+    def __init__(self, app, on_press, on_release=None, on_cancel=None):
         super().__init__()
         self.app = app
-        self.on_hotkey = on_hotkey
+        self.on_press = on_press
+        self.on_release = on_release or (lambda: None)
+        self.on_cancel = on_cancel or self.on_release
+        self._events = deque()
+        self._pump = QTimer()
+        self._pump.setInterval(15)
+        self._pump.timeout.connect(self._drain_events)
         self.registered = False
         self.hotkey = None
         self._hook = None
         self._hook_callback = None
-        self._gesture = ModifierChord()
+        self._gesture = HoldShortcut()
         self._generation = 0
         if IS_WINDOWS:
             app.installNativeEventFilter(self)
@@ -98,47 +108,57 @@ class DesktopBridge(QAbstractNativeEventFilter):
         return False
 
     def _register_binding(self, name: str) -> bool:
-        if name == "ctrl_win":
-            # Modifier-only shortcuts cannot be represented reliably by RegisterHotKey.
-            # The callback tracks virtual key codes only, never records typed text,
-            # and passes all physical events through to Windows unchanged.
-            held = [key for key in range(8, 256) if user32.GetAsyncKeyState(key) & 0x8000]
-            # GetAsyncKeyState reports generic Ctrl AND its side: retain side keys only.
-            held = [key for key in held if key not in (0x10, 0x11, 0x12)]
-            self._gesture = ModifierChord(held)
-            self._hook_callback = HOOKPROC(self._keyboard_event)
-            self._hook = user32.SetWindowsHookExW(
-                WH_KEYBOARD_LL, self._hook_callback, kernel32.GetModuleHandleW(None), 0,
-            )
-            success = bool(self._hook)
-            if not success:
-                self._hook_callback = None
-        else:
-            _, modifiers, key = HOTKEYS[name]
-            success = bool(user32.RegisterHotKey(None, HOTKEY_ID, modifiers | MOD_NOREPEAT, key))
-        if success:
-            self.registered = True
-            self.hotkey = name
-        return success
+        # A hook is needed for keyUP as well as keyDOWN for every hold shortcut.
+        held = [key for key in range(8, 256) if user32.GetAsyncKeyState(key) & 0x8000]
+        held = [key for key in held if key not in (0x10, 0x11, 0x12)]
+        self._gesture = HoldShortcut(name, held)
+        self._hook_callback = HOOKPROC(self._keyboard_event)
+        self._hook = user32.SetWindowsHookExW(
+            WH_KEYBOARD_LL, self._hook_callback, kernel32.GetModuleHandleW(None), 0,
+        )
+        if not self._hook:
+            self._hook_callback = None
+            logger.error("Keyboard hook registration failed: winerror=%s", ctypes.get_last_error())
+            return False
+        self.registered = True
+        self.hotkey = name
+        self._pump.start()
+        logger.info("Push-to-talk shortcut registered: %s", name)
+        return True
 
     def _keyboard_event(self, code, message, pointer):
-        # Keep the low-level hook fast: all recording/UI work is deferred to Qt.
-        if code >= 0 and message in (WM_KEYDOWN, WM_KEYUP, WM_SYSKEYDOWN, WM_SYSKEYUP):
-            event = ctypes.cast(pointer, ctypes.POINTER(KBDLLHOOKSTRUCT)).contents
-            if not event.flags & LLKHF_INJECTED:
-                mask, activate = self._gesture.feed(
-                    event.vkCode, message in (WM_KEYDOWN, WM_SYSKEYDOWN),
-                )
-                if mask:
-                    self._mask_start_menu()
-                if activate:
-                    generation = self._generation
-                    QTimer.singleShot(0, lambda: self._dispatch_chord(generation))
+        # Never invoke Qt, PortAudio, SendInput or recording callbacks inside the
+        # native keyboard hook. The periodic Qt pump handles them AFTER it returns.
+        try:
+            if code >= 0 and message in (WM_KEYDOWN, WM_KEYUP, WM_SYSKEYDOWN, WM_SYSKEYUP):
+                event = ctypes.cast(pointer, ctypes.POINTER(KBDLLHOOKSTRUCT)).contents
+                if not event.flags & LLKHF_INJECTED:
+                    mask, action = self._gesture.feed(
+                        event.vkCode, message in (WM_KEYDOWN, WM_SYSKEYDOWN),
+                    )
+                    if action:
+                        self._events.append((self._generation, mask, action))
+        except Exception:
+            # No exception may escape a ctypes callback.
+            self._events.append((self._generation, False, "error"))
         return user32.CallNextHookEx(self._hook, code, message, pointer)
 
-    def _dispatch_chord(self, generation):
-        if self.registered and self.hotkey == "ctrl_win" and generation == self._generation:
-            self.on_hotkey()
+    def _drain_events(self):
+        while self._events:
+            generation, mask, action = self._events.popleft()
+            if not self.registered or generation != self._generation:
+                continue
+            if mask:
+                self._mask_start_menu()
+            logger.info("Shortcut event: %s", action)
+            if action == "start":
+                self.on_press()
+            elif action == "stop":
+                self.on_release()
+            else:
+                if action == "error":
+                    logger.error("Keyboard hook callback failed; cancelling recording")
+                self.on_cancel()
 
     @staticmethod
     def _mask_start_menu():
@@ -155,6 +175,8 @@ class DesktopBridge(QAbstractNativeEventFilter):
 
     def unregister(self):
         self._generation += 1
+        self._pump.stop()
+        self._events.clear()
         if IS_WINDOWS and self._hook:
             user32.UnhookWindowsHookEx(self._hook)
             self._hook = None
@@ -163,14 +185,9 @@ class DesktopBridge(QAbstractNativeEventFilter):
             user32.UnregisterHotKey(None, HOTKEY_ID)
         self.registered = False
         self.hotkey = None
-        self._gesture = ModifierChord()
+        self._gesture = HoldShortcut()
 
     def nativeEventFilter(self, event_type, message):
-        if IS_WINDOWS and bytes(event_type) in (b"windows_generic_MSG", b"windows_dispatcher_MSG"):
-            msg = wintypes.MSG.from_address(int(message))
-            if msg.message == WM_HOTKEY and msg.wParam == HOTKEY_ID:
-                self.on_hotkey()
-                return True, 0
         return False, 0
 
     @staticmethod

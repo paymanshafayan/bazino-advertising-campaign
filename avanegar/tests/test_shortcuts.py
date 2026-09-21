@@ -1,61 +1,65 @@
 import unittest
 
-from avanegar.shortcuts import ModifierChord
+from avanegar.shortcuts import HoldShortcut
 
 
-class ModifierChordTests(unittest.TestCase):
-    def play(self, events):
-        chord = ModifierChord()
+class HoldShortcutTests(unittest.TestCase):
+    def play(self, events, name="ctrl_win"):
+        chord = HoldShortcut(name)
         return [chord.feed(key, down) for key, down in events]
 
-    def test_all_sides_and_orders_fire_once_only_after_both_released(self):
+    def test_both_orders_both_sides_start_on_press_stop_on_first_release(self):
         for ctrl in (0xA2, 0xA3):
             for win in (0x5B, 0x5C):
                 for first, second in ((ctrl, win), (win, ctrl)):
                     for release1, release2 in ((first, second), (second, first)):
-                        with self.subTest(ctrl=ctrl, win=win, first=first, release1=release1):
+                        with self.subTest(first=first, release1=release1):
                             self.assertEqual(self.play([(first, True), (second, True), (release1, False), (release2, False)]),
-                                             [(False, False), (True, False), (False, False), (False, True)])
+                                             [(False, None), (True, "start"), (False, "stop"), (False, None)])
 
-    def test_auto_repeat_does_not_retrigger(self):
-        result = self.play([(0xA2, True), (0x5B, True)] + [(0x5B, True)] * 10 + [(0x5B, False), (0xA2, False)])
-        self.assertEqual(sum(activate for _, activate in result), 1)
-        self.assertEqual(sum(mask for mask, _ in result), 1)
+    def test_repeat_does_not_retrigger(self):
+        results = self.play([(0xA2, True), (0x5B, True)] + [(0x5B, True)] * 20 + [(0x5B, False), (0xA2, False)])
+        self.assertEqual([action for _, action in results if action], ["start", "stop"])
 
-    def test_two_gestures_toggle_twice(self):
+    def test_two_holds_produce_two_sessions(self):
         gesture = [(0xA2, True), (0x5B, True), (0x5B, False), (0xA2, False)]
-        self.assertEqual(sum(activate for _, activate in self.play(gesture * 2)), 2)
+        self.assertEqual([action for _, action in self.play(gesture * 2) if action], ["start", "stop", "start", "stop"])
 
-    def test_three_key_windows_shortcut_is_not_dictation(self):
-        for other in (0x44, 0x25, 0x27, 0x20, 0xA4, 0xA0):
-            result = self.play([(0x5B, True), (0xA2, True), (other, True), (other, False), (0xA2, False), (0x5B, False)])
-            self.assertFalse(any(activate for _, activate in result))
+    def test_extra_key_cancels_and_does_not_transcribe(self):
+        for extra in (0x44, 0x25, 0x20, 0xA4, 0xA0):
+            results = self.play([(0x5B, True), (0xA2, True), (extra, True), (extra, False), (0xA2, False), (0x5B, False)])
+            self.assertEqual([action for _, action in results if action], ["start", "cancel"])
 
-    def test_other_modifier_already_held_prevents_chord(self):
+    def test_extra_modifier_already_held_prevents_start(self):
         result = self.play([(0xA0, True), (0xA2, True), (0x5B, True), (0xA0, False), (0xA2, False), (0x5B, False)])
-        self.assertFalse(any(activate for _, activate in result))
+        self.assertFalse(any(action for _, action in result))
 
-    def test_standalone_modifier_does_not_activate_or_mask(self):
+    def test_single_key_does_nothing(self):
         for key in (0xA2, 0xA3, 0x5B, 0x5C):
-            self.assertEqual(self.play([(key, True), (key, False)]), [(False, False), (False, False)])
+            self.assertEqual(self.play([(key, True), (key, False)]), [(False, None), (False, None)])
 
-    def test_unknown_release_is_ignored(self):
-        self.assertEqual(ModifierChord().feed(0x5B, False), (False, False))
+    def test_unknown_release(self):
+        self.assertEqual(HoldShortcut().feed(0x5B, False), (False, None))
 
-    def test_ordinary_typing_does_not_block_next_gesture(self):
-        self.assertEqual(self.play([(0x41, True), (0x41, False), (0xA2, True), (0x5B, True), (0xA2, False), (0x5B, False)])[-1], (False, True))
+    def test_typing_before_chord_is_not_retained(self):
+        result = self.play([(0x41, True), (0x41, False), (0xA2, True), (0x5B, True), (0xA2, False), (0x5B, False)])
+        self.assertEqual([action for _, action in result if action], ["start", "stop"])
 
-    def test_held_keys_at_registration_must_be_released_first(self):
-        chord = ModifierChord([0xA2])
-        self.assertEqual(chord.feed(0x5B, True), (False, False))
-        self.assertEqual(chord.feed(0xA2, False), (False, False))
-        self.assertEqual(chord.feed(0x5B, False), (False, False))
-        chord.feed(0xA2, True)
-        chord.feed(0x5B, True)
+    def test_initially_held_keys_must_first_be_released(self):
+        chord = HoldShortcut(held=[0xA2])
+        self.assertEqual(chord.feed(0x5B, True), (False, None))
         chord.feed(0xA2, False)
-        self.assertEqual(chord.feed(0x5B, False), (False, True))
+        chord.feed(0x5B, False)
+        chord.feed(0xA2, True)
+        self.assertEqual(chord.feed(0x5B, True), (True, "start"))
 
-    def test_repress_win_while_holding_ctrl_masks_start_again(self):
-        result = self.play([(0xA2, True), (0x5B, True), (0x5B, False), (0x5B, True), (0x5B, False), (0xA2, False)])
-        self.assertEqual(sum(mask for mask, _ in result), 2)
-        self.assertEqual(sum(activate for _, activate in result), 1)
+    def test_no_rearm_until_entire_gesture_released(self):
+        results = self.play([(0xA2, True), (0x5B, True), (0x5B, False), (0x5B, True), (0x5B, False), (0xA2, False)])
+        self.assertEqual([action for _, action in results if action], ["start", "stop"])
+
+    def test_alternative_hotkeys_are_also_hold_to_talk(self):
+        for name, keys in [("ctrl_shift_space", (0xA2, 0xA0, 0x20)), ("ctrl_alt_f9", (0xA3, 0xA5, 0x78))]:
+            events = [(key, True) for key in keys] + [(key, False) for key in reversed(keys)]
+            result = self.play(events, name)
+            self.assertEqual([action for _, action in result if action], ["start", "stop"])
+            self.assertFalse(any(mask for mask, _ in result))
