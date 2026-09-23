@@ -1,1 +1,1 @@
-{"id":69030,"result":{"result":{"type":"string","value":"{\"url\":\"https://myaccount.google.com/?pli=1\",\"title\":\"Google Account\"}"}},"sessionId":"835B943C09E8BE6C752B53E037E30662"}
+{"id":69030,"error":{"code":-32001,"message":"Session with given id not found."}}
