@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# Gate writes, not reads.
+#
+# Research finding (2026): the reliable boundary for agent permission is not
+# "risky vs safe" but "does this change state". Reads run free; writes are
+# gated. Every unpermitted decision this agent made became a WRITE — a commit,
+# a saved file, a push. So the write is where the gate belongs.
+#
+# This hook runs in git, outside the model's context. It cannot be reasoned past.
+# Override for genuine emergencies:  BAZINO_OVERRIDE=1 git commit ...
+
+STATE=".agent/state.json"
+[ -f "$STATE" ] || exit 0
+[ "${BAZINO_OVERRIDE:-}" = "1" ] && { echo "⚠️  gate overridden"; exit 0; }
+
+python3 - <<'PY' || exit 1
+import json, sys
+try:
+    s = json.load(open('.agent/state.json'))
+except Exception:
+    sys.exit(0)
+
+blocked = s.get('blocked_on_owner', [])
+ds      = s.get('deliverables', [])
+waiting = [d for d in ds if d.get('status') == 'awaiting_approval']
+gen     = len(s.get('images_generated', []))
+rev     = len(s.get('images_reviewed', []))
+
+problems = []
+if blocked:
+    problems.append(f"{len(blocked)} item(s) waiting on the owner:")
+    problems += [f"     • {b}" for b in blocked]
+if waiting:
+    problems.append(f"{len(waiting)} deliverable(s) awaiting approval — do not commit yet:")
+    problems += [f"     • {d.get('id')}" for d in waiting]
+if gen > rev:
+    problems.append(f"{gen} image(s) generated, only {rev} reviewed with read_file")
+
+if problems:
+    print("\n\033[31m✖ COMMIT BLOCKED — Rule 0\033[0m")
+    for p in problems:
+        print(f"  {p}")
+    print("\n  Get approval first, or: BAZINO_OVERRIDE=1 git commit ...\n")
+    sys.exit(1)
+PY
