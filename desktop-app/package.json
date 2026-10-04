@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node src/server.cjs",
     "test": "node --test tests/*.test.cjs",
-    "check": "node --check src/server.cjs && node --check src/server-address.cjs && node --check src/restart-existing.cjs && node --check src/client.js && node --check src/ui.js && node --check src/kling.cjs && node --check src/constants.cjs && node --check src/protocol.cjs && node --check src/providers.cjs && node --check src/vault.cjs && node --check src/relay.cjs && node --check src/assets.cjs && node --check src/research.cjs && node --check src/editorial.cjs && node --check src/zernio-workflow.cjs && node --check src/gateway-network.cjs && node --check src/gateway-content.cjs && node --check src/gateway-mcp.cjs && node --check src/gateway.cjs && node --check agent-client.cjs"
+    "check": "node --check src/server.cjs && node --check src/diagnostics.cjs && node --check src/server-address.cjs && node --check src/restart-existing.cjs && node --check src/client.js && node --check src/ui.js && node --check src/kling.cjs && node --check src/constants.cjs && node --check src/protocol.cjs && node --check src/providers.cjs && node --check src/vault.cjs && node --check src/relay.cjs && node --check src/assets.cjs && node --check src/research.cjs && node --check src/editorial.cjs && node --check src/zernio-workflow.cjs && node --check src/gateway-network.cjs && node --check src/gateway-content.cjs && node --check src/gateway-mcp.cjs && node --check src/gateway.cjs && node --check agent-client.cjs"
   },
   "engines": {
     "node": ">=22.12.0"

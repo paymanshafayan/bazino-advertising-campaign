@@ -1,0 +1,133 @@
+{
+  "output": "C:\\Users\\payman\\Downloads\\BazinoMarketing\\slides-2026-10-04",
+  "note": "الگوی بصری طبق Doc/carousel-content-pattern-fa.md — تصاویر قهرمان با مدل تصویرساز تولید شده‌اند؛ بدون ایموجی روی محتوای خبری (بند ۷٫۳)؛ منبع خبر Merlin'in Kazanı با تأیید دوم (بند ۷٫۷).",
+  "slides": [
+    {
+      "kind": "cover",
+      "name": "slide1",
+      "width": 1080,
+      "height": 1351,
+      "bg": "images/2026-10-04/cover.jpg",
+      "badge": "OYUN GÜNDEMİ · 4 EKİM 2026",
+      "title": "BU HAFTA OYUN DÜNYASINDA",
+      "title2": "KAÇIRMAYACAĞIN 4 GELİŞME",
+      "lead": "Biri tamamen ücretsiz: 8–12 Ekim.",
+      "cta": "KAYDIR",
+      "footer": "Kaynak: Merlin'in Kazanı"
+    },
+    {
+      "kind": "promise",
+      "name": "slide2",
+      "width": 1080,
+      "height": 1351,
+      "bg": "images/2026-10-04/promise.jpg",
+      "title": "NEDEN KAYDETMELİSİN?",
+      "lines": [
+        "Bu 4 gelişme bu hafta oyun dünyasının en çok konuşulan konuları.",
+        "Kaydet: hafta sonu planını yaparken tekrar aç.",
+        "Arkadaşına gönder: o da kaçırmasın."
+      ],
+      "note": "Haberlerin kaynağı: Merlin'in Kazanı"
+    },
+    {
+      "kind": "news",
+      "name": "slide3",
+      "index": 1,
+      "image": "images/2026-10-04/arc-raiders.jpg",
+      "kicker": "ÜCRETSİZ DÖNEM",
+      "title": "ARC RAIDERS 8–12 EKİM",
+      "title2": "ARASINDA TAMAMEN ÜCRETSİZ",
+      "lines": [
+        "Steam, PlayStation ve Xbox'ta tam oyun",
+        "Frozen Trail güncellemesiyle aynı gün başlıyor",
+        "Satın alırsan ilerlemen korunuyor"
+      ],
+      "credit": "Kaynak: Merlin'in Kazanı · teyit: Insider Gaming, DualShockers"
+    },
+    {
+      "kind": "news",
+      "name": "slide4",
+      "index": 2,
+      "image": "images/2026-10-04/frozen-trail.jpg",
+      "kicker": "YENİ GÜNCELLEME",
+      "title": "FROZEN TRAIL: KARDA",
+      "title2": "YENİ HARİTA GELİYOR",
+      "lines": [
+        "Pendola Pass: karlı ve dağlık yeni bölge",
+        "Dört yeni düşman ve yeni silahlar",
+        "8 Ekim'de yayınlanıyor"
+      ],
+      "credit": "Kaynak: Merlin'in Kazanı · teyit: FullCleared, DualShockers"
+    },
+    {
+      "kind": "news",
+      "name": "slide5",
+      "index": 3,
+      "image": "images/2026-10-04/metro-redux.jpg",
+      "kicker": "ÜCRETSİZ YÜKSELTME",
+      "title": "METRO REDUX YENİ NESİL",
+      "title2": "GÜNCELLEMESİ ALIYOR",
+      "lines": [
+        "PC: 22 Ekim · Konsollar: 29 Ekim",
+        "4K doku ve 60 FPS desteği",
+        "Oyunun sahipleri için ücretsiz"
+      ],
+      "credit": "Kaynak: Merlin'in Kazanı · teyit: Eurogamer, Insider Gaming"
+    },
+    {
+      "kind": "news",
+      "name": "slide6",
+      "index": 4,
+      "image": "images/2026-10-04/city-heist.jpg",
+      "kicker": "YAŞ DERECELENDİRMESİ",
+      "title": "GTA 6 SERİNİN EN",
+      "title2": "YETİŞKİN OYUNU OLDU",
+      "lines": [
+        "Yeni yaş derecelendirmesi: 18+",
+        "Rockstar bu kez sınırı daha da zorlamış",
+        "İçerik detayları yeni yayınlandı"
+      ],
+      "credit": "Kaynak: Merlin'in Kazanı · teyit: Eurogamer"
+    },
+    {
+      "kind": "closing",
+      "name": "slide7",
+      "width": 1080,
+      "height": 1351,
+      "bg": "images/2026-10-04/closing.jpg",
+      "title": "SIRA SENDE",
+      "question": "Bu 4 gelişmeden hangisi seni en çok heyecanlandırdı?",
+      "cta": "Yeni haberler için @bazinopro'yu takip et",
+      "footer": "BAZINO · oyun haberleri her gün"
+    },
+    {
+      "kind": "story_poll",
+      "name": "story-tr-1100",
+      "width": 1080,
+      "height": 1920,
+      "bg": "images/2026-10-04/story-snow-controller.jpg",
+      "badge": "GÜNÜN SORUSU",
+      "question": "ARC Raiders 8–12 Ekim arasında ücretsiz. Deneyecek misin?",
+      "options": [
+        "EVET",
+        "HAYIR"
+      ],
+      "note": "Cevabını bize yaz"
+    },
+    {
+      "kind": "story_news",
+      "name": "story-en-1230",
+      "width": 1080,
+      "height": 1920,
+      "bg": "images/2026-10-04/arc-raiders.jpg",
+      "badge": "GAMING NEWS",
+      "title": "ARC RAIDERS IS FREE TO PLAY",
+      "lines": [
+        "Full game on PS5, Xbox Series and Steam",
+        "Runs together with the Frozen Trail update",
+        "Your progress carries over if you buy it"
+      ],
+      "cta": "Follow @bazinopro for daily gaming news"
+    }
+  ]
+}

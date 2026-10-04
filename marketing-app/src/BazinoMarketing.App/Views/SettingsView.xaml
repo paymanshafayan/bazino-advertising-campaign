@@ -1,0 +1,383 @@
+<UserControl x:Class="BazinoMarketing.App.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:infra="clr-namespace:BazinoMarketing.App.Infrastructure"
+             xmlns:vm="clr-namespace:BazinoMarketing.App.ViewModels">
+    <UserControl.Resources>
+
+        <!-- Card header: glyph, title, description, live state -->
+        <DataTemplate x:Key="CardHeader" DataType="{x:Type vm:ToolCardViewModel}">
+            <Grid Margin="0,0,0,6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Width="42" Height="42" CornerRadius="12" Background="{Binding BrandBrush}" VerticalAlignment="Top">
+                    <TextBlock Text="{Binding Icon}" FontSize="19" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel Grid.Column="1" Margin="12,0,12,0">
+                    <TextBlock Text="{Binding Title}" Style="{StaticResource H2}" FontSize="17" />
+                    <TextBlock Text="{Binding Description}" Style="{StaticResource Muted}" Margin="0,4,0,0" />
+                </StackPanel>
+                <Border Grid.Column="2" Style="{StaticResource Pill}" VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Style="{StaticResource StatusDot}" Fill="{Binding State, Converter={StaticResource StateToBrush}}" />
+                        <TextBlock Text="{Binding StateText}" Margin="8,0,0,0" FontSize="13" Foreground="{Binding State, Converter={StaticResource StateToBrush}}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </DataTemplate>
+
+        <!-- Card footer: secret, proxy, permissions, actions, status -->
+        <DataTemplate x:Key="CardCommon" DataType="{x:Type vm:ToolCardViewModel}">
+            <StackPanel>
+                <StackPanel Visibility="{Binding SupportsSecret, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="{Binding SecretLabel}" Style="{StaticResource Label}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <PasswordBox Grid.Column="0" infra:PasswordBoxHelper.Attach="True" FlowDirection="LeftToRight"
+                                     infra:PasswordBoxHelper.Password="{Binding SecretInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button Grid.Column="1" Content="حذف کلید" Style="{StaticResource DangerButton}" Command="{Binding ClearSecretCommand}" Margin="8,0,0,0" />
+                    </Grid>
+                    <TextBlock Text="{Binding SecretStatusText}" Style="{StaticResource Muted}" Margin="0,4,0,0" FontSize="12" />
+                    <TextBlock Text="{Binding SecretHint}" Style="{StaticResource Muted}" FontSize="12" Visibility="{Binding SecretHint, Converter={StaticResource StringToVis}}" />
+                </StackPanel>
+
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                        <TextBlock Text="پراکسی" Style="{StaticResource Label}" />
+                        <WrapPanel>
+                            <RadioButton Style="{StaticResource Chip}" Content="سیستم" IsChecked="{Binding ProxyMode, Converter={StaticResource StringEquals}, ConverterParameter=system}" />
+                            <RadioButton Style="{StaticResource Chip}" Content="بدون پراکسی" IsChecked="{Binding ProxyMode, Converter={StaticResource StringEquals}, ConverterParameter=none}" />
+                            <RadioButton Style="{StaticResource Chip}" Content="سفارشی" IsChecked="{Binding ProxyMode, Converter={StaticResource StringEquals}, ConverterParameter=custom}" />
+                        </WrapPanel>
+                        <TextBox Text="{Binding ProxyUrl, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" ToolTip="http://host:port یا socks5://host:port"
+                                 Visibility="{Binding IsCustomProxy, Converter={StaticResource BoolToVis}}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="مجوزهای ایجنت برای این ابزار" Style="{StaticResource Label}" />
+                        <CheckBox Content="اجازهٔ عملیات نوشتن/تغییر" IsChecked="{Binding AllowWrites}" />
+                        <CheckBox Content="اجازهٔ انتشار عمومی" IsChecked="{Binding AllowPublish}" Visibility="{Binding ShowPublishPermission, Converter={StaticResource BoolToVis}}" />
+                        <CheckBox Content="اجازهٔ عملیات هزینه‌دار (مصرف اعتبار)" IsChecked="{Binding AllowSpend}" Visibility="{Binding ShowSpendPermission, Converter={StaticResource BoolToVis}}" />
+                        <TextBlock Text="این کلیدها برای مرحله‌های بعدی (انتشار و هزینه‌کرد) نگه داشته شده‌اند؛ فرمان‌های صندوق فرمان به تصمیم شما بدون پرسش اجرا می‌شوند." Style="{StaticResource Muted}" FontSize="12" Margin="0,6,0,0" />
+                    </StackPanel>
+                </Grid>
+
+                <Border Background="{StaticResource SurfaceAltBrush}" CornerRadius="8" Padding="12,8" Margin="0,14,0,0">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Style="{StaticResource StatusDot}" Fill="{Binding State, Converter={StaticResource StateToBrush}}" />
+                            <TextBlock Text="{Binding StatusSummary}" Style="{StaticResource Body}" Margin="8,0,0,0" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding StatusDetail}" Style="{StaticResource Mono}" Margin="18,4,0,0" FlowDirection="LeftToRight" TextAlignment="Left"
+                                   Visibility="{Binding StatusDetail, Converter={StaticResource StringToVis}}" />
+                    </StackPanel>
+                </Border>
+
+                <Grid Margin="0,12,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="ذخیره" Style="{StaticResource PrimaryButton}" Command="{Binding SaveCommand}" MinWidth="110" />
+                    <Button Grid.Column="1" Content="آزمایش اتصال" Command="{Binding TestCommand}" Margin="8,0,0,0" MinWidth="120" />
+                    <TextBlock Grid.Column="2" Text="{Binding SaveMessage}" Style="{StaticResource Muted}" Foreground="{StaticResource SuccessBrush}"
+                               VerticalAlignment="Center" Margin="12,0,0,0" />
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24,18,24,8">
+        <StackPanel MaxWidth="980">
+            <TextBlock Text="هر کارت یک ابزار است. کلیدها را وارد و «ذخیره» کنید؛ «آزمایش اتصال» فقط درخواست‌های خواندنی و بدون هزینه می‌فرستد." Style="{StaticResource Muted}" Margin="4,0,0,14" />
+            <TextBlock Text="{Binding GeneralMessage}" Style="{StaticResource Body}" Foreground="{StaticResource Accent2Brush}" Margin="4,0,0,10"
+                       Visibility="{Binding GeneralMessage, Converter={StaticResource StringToVis}}" />
+
+            <!-- GitHub -->
+            <Border Style="{StaticResource Card}" DataContext="{Binding GitHub}">
+                <StackPanel>
+                    <ContentControl Content="{Binding}" ContentTemplate="{StaticResource CardHeader}" Focusable="False" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                            <TextBlock Text="مخزن (owner/repo)" Style="{StaticResource Label}" />
+                            <TextBox Text="{Binding Repository, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                            <TextBlock Text="مسیر صندوق فرمان در مخزن" Style="{StaticResource Label}" />
+                            <TextBox Text="{Binding MailboxPath, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="شاخه (branch)" Style="{StaticResource Label}" />
+                            <TextBox Text="{Binding Branch, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                            <TextBlock Text="فاصلهٔ سرکشی به صندوق (ثانیه، ۳ تا ۳۰۰)" Style="{StaticResource Label}" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="0" Text="{Binding PollSecondsText, UpdateSourceTrigger=LostFocus}" FlowDirection="LeftToRight" />
+                                <Button Grid.Column="1" Content="ساخت توکن در GitHub" Style="{StaticResource LinkButton}" Command="{Binding OpenTokenPageCommand}" HorizontalAlignment="Left" Margin="8,0,0,0" />
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                    <ContentControl Content="{Binding}" ContentTemplate="{StaticResource CardCommon}" Focusable="False" />
+                </StackPanel>
+            </Border>
+
+            <!-- Kling -->
+            <Border Style="{StaticResource Card}" DataContext="{Binding Kling}">
+                <StackPanel>
+                    <ContentControl Content="{Binding}" ContentTemplate="{StaticResource CardHeader}" Focusable="False" />
+                    <TextBlock Text="منطقه" Style="{StaticResource Label}" />
+                    <WrapPanel>
+                        <RadioButton Style="{StaticResource Chip}" Content="جهانی — kling.ai" IsChecked="{Binding Region, Converter={StaticResource StringEquals}, ConverterParameter=global}" />
+                        <RadioButton Style="{StaticResource Chip}" Content="چین — klingai.com" IsChecked="{Binding Region, Converter={StaticResource StringEquals}, ConverterParameter=cn}" />
+                    </WrapPanel>
+                    <Border Background="{StaticResource SurfaceAltBrush}" CornerRadius="8" Padding="12,10" Margin="0,8,0,0">
+                        <StackPanel>
+                            <TextBlock Text="{Binding LocationText}" Style="{StaticResource Mono}" FlowDirection="LeftToRight" TextAlignment="Left" />
+                            <TextBlock Text="{Binding EnvironmentWarning}" Style="{StaticResource Body}" FontSize="12" TextWrapping="Wrap" Foreground="{StaticResource WarningBrush}" Margin="0,6,0,0"
+                                       Visibility="{Binding EnvironmentWarning, Converter={StaticResource StringToVis}}" />
+                            <TextBlock Style="{StaticResource Muted}" FontSize="12" Margin="0,6,0,0">
+                                <Run Text="نصب/به‌روزرسانی با: " />
+                                <Run Text="{Binding InstallCommandText, Mode=OneWay}" FontFamily="Consolas, Courier New" Foreground="{StaticResource Accent2Brush}" />
+                            </TextBlock>
+                            <TextBlock Text="Node.js باید از قبل روی این رایانه نصب باشد (برنامه Node را همراه خود ندارد). ورود فقط با kling login در مرورگر انجام می‌شود؛ هیچ توکنی دستی وارد نکنید." Style="{StaticResource Muted}" FontSize="12" Margin="0,4,0,0" />
+                        </StackPanel>
+                    </Border>
+                    <WrapPanel Margin="0,10,0,0">
+                        <Button Content="نصب CLI" Command="{Binding InstallCliCommand}" Margin="0,0,8,6" />
+                        <Button Content="ورود (kling login)" Style="{StaticResource PrimaryButton}" Command="{Binding LoginCommand}" Margin="0,0,8,6" />
+                        <Button Content="خروج" Command="{Binding LogoutCommand}" Margin="0,0,8,6" />
+                        <Button Content="جست‌وجوی دوباره" Style="{StaticResource GhostButton}" Command="{Binding DetectCommand}" Margin="0,0,8,6" />
+                    </WrapPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                            <TextBlock Text="مسیر دستی kling.cmd (اختیاری)" Style="{StaticResource Label}" />
+                            <TextBox Text="{Binding CliPath, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="مسیر دستی node.exe (اختیاری)" Style="{StaticResource Label}" />
+                            <TextBox Text="{Binding NodePath, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                        </StackPanel>
+                    </Grid>
+                    <ContentControl Content="{Binding}" ContentTemplate="{StaticResource CardCommon}" Focusable="False" />
+                </StackPanel>
+            </Border>
+
+            <!-- Zernio -->
+            <Border Style="{StaticResource Card}" DataContext="{Binding Zernio}">
+                <StackPanel>
+                    <ContentControl Content="{Binding}" ContentTemplate="{StaticResource CardHeader}" Focusable="False" />
+                    <TextBlock Text="آدرس پایهٔ API" Style="{StaticResource Label}" />
+                    <TextBox Text="{Binding BaseUrl, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                    <ContentControl Content="{Binding}" ContentTemplate="{StaticResource CardCommon}" Focusable="False" />
+                </StackPanel>
+            </Border>
+
+            <!-- Affiliate media-id ingest (separate from Zernio) -->
+            <Border Style="{StaticResource Card}" DataContext="{Binding PortalIngest}">
+                <StackPanel>
+                    <TextBlock Text="پورتال بازینو — ثبت Reelهای همکاری در فروش" Style="{StaticResource H2}" FontSize="17" />
+                    <TextBlock Text="این توکن فقط برای ثبت media_id واقعی Affiliate Reel پس از انتشار موفق استفاده می‌شود؛ برای DM یا انتشار شبکه‌های اجتماعی به‌کار نمی‌رود." Style="{StaticResource Muted}" Margin="0,4,0,8" TextWrapping="Wrap" />
+                    <TextBlock Text="آدرس پایهٔ پورتال" Style="{StaticResource Label}" />
+                    <TextBox Text="{Binding BaseUrl, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                    <TextBlock Text="توکن ingest (Bearer)" Style="{StaticResource Label}" />
+                    <PasswordBox infra:PasswordBoxHelper.Attach="True" FlowDirection="LeftToRight"
+                                 infra:PasswordBoxHelper.Password="{Binding TokenInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Text="{Binding TokenStatus}" Style="{StaticResource Muted}" FontSize="12" Margin="0,4,0,0" />
+                    <WrapPanel Margin="0,10,0,0">
+                        <Button Content="ذخیرهٔ تنظیمات" Style="{StaticResource PrimaryButton}" Command="{Binding SaveCommand}" Margin="0,0,8,0" />
+                        <Button Content="حذف توکن" Style="{StaticResource DangerButton}" Command="{Binding ClearTokenCommand}" />
+                        <TextBlock Text="{Binding Message}" Style="{StaticResource Muted}" VerticalAlignment="Center" Margin="10,0,0,0" TextWrapping="Wrap" />
+                    </WrapPanel>
+                    <TextBlock Text="توکن فقط در حافظهٔ امن Windows ذخیره می‌شود؛ درخواست ثبت media_id فقط پس از تأیید مالک و انتشار موفق ارسال می‌شود." Style="{StaticResource Muted}" FontSize="12" Margin="0,8,0,0" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <!-- FLUX -->
+            <Border Style="{StaticResource Card}" DataContext="{Binding Flux}">
+                <StackPanel>
+                    <ContentControl Content="{Binding}" ContentTemplate="{StaticResource CardHeader}" Focusable="False" />
+                    <TextBlock Text="ارائه‌دهنده" Style="{StaticResource Label}" />
+                    <WrapPanel>
+                        <RadioButton Style="{StaticResource Chip}" Content="غیرفعال" IsChecked="{Binding Provider, Converter={StaticResource StringEquals}, ConverterParameter=none}" />
+                        <RadioButton Style="{StaticResource Chip}" Content="Cloudflare Workers AI" IsChecked="{Binding Provider, Converter={StaticResource StringEquals}, ConverterParameter=cloudflare}" />
+                        <RadioButton Style="{StaticResource Chip}" Content="سرویس عمومی (URL دلخواه)" IsChecked="{Binding Provider, Converter={StaticResource StringEquals}, ConverterParameter=generic}" />
+                    </WrapPanel>
+                    <Grid Visibility="{Binding IsCloudflare, Converter={StaticResource BoolToVis}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                            <TextBlock Text="شناسهٔ حساب Cloudflare" Style="{StaticResource Label}" />
+                            <TextBox Text="{Binding AccountId, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="مدل" Style="{StaticResource Label}" />
+                            <TextBox Text="{Binding Model, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                        </StackPanel>
+                    </Grid>
+                    <StackPanel Visibility="{Binding IsGeneric, Converter={StaticResource BoolToVis}}">
+                        <TextBlock Text="آدرس پایهٔ API" Style="{StaticResource Label}" />
+                        <TextBox Text="{Binding BaseUrl, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                        <TextBlock Text="آدرس آزمایش (GET خواندنی، مثلاً /models)" Style="{StaticResource Label}" />
+                        <TextBox Text="{Binding TestUrl, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                    </StackPanel>
+                    <ContentControl Content="{Binding}" ContentTemplate="{StaticResource CardCommon}" Focusable="False" />
+                </StackPanel>
+            </Border>
+
+            <!-- Groq (Whisper Speech-to-Text) -->
+            <Border Style="{StaticResource Card}" DataContext="{Binding Groq}">
+                <StackPanel>
+                    <ContentControl Content="{Binding}" ContentTemplate="{StaticResource CardHeader}" Focusable="False" />
+                    <TextBlock Text="مدل تشخیص گفتار (Whisper)" Style="{StaticResource Label}" />
+                    <WrapPanel>
+                        <RadioButton Style="{StaticResource Chip}" Content="whisper-large-v3 (بالاترین دقت فارسی + ترجمه)" IsChecked="{Binding Model, Converter={StaticResource StringEquals}, ConverterParameter=whisper-large-v3}" />
+                        <RadioButton Style="{StaticResource Chip}" Content="whisper-large-v3-turbo (فوق سریع)" IsChecked="{Binding Model, Converter={StaticResource StringEquals}, ConverterParameter=whisper-large-v3-turbo}" />
+                    </WrapPanel>
+                    <Grid Margin="0,4,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                            <TextBlock Text="آدرس پایهٔ API" Style="{StaticResource Label}" />
+                            <TextBox Text="{Binding BaseUrl, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="زبان پیش‌فرض (خالی = تشخیص خودکار، fa = فارسی، en = انگلیسی)" Style="{StaticResource Label}" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="0" Text="{Binding Language, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                                <Button Grid.Column="1" Content="دریافت کلید رایگان از Groq" Style="{StaticResource LinkButton}" Command="{Binding OpenKeysPageCommand}" HorizontalAlignment="Left" Margin="8,0,0,0" />
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                    <ContentControl Content="{Binding}" ContentTemplate="{StaticResource CardCommon}" Focusable="False" />
+                </StackPanel>
+            </Border>
+
+            <!-- Custom cards -->
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="سرویس‌های سفارشی" Style="{StaticResource H2}" FontSize="17" />
+                    <TextBlock Text="هر API یا سرور MCP دیگری را با آدرس و کلید خودش اضافه کنید. سرویس‌های نرم‌افزار قدیمی به‌صورت خودکار این‌جا وارد می‌شوند." Style="{StaticResource Muted}" Margin="0,4,0,0" />
+                    <Grid Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding NewCardName, UpdateSourceTrigger=PropertyChanged}" ToolTip="نام سرویس جدید" />
+                        <Button Grid.Column="1" Content="افزودن سرویس" Style="{StaticResource PrimaryButton}" Command="{Binding AddCustomCardCommand}" Margin="8,0,0,0" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <ItemsControl ItemsSource="{Binding CustomCards}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:CustomCardViewModel}">
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <ContentControl Content="{Binding}" ContentTemplate="{StaticResource CardHeader}" Focusable="False" />
+                                <TextBlock Text="{Binding ImportedFromText}" Style="{StaticResource Muted}" Foreground="{StaticResource Accent2Brush}" FontSize="12"
+                                           Visibility="{Binding ImportedFromText, Converter={StaticResource StringToVis}}" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                                        <TextBlock Text="نام" Style="{StaticResource Label}" />
+                                        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBlock Text="آدرس پایه" Style="{StaticResource Label}" />
+                                        <TextBox Text="{Binding BaseUrl, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                                        <TextBlock Text="مسیر آزمایش (GET)" Style="{StaticResource Label}" />
+                                        <TextBox Text="{Binding TestPath, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="نوع" Style="{StaticResource Label}" />
+                                        <WrapPanel>
+                                            <RadioButton Style="{StaticResource Chip}" Content="HTTP API" IsChecked="{Binding Kind, Converter={StaticResource StringEquals}, ConverterParameter=http}" />
+                                            <RadioButton Style="{StaticResource Chip}" Content="سرور MCP" IsChecked="{Binding Kind, Converter={StaticResource StringEquals}, ConverterParameter=mcp}" />
+                                        </WrapPanel>
+                                        <TextBlock Text="احراز هویت" Style="{StaticResource Label}" />
+                                        <WrapPanel>
+                                            <RadioButton Style="{StaticResource Chip}" Content="ندارد" IsChecked="{Binding AuthType, Converter={StaticResource StringEquals}, ConverterParameter=none}" />
+                                            <RadioButton Style="{StaticResource Chip}" Content="Bearer" IsChecked="{Binding AuthType, Converter={StaticResource StringEquals}, ConverterParameter=bearer}" />
+                                            <RadioButton Style="{StaticResource Chip}" Content="هدر سفارشی" IsChecked="{Binding AuthType, Converter={StaticResource StringEquals}, ConverterParameter=header}" />
+                                            <RadioButton Style="{StaticResource Chip}" Content="Basic" IsChecked="{Binding AuthType, Converter={StaticResource StringEquals}, ConverterParameter=basic}" />
+                                        </WrapPanel>
+                                        <StackPanel Visibility="{Binding NeedsHeaderName, Converter={StaticResource BoolToVis}}">
+                                            <TextBlock Text="نام هدر" Style="{StaticResource Label}" />
+                                            <TextBox Text="{Binding HeaderName, UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                                <TextBlock Text="یادداشت" Style="{StaticResource Label}" />
+                                <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" />
+                                <ContentControl Content="{Binding}" ContentTemplate="{StaticResource CardCommon}" Focusable="False" />
+                                <Button Content="حذف این سرویس" Style="{StaticResource DangerButton}" HorizontalAlignment="Left" Margin="0,10,0,0"
+                                        Command="{Binding DataContext.RemoveCustomCardCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Legacy import -->
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="وارد کردن از نرم‌افزار قدیمی" Style="{StaticResource H2}" FontSize="17" />
+                    <TextBlock Text="کلیدها و توکن‌های نسخهٔ قبلی (مرورگر بازاریابی و Bridge) با همان حساب Windows خوانده و به ذخیره‌گاه امن این برنامه منتقل می‌شوند. مقادیر هرگز نمایش داده نمی‌شوند." Style="{StaticResource Muted}" Margin="0,4,0,0" />
+                    <TextBlock Text="{Binding LegacyPathsText}" Style="{StaticResource Mono}" Margin="0,6,0,0" FlowDirection="LeftToRight" TextAlignment="Left" />
+                    <Border Background="{StaticResource SurfaceAltBrush}" CornerRadius="8" Padding="12,10" Margin="0,10,0,0">
+                        <TextBlock Text="{Binding LegacySummary}" Style="{StaticResource Body}" FontSize="13" />
+                    </Border>
+                    <WrapPanel Margin="0,10,0,0">
+                        <Button Content="وارد کردن (فقط موارد خالی)" Style="{StaticResource PrimaryButton}" Command="{Binding ImportLegacyCommand}" Margin="0,0,8,6" />
+                        <Button Content="وارد کردن با جایگزینی" Command="{Binding ImportLegacyOverwriteCommand}" Margin="0,0,8,6" />
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Storage -->
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Text="ذخیره‌سازی و پشتیبان" Style="{StaticResource H2}" FontSize="17" />
+                    <TextBlock Text="{Binding SecretStoreText}" Style="{StaticResource Muted}" Margin="0,4,0,0" />
+                    <TextBlock Style="{StaticResource Mono}" Margin="0,6,0,0" FlowDirection="LeftToRight" TextAlignment="Left">
+                        <Run Text="{Binding DataFolder, Mode=OneWay}" />
+                    </TextBlock>
+                    <WrapPanel Margin="0,10,0,0">
+                        <Button Content="خروجی تنظیمات (بدون کلید)" Command="{Binding ExportSettingsCommand}" Margin="0,0,8,6" />
+                        <Button Content="وارد کردن تنظیمات" Command="{Binding ImportSettingsCommand}" Margin="0,0,8,6" />
+                        <Button Content="باز کردن پوشهٔ داده" Style="{StaticResource GhostButton}" Command="{Binding OpenDataFolderCommand}" Margin="0,0,8,6" />
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

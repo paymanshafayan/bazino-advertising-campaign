@@ -168,7 +168,15 @@ class Kling {
     const provider=new KlingOAuthProvider({vault:this.vault,
       redirectUrl:`http://127.0.0.1:${this.port}/kling-callback`,
       openExternal:async()=>{throw new Error('Kling OAuth expired. Reconnect from the Windows app.');}});
-    try {await this.connect(provider);} catch {throw new Error('Kling session is not active. Reconnect from the Windows app.');}
+    try {await this.connect(provider);} catch(e) {
+      // A saved token proves neither reachability nor a working OAuth session.
+      // Do not expose SDK errors (which may contain callback URLs or tokens).
+      const code=String(e?.cause?.code||e?.code||'');
+      if(/fetch failed|network/i.test(String(e?.message||''))||
+        /^(?:EAI_AGAIN|ENOTFOUND|ECONNRESET|ENETUNREACH|ETIMEDOUT|UND_ERR_CONNECT_TIMEOUT)$/.test(code))
+        throw new Error('Kling MCP is unreachable from this Windows app. Check VPN, proxy and firewall before retrying OAuth.');
+      throw new Error('Kling session is not active. Reconnect from the Windows app.');
+    }
   }
   async identity() {
     await this.ensureConnected();

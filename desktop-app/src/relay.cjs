@@ -29,20 +29,38 @@ class Relay extends EventEmitter {
     const token = this.vault.get('githubToken');
     if (!token) throw new Error('GitHub fine-grained Contents token is missing in desktop Settings');
     const target = new URL(`https://api.github.com/${resource}`);
-    const response = await this.fetcher(target, {
-      method, redirect:'manual',
-      headers: { Authorization:`Bearer ${token}`, Accept:'application/vnd.github+json',
-        'X-GitHub-Api-Version':'2022-11-28', 'User-Agent':'BazinoMarketingDesktop/0.1',
-        ...(body ? { 'Content-Type':'application/json' } : {}) },
-      body: body ? JSON.stringify(body) : undefined,
-      signal: AbortSignal.timeout(20000)
-    });
-    const reply = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      const err = new Error(`GitHub ${response.status} on ${method} ${resource.split('?')[0]}`);
-      err.status = response.status; throw err;
+    // A temporary network failure once prevented the Windows relay from connecting
+    // even though the browser bridge was online. Retry *reads* only: blindly
+    // repeating a PUT after an uncertain response could duplicate a signed reply.
+    const attempts=method==='GET'?3:1;
+    for(let attempt=1;attempt<=attempts;attempt++){
+      let response;
+      try {
+        response=await this.fetcher(target, {
+          method, redirect:'manual',
+          headers: { Authorization:`Bearer ${token}`, Accept:'application/vnd.github+json',
+            'X-GitHub-Api-Version':'2022-11-28', 'User-Agent':'BazinoMarketingDesktop/0.1',
+            ...(body ? { 'Content-Type':'application/json' } : {}) },
+          body: body ? JSON.stringify(body) : undefined,
+          signal: AbortSignal.timeout(method==='GET'?12000:20000)
+        });
+      } catch(e) {
+        if(attempt===attempts || !['TypeError','AbortError','TimeoutError'].includes(e?.name))throw e;
+        await new Promise(resolve=>setTimeout(resolve,350*attempt));
+        continue;
+      }
+      if(method==='GET'&&attempt<attempts&&[502,503,504].includes(response.status)){
+        await response.body?.cancel?.().catch(()=>{});
+        await new Promise(resolve=>setTimeout(resolve,350*attempt));
+        continue;
+      }
+      const reply = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const err = new Error(`GitHub ${response.status} on ${method} ${resource.split('?')[0]}`);
+        err.status = response.status; throw err;
+      }
+      return reply;
     }
-    return reply;
   }
   async getFile(file) {
     try {

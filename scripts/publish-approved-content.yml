@@ -1,0 +1,77 @@
+# Publishing workflow — MANUAL TRIGGER ONLY.
+#
+# The owner adds this file ONCE through the GitHub web UI, because the agent's key
+# cannot write to .github/workflows/. Path: .github/workflows/publish-approved-content.yml
+#
+# What it does: publishes one owner-approved content package through Zernio.
+# What it never does: run on its own. There is no `push` trigger and no schedule.
+#
+# One-time setup before the first real publish:
+#   1. Repository -> Settings -> Secrets and variables -> Actions -> New repository secret
+#        Name:  ZERNIO_API_KEY
+#        Value: the Zernio key from the marketing app (never paste it in chat or in a file)
+#   2. Connect Instagram in Zernio (see Work/publish/README-fa.md). Without it only the
+#      Facebook Page can be published to.
+#   3. Put ZERNIO_ACCOUNT_INSTAGRAM and ZERNIO_ACCOUNT_FACEBOOK in the same secrets list.
+
+name: Publish approved content
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Folder of the approved content package, e.g. Work/publish/2026-09-30-family-01'
+        required: true
+        default: 'Work/publish/example-family-carousel'
+      platforms:
+        description: 'Comma separated: instagram, facebook'
+        required: true
+        default: 'instagram,facebook'
+      dry_run:
+        description: 'true = show the request and publish nothing. false = publish for real.'
+        required: true
+        default: 'true'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-approved-content
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Confirm the package is approved
+        run: |
+          PKG="${{ inputs.package }}"
+          if [ ! -f "$PKG/publish.json" ]; then
+            echo "::error file=$PKG/publish.json::publish.json not found. Nothing was published."
+            exit 1
+          fi
+          if ! grep -q '"approved"[[:space:]]*:[[:space:]]*true' "$PKG/publish.json"; then
+            echo "::error file=$PKG/publish.json::approved is not true. Nothing was published."
+            exit 1
+          fi
+          echo "Package $PKG carries owner approval."
+
+      - name: Publish through Zernio
+        env:
+          ZERNIO_API_KEY: ${{ secrets.ZERNIO_API_KEY }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          ZERNIO_BASE_URL: https://zernio.com/api
+        run: node "استودیوی تبلیغات و بازاریابی/scripts/publish-content.cjs" "${{ inputs.package }}"
+
+      - name: Reminder
+        if: always()
+        run: |
+          echo "After a real publish, record the post id and URL in the package folder,"
+          echo "then commit that record so the studio keeps the proof."

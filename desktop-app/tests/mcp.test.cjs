@@ -108,6 +108,19 @@ test('official MCP transport performs OAuth/PKCE in browser and verifies who_am_
   }finally{await kling.close();fs.rmSync(dir,{recursive:true,force:true});}
 });
 
+test('Kling distinguishes an unreachable MCP host from an unverified saved OAuth token without leaking SDK details',async()=>{
+  const vault={getKlingOAuth:key=>key==='tokens'?{access_token:'LOCAL_ONLY'}:undefined};
+  const kling=new Kling({vault,openExternal:()=>{}});
+  try{
+    kling.connect=async()=>{throw new TypeError('fetch failed OWNER_SECRET_SHOULD_NOT_LEAK');};
+    await assert.rejects(()=>kling.identity(),error=>
+      /Kling MCP is unreachable/.test(error.message)&&!error.message.includes('OWNER_SECRET'));
+    kling.connect=async()=>{throw new Error('unrecognized OAuth state OWNER_SECRET_SHOULD_NOT_LEAK');};
+    await assert.rejects(()=>kling.identity(),error=>
+      /Kling session is not active/.test(error.message)&&!error.message.includes('OWNER_SECRET'));
+  }finally{await kling.close();}
+});
+
 test('Kling callback remains reachable until login opens, verifies state/issuer and can be cancelled',async()=>{
   const provider={expectedState:'fresh-state',discoveryState:()=>({authorizationServerMetadata:{issuer:auth}})};
   const listener=oauthCallback({provider,port:0,timeoutMs:500,deferTimeout:true});

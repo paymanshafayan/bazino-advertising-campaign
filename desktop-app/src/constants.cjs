@@ -1,7 +1,7 @@
 'use strict';
 
 const REPO = 'paymanshafayan/bazino-gamenet-portal';
-const BRANCH = 'arena/01a0d4ee-bazino-gamenet-portal';
+const BRANCH = 'arena/01a0e1c3-bazino-gamenet-portal';
 const RELAY_ROOT = 'استودیوی تبلیغات و بازاریابی/desktop-app/relay';
 const PROTOCOL_VERSION = 1;
 

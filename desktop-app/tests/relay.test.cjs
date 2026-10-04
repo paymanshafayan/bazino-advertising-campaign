@@ -42,6 +42,36 @@ function sampleRequest(desktop,agentKey,replyKey,op){
   return request;
 }
 
+test('transient GitHub GETs retry, but auth failures and uncertain PUTs never do',async()=>{
+  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'relay-retry-test-'));
+  try{
+    const vault=new Vault(path.join(dir,'settings.json'),storage);vault.load();
+    vault.update({secrets:{githubToken:'OWNER_GITHUB_TOKEN'}});
+    const requests=[];
+    const relay=new Relay({vault,statePath:path.join(dir,'state.json'),
+      fetcher:async(target,options)=>{
+        assert.equal(target.origin,'https://api.github.com');
+        assert.equal(target.searchParams.has('token'),false);
+        requests.push(options.method);
+        if(options.method==='PUT')throw new TypeError('fetch failed after an uncertain write');
+        if(requests.length===1)throw new TypeError('fetch failed');
+        if(requests.length===2)return Response.json({error:'try later'},{status:503});
+        return Response.json({private:true});
+      }});
+    assert.deepEqual(await relay.github(`repos/${REPO}`),{private:true});
+    assert.deepEqual(requests,['GET','GET','GET']);
+    await assert.rejects(()=>relay.github(`repos/${REPO}/contents/test`,
+      {method:'PUT',body:{branch:BRANCH}}),/fetch failed/);
+    assert.deepEqual(requests,['GET','GET','GET','PUT'],'a timed-out write must not be repeated');
+    const forbidden=[];
+    const authRelay=new Relay({vault,statePath:path.join(dir,'state.json'),fetcher:async(_url,options)=>{
+      forbidden.push(options.method);return Response.json({message:'denied'},{status:403});
+    }});
+    await assert.rejects(()=>authRelay.github(`repos/${REPO}`),error=>error.status===403);
+    assert.deepEqual(forbidden,['GET'],'invalid credentials are not transient');
+  }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
+
 test('private GitHub relay only executes signed paired requests, encrypts replies and never stores raw API body',async()=>{
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'relay-test-'));
   const mock=repoMock();

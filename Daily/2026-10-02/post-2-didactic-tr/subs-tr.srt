@@ -1,0 +1,43 @@
+1
+00:00:00,000 --> 00:00:03,000
+Bugün sana birkaç oyun ipucu göstereceğim!
+
+2
+00:00:03,000 --> 00:00:06,500
+Birincisi: grafik ayarlarını düşürmek yerine gölge kalitesini azalt.
+
+3
+00:00:06,500 --> 00:00:10,000
+Böylece görüntü neredeyse aynı kalır, performans ciddi şekilde artar.
+
+4
+00:00:10,000 --> 00:00:14,000
+İkincisi: oyun içi FPS sınırını monitörünün tazeleme hızına sabitle.
+
+5
+00:00:14,000 --> 00:00:18,000
+Ekran yırtılması biter, kontrol çok daha yumuşak olur.
+
+6
+00:00:18,000 --> 00:00:22,000
+Üçüncüsü: hassasiyeti bir kez ayarla ve en az bir hafta değiştirme.
+
+7
+00:00:22,000 --> 00:00:26,000
+Kas hafızası ancak tekrarla gelişir; her gün değiştirirsen gelişemezsin.
+
+8
+00:00:26,000 --> 00:00:30,000
+Dördüncüsü: maçtan önce ışın izlemeyi kapat, gecikmeyi ciddi düşürür.
+
+9
+00:00:30,000 --> 00:00:34,000
+Beşincisi: sesli komutlarda kısa ve net konuş, takım iletişimi hız kazanır.
+
+10
+00:00:34,000 --> 00:00:38,000
+Bu ipuçlarını kaydet ve akşam oyun seansında hemen dene!
+
+11
+00:00:38,000 --> 00:00:42,000
+Daha fazlası için takipte kal — iyi oyunlar!

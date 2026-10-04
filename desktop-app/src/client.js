@@ -71,6 +71,7 @@
     openWebsite:url=>call('external:open',url),stopApp:async()=>{
       const result=await call('app:stop');closing=true;return result;
     },
+    diagnostics:()=>call('diagnostics'),
     onActivity:cb=>{activityCallback=cb;events();},
     onRelay:cb=>{relayCallback=cb;events();}
   });

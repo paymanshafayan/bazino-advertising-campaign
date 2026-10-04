@@ -20,6 +20,7 @@ const { Relay }=require('./relay.cjs');
 const { Research,FEEDS }=require('./research.cjs');
 const { EditorialStore }=require('./editorial.cjs');
 const { validateOperation,isMutating,redact }=require('./protocol.cjs');
+const { BUILD_ID,createDiagnostics,failureReason }=require('./diagnostics.cjs');
 const { REPO,BRANCH,PORTAL_MEDIA_STUDIO,KLING_ENDPOINT }=require('./constants.cjs');
 const { HOST,PORT }=require('./server-address.cjs');
 
@@ -137,6 +138,8 @@ function createService({baseDir,storage=windowsStorage,approval=messageBox,launc
   let relay;
   const session=randomBytes(32).toString('base64url');
   const history=[];
+  const diagnostics=createDiagnostics();
+  const startedAt=new Date().toISOString();
   let lastSeq=0;
   function event(message,type='info'){
     const row={seq:++lastSeq,at:new Date().toISOString(),message:String(message).slice(0,120),type};
@@ -156,18 +159,26 @@ function createService({baseDir,storage=windowsStorage,approval=messageBox,launc
     if(origin==='relay'&&['gateway-api','gateway-mcp'].includes(op.kind)){
       const row=vault.connector(op.connectorId);
       if(!row||row.kind!==(op.kind==='gateway-api'?'api':'mcp')||
-        row.agentAccess==='none'||isMutating(op)&&row.agentAccess!=='approved-writes')
+        row.agentAccess==='none'||isMutating(op)&&row.agentAccess!=='approved-writes'){
+        diagnostics.add('operation','OP_DECLINED',{kind:op.kind,reason:'DECLINED'});
         return {ok:false,error:'CONNECTOR_NOT_SHARED_WITH_AGENT'};
+      }
     }
     // Saving a local research note via the browser is not an external action. A remote
     // agent's write still needs the native Windows confirmation in the relay.
     if(origin==='local'&&isMutating(op)&&op.kind!=='editorial'){
       const before=['gateway-api','gateway-mcp'].includes(op.kind)?vault.connector(op.connectorId):null;
-      if(!(await approve(op,origin)))return {ok:false,error:'DECLINED_BY_OWNER'};
-      if(before&&vault.connector(op.connectorId)!==before)
+      if(!(await approve(op,origin))){
+        diagnostics.add('operation','OP_DECLINED',{kind:op.kind,reason:'DECLINED'});
+        return {ok:false,error:'DECLINED_BY_OWNER'};
+      }
+      if(before&&vault.connector(op.connectorId)!==before){
+        diagnostics.add('operation','OP_DECLINED',{kind:op.kind,reason:'DECLINED'});
         return {ok:false,error:'CONNECTOR_CHANGED_DURING_APPROVAL'};
+      }
     }
     event(`${origin} ${op.kind==='api'?op.provider+' '+op.method:op.kind}`,'work');
+    diagnostics.add('operation','OP_STARTED',{kind:op.kind});
     try {
       let result;
       if(op.kind==='api')result=await providers.api(op);
@@ -190,16 +201,33 @@ function createService({baseDir,storage=windowsStorage,approval=messageBox,launc
           result.trackingWarning='Post response received, but local report could not be updated';}
       }
       event(`${op.kind} ${result.ok?'completed':'provider error'}`,result.ok?'success':'error');
+      const failedFeeds=op.kind==='research'&&Array.isArray(result.sources)?
+        result.sources.filter(source=>source.error):[];
+      const partial=Boolean(result.ok&&(result.status===207||failedFeeds.length));
+      const feedError=failedFeeds.find(source=>/fetch failed|network|timeout/i.test(String(source.error)))?.error;
+      const reason=failedFeeds.length?(feedError?'NETWORK':'OTHER'):
+        result.ok?undefined:failureReason({message:result.error});
+      diagnostics.add('operation',result.ok?(partial?'OP_PARTIAL':'OP_DONE'):'OP_FAILED',
+        {kind:op.kind,status:result.status,reason});
       return redact(result,0,vault.allSecrets());
-    }catch(e){event(`${op.kind} failed`,'error');return {ok:false,error:safeError(e,vault),
+    }catch(e){
+      event(`${op.kind} failed`,'error');
+      diagnostics.add('operation','OP_FAILED',{kind:op.kind,reason:failureReason(e)});
+      return {ok:false,error:safeError(e,vault),
       ...(op.kind==='api'&&op.path.split('?')[0]==='/v1/posts'&&op.idempotencyKey?
         {idempotencyKey:op.idempotencyKey}:{} )};}
   }
   relay=new Relay({vault,service:op=>execute(op,'relay'),approve:op=>approve(op,'relay'),
     statePath:path.join(baseDir,'relay-state.json')});
-  relay.on('error',()=>event('GitHub relay error; check connection','error'));
+  relay.on('error',e=>{
+    event('GitHub relay error; check connection','error');
+    diagnostics.add('relay','RELAY_FAILED',{reason:failureReason(e)});
+  });
   relay.on('activity',a=>event(`Remote ${a.status||'request'}`,'info'));
-  relay.on('status',s=>event(s.connected?'GitHub relay connected':'GitHub relay disconnected'));
+  relay.on('status',s=>{
+    event(s.connected?'GitHub relay connected':'GitHub relay disconnected');
+    diagnostics.add('relay',s.connected?'RELAY_CONNECTED':'RELAY_DISCONNECTED');
+  });
   const uiTabs=new Set();
   let tabCloseTimer=null,stopTimer=null,stopping=false,closePromise=null;
   function tabKey(arg){
@@ -233,7 +261,7 @@ function createService({baseDir,storage=windowsStorage,approval=messageBox,launc
       case 'startup':{
         if(arg?.tabId){uiTabs.add(tabKey(arg));cancelTabClose();}
         return {settings:vault.publicSettings(),assets:assets.list(),history,lastSeq,
-          connectors:vault.listConnectors(),
+          buildId:BUILD_ID,connectors:vault.listConnectors(),
           researchFeeds:FEEDS.map(({id,name,region})=>({id,name,region})),
           editorialCount:editorial.list().length,
           relay:{connected:relay.connected},repo:REPO,branch:BRANCH,endpoint:KLING_ENDPOINT};
@@ -306,6 +334,8 @@ function createService({baseDir,storage=windowsStorage,approval=messageBox,launc
       }
       case 'events':return {rows:history.filter(row=>row.seq>(Number(arg)||0)).reverse(),lastSeq,
         relay:{connected:relay.connected},settings:vault.publicSettings()};
+      case 'diagnostics':return {buildId:BUILD_ID,startedAt,
+        relayConnected:relay.connected,rows:diagnostics.list()};
       default:throw new Error('Unknown action');
     }
   }
@@ -329,20 +359,47 @@ function createService({baseDir,storage=windowsStorage,approval=messageBox,launc
       textResponse(res,403,{error:'Local session required'});return;
     }
     if(pathname==='/api/assets/import'){
-      uploadAsset(req,assets,baseDir).then(result=>textResponse(res,200,result))
-        .catch(e=>{if(!res.destroyed)textResponse(res,400,{error:safeError(e,vault)});});
+      uploadAsset(req,assets,baseDir).then(result=>{
+        diagnostics.add('asset','ASSET_IMPORT_DONE');
+        textResponse(res,200,result);
+      }).catch(e=>{
+          diagnostics.add('asset','ASSET_IMPORT_FAILED',{reason:failureReason(e)});
+          if(!res.destroyed)textResponse(res,400,{error:safeError(e,vault)});
+        });
       return;
     }
     if(pathname!=='/api/dispatch'||req.headers['content-type']!=='application/json'){
       textResponse(res,404,{error:'Not found'});return;
     }
-    readJSON(req).then(({action,arg})=>dispatch(action,arg))
-      .then(result=>{if(!res.destroyed)textResponse(res,200,result);})
-      .catch(e=>{if(!res.destroyed)textResponse(res,400,{error:safeError(e,vault)});});
+    let attemptedAction;
+    readJSON(req).then(({action,arg})=>{
+      attemptedAction=action;
+      return dispatch(action,arg);
+    }).then(result=>{
+      if(!['startup','events','diagnostics','ui:leave','operation:run'].includes(attemptedAction)){
+        diagnostics.add('server',result?.ok===false?'REQUEST_FAILED':'REQUEST_DONE',{
+          action:attemptedAction,
+          reason:result?.ok===false?failureReason({message:result.error}):undefined
+        });
+      }
+      if(!res.destroyed)textResponse(res,200,result);
+    }).catch(e=>{
+        // Only an allowlisted action label and a fixed failure category reach the
+        // copyable log. Never store arg, session, URL, raw error or stack here.
+        diagnostics.add('server','REQUEST_FAILED',
+          {action:attemptedAction,reason:failureReason(e)});
+        if(!res.destroyed)textResponse(res,400,{error:safeError(e,vault)});
+      });
   }
   server=http.createServer(handler);
   return {server,dispatch,handler,vault,assets,relay,kling,gateway,session,
-    listen:()=>new Promise((resolve,reject)=>{server.once('error',reject);server.listen(port,HOST,resolve);}),
+    listen:()=>new Promise((resolve,reject)=>{
+      server.once('error',reject);
+      server.listen(port,HOST,()=>{
+        diagnostics.add('server','SERVER_READY');
+        resolve();
+      });
+    }),
     close:()=>{
       if(closePromise)return closePromise;
       stopping=true;cancelTabClose();clearTimeout(stopTimer);

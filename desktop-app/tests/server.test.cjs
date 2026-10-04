@@ -74,6 +74,47 @@ test('local browser server isolates session, requires same-origin token, and app
   }finally{await app.close();fs.rmSync(dir,{recursive:true,force:true});}
 });
 
+test('same-origin diagnostics expose build identity and safe categories, never raw provider data',async()=>{
+  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'bazino-diagnostics-test-'));
+  const secret='OWNER_SECRET_NEVER_IN_LOG';
+  const app=createService({baseDir:dir,port:0,storage,providersFactory:()=>({
+    api:async()=>{throw new TypeError(`fetch failed ${secret} https://example.org/?code=PRIVATE`);}
+  }),researchFactory:()=>({scan:async()=>({ok:false,sources:[
+    {source:'vgc',items:[],error:`fetch failed ${secret}`} ]})})});
+  try{
+    await app.listen();
+    const origin=`http://127.0.0.1:${app.server.address().port}`;
+    const post=(action,arg,authorized=true)=>fetch(`${origin}/api/dispatch`,{
+      method:'POST',headers:{'Content-Type':'application/json',Origin:origin,
+        ...(authorized?{'X-Bazino-Session':app.session}:{})},
+      body:JSON.stringify({action,arg})});
+    const html=await(await fetch(`${origin}/`)).text();
+    assert.match(html,/data-ui-build="studio-logs-2026-09-26\.1"/);
+    assert.equal((await post('diagnostics',undefined,false)).status,403);
+    const api=await(await post('operation:run',
+      {kind:'api',provider:'zernio',method:'GET',path:'/v1/accounts'})).json();
+    assert.equal(api.ok,false);
+    assert.equal((await(await post('operation:run',
+      {kind:'research',action:'scan',sourceIds:['vgc']})).json()).ok,false);
+    app.relay.emit('error',new TypeError(`fetch failed ${secret}`));
+    assert.equal((await post('gateway:list')).status,200);
+    assert.equal((await post(`unknown-action-${secret}`)).status,400);
+    const response=await post('diagnostics');assert.equal(response.status,200);
+    const log=await response.json();
+    assert.equal(log.buildId,'studio-logs-2026-09-26.1');
+    assert.ok(log.rows.some(row=>row.code==='SERVER_READY'));
+    assert.ok(log.rows.some(row=>row.code==='OP_STARTED'&&row.kind==='api'));
+    assert.ok(log.rows.some(row=>row.code==='OP_FAILED'&&row.reason==='NETWORK'));
+    assert.ok(log.rows.some(row=>row.code==='OP_FAILED'&&row.kind==='research'&&row.reason==='NETWORK'));
+    assert.ok(log.rows.some(row=>row.code==='RELAY_FAILED'&&row.reason==='NETWORK'));
+    assert.ok(log.rows.some(row=>row.code==='REQUEST_DONE'&&row.action==='gateway:list'));
+    assert.ok(log.rows.some(row=>row.code==='REQUEST_FAILED'&&!row.action));
+    const copied=JSON.stringify(log);
+    for(const forbidden of [secret,app.session,'example.org','PRIVATE','/v1/accounts'])
+      assert.ok(!copied.includes(forbidden),`diagnostics must not contain ${forbidden}`);
+  }finally{await app.close();fs.rmSync(dir,{recursive:true,force:true});}
+});
+
 test('closing the last authenticated browser tab releases the port; a reload or another tab cancels it',async()=>{
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'bazino-close-test-'));
   let stops=0;

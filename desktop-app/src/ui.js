@@ -14,7 +14,10 @@ let settings = {},
   access = null,
   reports = [],
   engagement = null,
-  connectors = [];
+  connectors = [],
+  serverDiagnostics = null,
+  browserDiagnostics = [],
+  diagnosticsRefreshing = false;
 const titles = {
   overview: "نمای کلی",
   intelligence: "رصد و پژوهش روزانه",
@@ -24,6 +27,7 @@ const titles = {
   media: "کتابخانه رسانه",
   kling: "Kling AI",
   relay: "ارتباط GitHub",
+  diagnostics: "لاگ و عیب‌یابی",
   settings: "تنظیمات و کلیدها",
 };
 const presets = {
@@ -57,6 +61,117 @@ function toast(message, error = false) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove("visible"), 4500);
 }
+// The clipboard receives only fixed diagnostic codes, never toast text, raw
+// exceptions, provider responses, account identifiers or credential fields.
+const diagnosticCodes = new Set(['SERVER_READY','REQUEST_DONE','REQUEST_FAILED',
+  'OP_STARTED','OP_DONE','OP_PARTIAL','OP_FAILED','OP_DECLINED',
+  'RELAY_CONNECTED','RELAY_DISCONNECTED','RELAY_FAILED',
+  'ASSET_IMPORT_DONE','ASSET_IMPORT_FAILED']);
+const diagnosticComponents = new Set(['server','operation','relay','asset']);
+const diagnosticKinds = new Set(['api','zernio-access','zernio-engagement-check',
+  'zernio-media-upload','research','editorial','web-fetch','gateway-list',
+  'gateway-api','gateway-mcp','kling']);
+const diagnosticActions = new Set(['startup','settings:save','gateway:list',
+  'gateway:save','gateway:remove','gateway:authorize','operation:run',
+  'relay:connect','relay:disconnect','relay:pair','assets:open',
+  'kling:authorize','kling:identity','kling:tools','kling:logout',
+  'external:open','app:stop','events','diagnostics']);
+const diagnosticReasons = new Set(['NONE','OTHER','NETWORK','AUTH','DECLINED',
+  ...[400,401,403,404,408,409,429,500,502,503,504].map(n=>`HTTP_${n}`),
+  ...['ECONNRESET','ECONNREFUSED','ENOTFOUND','EAI_AGAIN','ETIMEDOUT',
+    'ENETUNREACH','EHOSTUNREACH','UND_ERR_CONNECT_TIMEOUT','UND_ERR_SOCKET',
+    'UNABLE_TO_VERIFY_LEAF_SIGNATURE','SELF_SIGNED_CERT_IN_CHAIN','CERT_HAS_EXPIRED',
+    'ERR_TLS_CERT_ALTNAME_INVALID'].map(code=>`NET_${code}`)]);
+const localDiagnosticCodes = new Set(['UI_SCRIPT_ERROR','UI_RESOURCE_ERROR',
+  'UI_UNHANDLED_REJECTION','STARTUP_FAILED','LOCAL_SERVER_UNREACHABLE',
+  'DIAGNOSTICS_UNAVAILABLE']);
+function localDiagnostic(code) {
+  if(!localDiagnosticCodes.has(code))return;
+  const at=new Date().toISOString(),last=browserDiagnostics.at(-1);
+  if(last?.code===code&&Date.parse(at)-Date.parse(last.at)<10000)return;
+  browserDiagnostics.push({at,code});
+  if(browserDiagnostics.length>40)browserDiagnostics.shift();
+  if($('#view-diagnostics')?.classList.contains('active'))paintDiagnostics();
+}
+window.addEventListener('error',event=>localDiagnostic(
+  ['SCRIPT','LINK'].includes(event.target?.tagName)?'UI_RESOURCE_ERROR':'UI_SCRIPT_ERROR'));
+window.addEventListener('unhandledrejection',()=>localDiagnostic('UI_UNHANDLED_REJECTION'));
+function safeIso(value) {
+  if(typeof value!=='string')return '?';
+  const ms=Date.parse(value);
+  return Number.isFinite(ms)?new Date(ms).toISOString():'?';
+}
+function stopButtonStyle() {
+  const button=$('#app-stop');
+  if(!button)return 'CSS_MISMATCH';
+  const style=window.getComputedStyle(button);
+  return style.color==='rgb(255, 255, 255)'&&
+    style.backgroundColor==='rgb(35, 54, 78)'?'CSS_OK':'CSS_MISMATCH';
+}
+function paintDiagnostics() {
+  // A partially extracted ZIP may combine new scripts with an older HTML file.
+  // Keep the rest of the interface working even if the diagnostics panel is absent.
+  if(!$('#diagnostics-text')||!$('#diagnostics-ui-build'))return;
+  const rawUiBuild=document.documentElement.dataset.uiBuild;
+  const uiBuild=typeof rawUiBuild==='string'&&
+    /^studio-logs-[0-9-]+\.[0-9]+$/.test(rawUiBuild)?rawUiBuild:'UNKNOWN_UI';
+  const rawBuild=serverDiagnostics?.buildId;
+  const serverBuild=typeof rawBuild==='string'&&/^studio-logs-[0-9-]+\.[0-9]+$/.test(rawBuild)?
+    rawBuild:'NO_SERVER_RESPONSE';
+  const css=stopButtonStyle();
+  $('#diagnostics-ui-build').textContent=uiBuild;
+  $('#diagnostics-server-build').textContent=serverBuild===uiBuild?serverBuild:
+    `${serverBuild} · نسخه‌های رابط و سرور متفاوت‌اند`;
+  $('#diagnostics-style-state').textContent=css==='CSS_OK'?'خوانا ✓':
+    'ناهماهنگ؛ CSS یا تنظیمات نمایش را بررسی کنید';
+  const rows=(Array.isArray(serverDiagnostics?.rows)?serverDiagnostics.rows.slice(-120):[])
+    .filter(row=>diagnosticComponents.has(row?.component)&&diagnosticCodes.has(row?.code)).map(row=>{
+    const parts=[`[${safeIso(row.at)}]`,row.component.toUpperCase(),row.code];
+    if(diagnosticKinds.has(row.kind))parts.push(`kind=${row.kind}`);
+    if(diagnosticActions.has(row.action))parts.push(`action=${row.action}`);
+    if(Number.isInteger(row.status)&&row.status>=100&&row.status<=599)
+      parts.push(`http=${row.status}`);
+    if(diagnosticReasons.has(row.reason))parts.push(`reason=${row.reason}`);
+    return {at:safeIso(row.at),text:parts.join(' ')};
+  });
+  for(const row of browserDiagnostics)
+    rows.push({at:row.at,text:`[${row.at}] BROWSER ${row.code}`});
+  rows.sort((a,b)=>a.at.localeCompare(b.at));
+  const text=[`BAZINO STUDIO DIAGNOSTICS`, `UI_BUILD=${uiBuild}`,
+    `SERVER_BUILD=${serverBuild}`,`STYLE=${css}`,
+    `STARTED=${safeIso(serverDiagnostics?.startedAt)}`,
+    `RELAY=${serverDiagnostics?.relayConnected===true?'CONNECTED':'DISCONNECTED_OR_UNKNOWN'}`,
+    'Data: fixed codes only; no account names, tokens, URLs or raw responses.',
+    '',...rows.map(row=>row.text)].join('\n');
+  const output=$('#diagnostics-text');
+  if(document.activeElement!==output||output.selectionStart===output.selectionEnd)
+    output.value=text;
+}
+async function refreshDiagnostics() {
+  if(diagnosticsRefreshing)return;
+  diagnosticsRefreshing=true;
+  try {
+    const result=await window.marketing.diagnostics();
+    if(!result||!Array.isArray(result.rows))throw new Error('Unexpected diagnostics response');
+    serverDiagnostics=result;
+  }catch{localDiagnostic('DIAGNOSTICS_UNAVAILABLE');}
+  finally{diagnosticsRefreshing=false;paintDiagnostics();}
+}
+async function copyDiagnostics() {
+  const output=$('#diagnostics-text');
+  const text=output.value;
+  try {
+    if(!navigator.clipboard?.writeText)throw new Error('Clipboard unavailable');
+    await navigator.clipboard.writeText(text);
+    $('#diagnostics-copy-status').textContent='لاگ کپی شد.';
+  } catch {
+    output.focus();output.select();
+    let copied=false;
+    try{copied=document.execCommand?.('copy')===true;}catch{ /* manual copy */ }
+    $('#diagnostics-copy-status').textContent=copied?'لاگ کپی شد.':
+      'متن لاگ انتخاب شد؛ Ctrl+C را فشار دهید.';
+  }
+}
 function go(view) {
   if (!titles[view]) return;
   $$(".view").forEach((el) =>
@@ -67,6 +182,10 @@ function go(view) {
   );
   $("#page-title").textContent = titles[view];
   window.scrollTo(0, 0);
+  if(view==='diagnostics'){
+    paintDiagnostics();
+    void refreshDiagnostics();
+  }
 }
 function isConfigured(field) {
   return Boolean(settings.configured?.[field]);
@@ -286,8 +405,13 @@ async function refreshReports() {
 }
 function paintResearch(result) {
   const box=$('#research-results');box.replaceChildren();
-  const errors=(result.sources||[]).filter(row=>row.error).map(row=>`${row.source}: ${row.error}`);
-  $('#research-status').textContent=`${result.observedAt||''} · ${errors.length?'منابع ناموفق: '+errors.join(' | '):'خوراک‌ها خوانده شد؛ تیترها نیاز به بررسی دارند.'}`;
+  const sources=result.sources||[];
+  const errors=sources.filter(row=>row.error).map(row=>`${row.source}: ${row.error}`);
+  const allNetworkFailures=sources.length>0&&sources.every(row=>
+    /fetch failed|network|timed out|aborted/i.test(String(row.error||'')));
+  const advice=allNetworkFailures?
+    ' · دسترسی شبکهٔ خود برنامه به خوراک‌ها برقرار نیست؛ بازشدن سایت در Chrome کافی نیست. VPN، پروکسی و فایروال Windows را بررسی کنید.':'';
+  $('#research-status').textContent=`${result.observedAt||''} · ${errors.length?'منابع ناموفق: '+errors.join(' | '):'خوراک‌ها خوانده شد؛ تیترها نیاز به بررسی دارند.'}${advice}`;
   let count=0;
   for(const source of result.sources||[])for(const item of source.items||[]) {
     count++;
@@ -505,6 +629,8 @@ async function init() {
   try {
     const data = await window.marketing.startup();
     settings = data.settings;
+    serverDiagnostics={buildId:data.buildId,rows:[]};
+    paintDiagnostics();
     assets = data.assets || [];
     activity = data.history || [];
     connectors = data.connectors || [];
@@ -519,9 +645,12 @@ async function init() {
     window.marketing.onActivity((row) => {
       activity.unshift(row);
       paintActivity();
+      if($('#view-diagnostics').classList.contains('active'))void refreshDiagnostics();
     });
     window.marketing.onRelay(paintRelay);
   } catch (e) {
+    localDiagnostic(/fetch failed|failed to fetch|network/i.test(String(e?.message||''))?
+      'LOCAL_SERVER_UNREACHABLE':'STARTUP_FAILED');
     toast(`راه‌اندازی: ${e.message}`, true);
   }
 }
@@ -826,22 +955,32 @@ for (const [selector, fn] of [
 }
 $("#relay-connect").addEventListener("click", () =>
   busy($("#relay-connect"), async () => {
-    const result = await window.marketing.connectRelay();
-    paintRelay(result);
-    $("#relay-feedback").textContent = result.connected
-      ? "اتصال امن برقرار شد. اثر انگشت را با ایجنت مقایسه کنید."
-      : result.error;
-    toast(
-      result.connected ? "ارتباط GitHub برقرار شد." : result.error,
-      !result.connected,
-    );
+    try {
+      const result = await window.marketing.connectRelay();
+      paintRelay(result);
+      $("#relay-feedback").textContent = result.connected
+        ? "اتصال امن برقرار شد. اثر انگشت را با ایجنت مقایسه کنید."
+        : result.error;
+      toast(result.connected ? "ارتباط GitHub برقرار شد." : result.error, !result.connected);
+    } catch (e) {
+      // A failed network attempt previously became an unhandled rejection: the
+      // button re-enabled without displaying why the encrypted relay stayed off.
+      try { paintRelay((await window.marketing.startup()).relay || {}); } catch { /* keep displayed status */ }
+      $("#relay-feedback").textContent = `اتصال برقرار نشد: ${e.message}`;
+      toast(e.message, true);
+    }
   }),
 );
 $("#relay-disconnect").addEventListener("click", async () => {
-  const result = await window.marketing.disconnectRelay();
-  paintRelay(result);
-  $("#relay-feedback").textContent = "ارتباط قطع شد.";
-  toast("اتصال قطع شد.");
+  try {
+    const result = await window.marketing.disconnectRelay();
+    paintRelay(result);
+    $("#relay-feedback").textContent = "ارتباط قطع شد.";
+    toast("اتصال قطع شد.");
+  } catch (e) {
+    $("#relay-feedback").textContent = `قطع ارتباط تأیید نشد: ${e.message}`;
+    toast(e.message, true);
+  }
 });
 $("#relay-pair").addEventListener("click", () =>
   busy($("#relay-pair"), async () => {
@@ -865,4 +1004,11 @@ $("#app-stop").addEventListener("click", async () => {
     document.body.textContent = "برنامه بسته شد. برای ادامه، BazinoMarketing.exe را دوباره اجرا کنید.";
   } catch (e) { toast(e.message, true); }
 });
+$('#diagnostics-refresh')?.addEventListener('click',()=>{void refreshDiagnostics();});
+$('#diagnostics-copy')?.addEventListener('click',()=>{void copyDiagnostics();});
+setInterval(()=>{
+  if($('#view-diagnostics')?.classList.contains('active')&&
+    document.activeElement!==$('#diagnostics-text'))void refreshDiagnostics();
+},5000);
+paintDiagnostics();
 init();

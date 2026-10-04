@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>BazinoMarketing</AssemblyName>
+    <RootNamespace>BazinoMarketing.App</RootNamespace>
+    <ApplicationIcon>Assets\bazino.ico</ApplicationIcon>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <AssemblyTitle>Jinus</AssemblyTitle>
+    <!-- Single-file, self-contained publish is driven from the CI command line / build/publish.ps1. -->
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BazinoMarketing.Core\BazinoMarketing.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\bazino.ico" />
+    <Resource Include="Assets\bazino.png" />
+    <!-- Four placeholder slides used only by the render-screenshots switch (sample data) so the carousel reviewer shows four slides. -->
+    <EmbeddedResource Include="Assets\sample\carousel-*.png" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>طرح ساخت پل رومیزی جدید برای ایجنت</title>
+  <style>
+    :root { color-scheme: light; --ink:#18253a; --muted:#52647c; --line:#dbe4ed; --blue:#183d69; --teal:#006b63; --bg:#f4f7fb; --warn:#fff4df; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--bg); color:var(--ink); direction:rtl; text-align:right; font:16px/2.05 Tahoma,"Segoe UI",sans-serif; }
+    main { max-width:1040px; margin:36px auto 70px; padding:0 22px; }
+    header { padding:30px 34px 25px; color:white; background:linear-gradient(135deg,#122c4b,#155e72); border-radius:20px; box-shadow:0 13px 32px #15365023; }
+    h1 { font-size:clamp(25px,3.6vw,37px); margin:0 0 8px; line-height:1.6; }
+    .lead { margin:0; max-width:800px; font-size:17px; color:#eef9ff; }
+    .date { color:#d2e8f1; font-size:13px; margin:16px 0 0; }
+    nav { display:flex; flex-wrap:wrap; gap:9px; margin:20px 0; }
+    nav a { color:var(--blue); background:white; border:1px solid var(--line); border-radius:999px; padding:3px 13px; text-decoration:none; font-size:13px; }
+    nav a:hover { background:#e4f4f4; }
+    section { background:white; margin:19px 0; padding:22px 30px 25px; border:1px solid var(--line); border-radius:16px; box-shadow:0 2px 8px #0f305b0a; }
+    h2 { margin:0 0 12px; color:var(--blue); font-size:23px; border-bottom:1px solid var(--line); padding-bottom:10px; }
+    h3 { color:var(--teal); font-size:18px; margin:20px 0 7px; }
+    p { margin:8px 0 14px; }
+    ul,ol { padding-right:25px; margin:7px 0 16px; }
+    li { margin:5px 0; }
+    a { color:#075893; overflow-wrap:anywhere; }
+    a:focus-visible { outline:3px solid #09857a; outline-offset:3px; }
+    .note { background:#eaf5f4; border-right:4px solid #008377; border-radius:8px; padding:11px 16px; margin:15px 0; }
+    .caution { background:var(--warn); border-right:4px solid #bb761a; border-radius:8px; padding:11px 16px; margin:15px 0; }
+    .flow { direction:rtl; text-align:center; background:#f1f5fb; border:1px solid #d9e5f1; border-radius:10px; padding:16px; margin:15px 0; font-weight:bold; }
+    table { border-collapse:collapse; width:100%; margin:15px 0; font-size:15px; }
+    th,td { padding:10px 12px; text-align:right; vertical-align:top; border:1px solid var(--line); }
+    th { background:#edf4f9; color:#183d69; }
+    .scroll { overflow-x:auto; }
+    .latin { direction:ltr; unicode-bidi:isolate; display:inline-block; font-family:Consolas,monospace; font-size:.94em; }
+    .source { font-size:13px; color:var(--muted); white-space:nowrap; }
+    .sources { font-size:14px; }
+    .sources li { margin:4px 0; }
+    footer { color:var(--muted); text-align:center; font-size:13px; padding:12px; }
+    @media(max-width:600px){main{padding:0 10px;margin:12px auto;}header,section{padding:18px;}table{font-size:13px;}th,td{padding:7px;}}
+    @media print { body{background:white;}main{margin:0;max-width:none;}header{color:var(--ink);background:white;box-shadow:none;border:1px solid var(--line);}header .lead,header .date{color:var(--ink);}nav{display:none;}section{box-shadow:none;break-inside:avoid;}a{color:var(--ink);}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>طرح ساختِ پل رومیزیِ جدید برای ایجنت</h1>
+    <p class="lead">بازطراحی از صفر: یک برنامهٔ واقعیِ ویندوزی که با یک دکمه به ایجنت وصل شود، ابزارها را مدیریت کند و برای کار روزانه نه به مرورگر نیاز داشته باشد و نه به سروری که مالک راه‌اندازی کند.</p>
+    <p class="date">نسخهٔ پژوهشی، بازنگری اتصال Kling به CLI ـ ۲۷ سپتامبر ۲۰۲۶ · خروجی این سند «طرح ساخت» است، نه ادعای ساخته‌شدن یا آزموده‌شدن برنامهٔ تازه.</p>
+  </header>
+  <section style="background:#fff4df;border-color:#e8c98a;margin-top:16px">
+    <h2>وضعیت کنونی: این سند طرح تاریخی است</h2>
+    <p>از ۲ اکتبر ۲۰۲۶، ژینوس توصیف‌شده در این طرح پیاده‌سازی شده و نسخهٔ 0.8.1 روی رایانهٔ مالک نصب است. این فایل به‌عنوان سابقهٔ پژوهش اولیه نگهداری می‌شود؛ برای قابلیت‌های موجود و راهنمای استفاده به <a href="BAZINO_MARKETING_STUDIO_WINDOWS_USER_GUIDE_EN.md">راهنمای کاربر انگلیسی</a>، <a href="../marketing-app/README.md">README فنی برنامه</a> و <a href="../HANDOFF.md">HANDOFF جاری</a> رجوع کنید. هیچ متن بعدی این طرح دربارهٔ «هنوز ساخته نشده» نمایانگر وضعیت امروز نیست. وجود این طرح مجوز انتشار، DM یا هزینه‌کرد نیست.</p>
+  </section>
+  <nav aria-label="فهرست بخش‌ها">
+    <a href="#decision">تصمیم اصلی</a><a href="#screens">سه صفحه</a><a href="#architecture">معماری</a><a href="#github">GitHub و VPN</a><a href="#auth">احراز هویت و ابزارها</a><a href="#security">امنیت فرمان</a><a href="#repair">عیب‌یابی</a><a href="#steps">مراحل و پذیرش</a><a href="#sources">منابع</a>
+  </nav>
+
+  <section id="decision">
+    <h2>۱. تصمیم اصلی؛ قرار است چه چیزی ساخته شود؟</h2>
+    <p>پیشنهاد من یک <strong>برنامهٔ بومی Windows با WPF و ‎.NET 10</strong> است. برنامه با بستهٔ خودبسنده منتشر می‌شود؛ در استفادهٔ روزانه به اجرای دستی Node، npx، PowerShell، باز کردن وب‌سایت یا راه‌اندازی سرویس محلی نیاز ندارد. چون CLI رسمی Kling بر Node تکیه دارد، تهیهٔ یک‌بارهٔ پیش‌نیازِ سازگار باید در فرایند نصب برنامه مدیریت و روی Windows واقعی آزمایش شود؛ خودبسنده‌بودنِ رابط WPF به‌تنهایی CLI را بی‌نیاز از Node نمی‌کند. ‎.NET 10 نسخهٔ پشتیبانیِ بلندمدت است و مایکروسافت انتشارِ خودبسنده را برای برنامه‌های رومیزی مستند کرده است. راست‌به‌چپ واقعی در WPF از ابتدای طراحی، با <span class="latin">FlowDirection=RightToLeft</span>، پیاده می‌شود؛ کدها، نشانی‌های اینترنتی و نام متغیرها در بخش‌های جداگانه چپ‌به‌راست می‌مانند. <a class="source" href="https://learn.microsoft.com/en-us/dotnet/core/releases-and-support">[۵]</a> <a class="source" href="https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/publish-first-app">[۱]</a> <a class="source" href="https://learn.microsoft.com/en-us/dotnet/desktop/wpf/advanced/bidirectional-features-in-wpf-overview">[۱]</a></p>
+    <p>این برنامه <strong>پوستهٔ وب‌سایت، مرورگر جاسازی‌شده یا بازنویسی عجولانهٔ رلهٔ فعلی نیست</strong>. ساختار تازه از ابتدا جدا می‌شود؛ نسخهٔ قدیم تا زمان گذراندن آزمون‌های نسخهٔ جدید دست‌نخورده می‌ماند. فقط سه بخش اصلی در رابط کاربری وجود دارد: «اتصال»، «تنظیمات» و «لاگ».</p>
+    <div class="note"><strong>تجربهٔ روزمره:</strong> مالک یک بار اطلاعات لازم را در «تنظیمات» وارد و ذخیره می‌کند؛ از آن پس برنامه را باز می‌کند، «اتصال» را می‌زند و تمام. بستن واقعی برنامه یا زدن «قطع ارتباط»، پذیرش فرمان‌های تازه را متوقف می‌کند. برنامه نباید پنهانی در سینی سیستم باز بماند؛ اگر قابلیت کمینه‌سازی به سینی بعداً اضافه شد، از «خروج» آشکارا متمایز است.</div>
+  </section>
+
+  <section id="screens">
+    <h2>۲. سه بخشِ دقیقِ برنامه</h2>
+    <h3>الف) اتصال</h3>
+    <p>دکمه‌های پررنگ و خوانای «اتصال» و «قطع ارتباط و بستن برنامه»، همراه با وضعیتِ خود برنامه، صندوق ارتباط GitHub، و <strong>هر ابزار به‌طور جداگانه</strong> نمایش داده می‌شوند. برای هر کدام «متصل»، «قطع»، «نیازمند ورود»، «اختلال شبکه» یا «در حال بررسی» و آخرین زمان بررسی دیده می‌شود؛ چراغ سبز یا قرمز بدون متنِ توضیحی کافی نیست. «اتصال» به معنای سالم‌بودن Kling یا Zernio نیست: سلامت مسیر فرمان و سلامت سرویس مقصد دو موضوع مستقل‌اند. ابزارهای عیب‌یابیِ خواندنی، از همین صفحه در دسترس‌اند، نه در صفحهٔ چهارم.</p>
+    <h3>ب) تنظیمات</h3>
+    <p>برای <strong>GitHub، Kling، Zernio و FLUX</strong> کارت پیش‌فرض می‌سازیم؛ در صورت نیاز کارتِ پورتال و دیگر سرویس‌ها نیز افزوده می‌شود. هر کارت تنها اطلاعات واقعاً لازم برای همان سرویس را می‌خواهد: کلید یا نشانی، وضعیت مجوز، تنظیم پراکسیِ همان ابزار، «ذخیره»، «تست اتصال» و نشانگر سبز/قرمز با علت خطا. <strong>کارت Kling استثناست:</strong> به‌جای گرفتن توکن، منطقهٔ حساب را با انتخاب مالک، نسخه/مسیر CLI، دکمهٔ «ورود» و وضعیت ورود نشان می‌دهد؛ هرگز محتوای فایل اعتبار CLI را نمی‌خواند یا نمایش نمی‌دهد. آزمونِ پیش‌فرض <strong>فقط خواندنی و بدون هزینه/انتشار</strong> است؛ مثلاً بررسی مخزن برای GitHub، <span class="latin">kling who_am_i</span> برای Kling و سلامت حساب برای Zernio. آزمونِ تولید تصویر یا ویدئو که احتمال هزینه دارد، جداگانه اجازه می‌خواهد. راهنمای Zernio بررسی سلامت حساب را از انتشار محتوا جدا می‌کند. <a class="source" href="https://kling.ai/app/mcp/guide">[۱]</a> <a class="source" href="https://docs.zernio.com/guides/connecting-accounts">[۲]</a></p>
+    <p>علاوه بر آن، <strong>کارت سفارشی استاندارد</strong> وجود دارد: «نام سرویس»، ردیف‌های «نام متغیر / مقدار» با افزودن و حذف ردیف، نوع مقدار (محرمانه/عادی)، آدرس API یا MCP، روش احراز هویت، و آزمونِ قابل‌تنظیمِ ایمن. مقدارِ محرمانه پنهان است، فقط با اقدام خود مالک آشکار می‌شود و در کپی/خروجی تنظیمات یا لاگ نمی‌آید. افزودن سرویس یا متغیر تازه نیازمند بازسازی EXE نیست. کارت‌ها برای <em>پیکربندی و آزمون</em> هستند؛ فهرست محدودی از دستورهای قابل اجرای ایجنت تعریف نمی‌کنند.</p>
+    <h3>ج) لاگ</h3>
+    <p>همهٔ رخدادهای عملیاتیِ قابل ثبت ــ اتصال/قطع، درخواست و پاسخ، ابزار، زمان، شناسهٔ درخواست، اجازهٔ مالک، نتیجه، مدت اجرا، کد خطا و تشخیص DNS/TLS/پراکسی ــ به شکل ساخت‌یافته در دستگاه ثبت می‌شود. فیلترِ «ابزار»، «زمان»، «موفق/ناموفق» و «سطح اهمیت» و دکمهٔ <strong>کپیِ ردیف یا لاگ فیلترشده</strong> وجود دارد. محتوای حساسی مانند رمز، توکن، کد OAuth و متنِ محرمانهٔ پاسخ‌ها پیش از نمایش، ذخیره و کپی پالایش می‌شود؛ پس «لاگ کامل» به معنی نشت اسرار نیست. لاگ‌های بزرگ سقف حجم، چرخش فایل و امکان خروجیِ پاک‌سازی‌شده دارند. <a class="source" href="https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html">[۱]</a></p>
+  </section>
+
+  <section id="architecture">
+    <h2>۳. ارتباط ایجنت با رایانه چگونه کار می‌کند؟</h2>
+    <div class="flow">ایجنت ← پیامِ امضاشده/رمزگذاری‌شده در صندوق خصوصی GitHub ← برنامهٔ باز و متصل روی Windows ← API / Kling CLI / ابزارهای دیگر / فرمانِ مجاز ← نتیجهٔ پالایش‌شده از همان صندوق ← ایجنت</div>
+    <p>GitHub <strong>فقط صندوقِ انتقال درخواست و نتیجه</strong> است، نه سرورِ شخصیِ همیشه‌روشن و نه مرورگرِ واسط. برنامه روی رایانهٔ مالک با درخواست‌های خروجی به GitHub وصل می‌شود و ابزارها را <strong>مستقیماً از خود Windows</strong> فراخوانی می‌کند. سوی ایجنت یک کلاینتِ کوچکِ همین پروتکل لازم است؛ اما «Bridge مرورگر» و تب بازِ استودیو هیچ نقشی در اتصال عملیاتی ندارند. با بسته‌شدن برنامه، هیچ پردازشِ مخفی‌ای نباید فرمان بعدی را اجرا کند.</p>
+    <p>برای نمونهٔ اولیه، از یک <strong>مخزن خصوصیِ مجزا از مخزن کد و شاخه‌های کاری</strong> و API محتوای GitHub استفاده می‌کنیم. پیام‌ها شناسهٔ یکتا، مهلت انقضا، شناسهٔ نشست، وضعیت انجام و محدودیت اندازه دارند؛ نسخهٔ دومِ پیام تکراری دوباره اجرا نمی‌شود. در هر نشست، برنامه درخواست‌های نشست‌های قبلی را رد می‌کند. دسترسی GitHub به همان مخزن محدود است: در حالت ایده‌آل مجوز GitHub App محدود به آن مخزن، یا در نمونهٔ اولیه توکنِ ریزدانهٔ قابل لغو؛ هیچ توکنی داخل EXE یا سورس قرار نمی‌گیرد. سازوکار هویت فرستنده و تأیید محلیِ درخواست‌های خطرناک باید جدا از «خصوصی‌بودن مخزن» بررسی شود. <a class="source" href="https://docs.github.com/en/rest/repos/contents?apiVersion=2026-03-10">[۱]</a> <a class="source" href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens">[۱]</a></p>
+    <div class="caution">GitHub یک صفِ کم‌حجم با تأخیرِ چندثانیه‌ای است، نه کانالِ بلادرنگ یا محل ذخیرهٔ فایلِ رسانه‌ای/اسرار. نوشتن‌های هم‌زمان ممکن است تعارض بسازند؛ سهمیهٔ معمولِ API احراز‌هویت‌شده ۵۰۰۰ درخواست در ساعت است و محدودیت‌های ثانویه هم وجود دارند، پس پرس‌وجوی پی‌درپی ممنوع و فاصله‌گذاری/تلاشِ دوباره لازم است. محتوای commit حتی پس از حذف فایل می‌تواند در تاریخچه بماند. برای همین متن و خروجیِ محرمانه را خام در مخزن نمی‌گذاریم، ظرفیت/تأخیر را با آزمون واقعی می‌سنجیم و اگر کافی نبود، فقط با تصمیم جدید مالک راه انتقال دیگری طراحی می‌کنیم. <a class="source" href="https://docs.github.com/en/rest/repos/contents?apiVersion=2026-03-10">[۱]</a> <a class="source" href="https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api">[۱]</a></div>
+  </section>
+
+  <section id="github">
+    <h2>۴. آیا GitHub نیاز به VPN را برطرف می‌کند؟</h2>
+    <p><strong>پاسخ کوتاه: فقط در مسیر انتقال فرمان، شاید؛ برای اینترنتِ کل برنامه، خیر.</strong> اگر ایجنت و Windows هر دو به GitHub دسترسی داشته باشند، می‌توانند بدون داشتن IP عمومی، باز کردن پورت یا VPN مشترک فرمان/نتیجه را ردوبدل کنند. اما اگر <strong>خود رایانهٔ Windows</strong> نتواند به Kling، Zernio، FLUX یا نشانیِ مقصد برسد، دریافت فرمان از GitHub این مشکل را حل نمی‌کند. GitHub Contents API سرویسِ ذخیرهٔ فایل است، نه VPN یا پراکسی عمومیِ ترافیک. <a class="source" href="https://docs.github.com/en/rest/repos/contents?apiVersion=2026-03-10">[۱]</a></p>
+    <p>پس برای هر ابزار آزمون جداگانهٔ DNS، TLS، زمان پاسخ، احراز هویت و پراکسی لازم است. برنامه ابتدا تنظیم پراکسی سیستم را آزمایش می‌کند و امکان پراکسی مجازِ اختصاصی برای هر ابزار را می‌دهد؛ موفقیت ورود در مرورگر <strong>نشانهٔ قطعیِ موفقیت درخواست‌های برنامه</strong> نیست. .NET پیکربندی پراکسی برای درخواست‌های HTTP را پشتیبانی می‌کند. راه‌حلِ دسترسی به سرویسِ مسدود یا مختل ــ مثلاً پراکسی یا مسیر شبکه‌ای مورد تأیید مالک ــ موضوعی مجزا از انتقال فرمان است؛ از این طرح نباید وعدهٔ «بدون VPN در همهٔ شرایط» برداشت شود. <a class="source" href="https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclienthandler.proxy?view=net-10.0">[۱]</a></p>
+  </section>
+
+  <section id="auth">
+    <h2>۵. ورود موقت در مرورگر و اتصال ابزارها</h2>
+    <p><strong>Kling ـ تصمیم اصلاح‌شده:</strong> برنامه از <strong>CLI رسمی Kling</strong> استفاده می‌کند، نه کلاینت MCP در خود برنامه؛ برای همین ایجنت هم‌زمان نسخهٔ MCP مستقل نصب نمی‌کند. فرمانی که فرستادید، <span class="latin">npx skills add klingai-tech/skills</span>، «مهارتِ راهنمای ایجنت» را نصب می‌کند و <strong>به‌تنهایی نصبِ برنامهٔ اجرایی <span class="latin">kling</span> روی Windows نیست</strong>. برای اجرای CLI باید بستهٔ رسمی npm مناسب منطقهٔ حساب نصب شود: <span class="latin">@klingai/cli-global</span> یا <span class="latin">@klingai/cli-cn</span>؛ بستهٔ اشتباه انتخاب نمی‌کنیم و منطقه را از مالک می‌پرسیم. CLI به Node.js 18+ نیاز دارد. طراحی نصب باید کاری کند مالک برای استفادهٔ روزمره ترمینال یا npx را اجرا نکند؛ برنامه پس از تأیید مالک، نصب/نسخهٔ CLI را بررسی و راه‌اندازی یک‌باره را هدایت کند. این وابستگی و شیوهٔ توزیعش باید پیش از وعدهٔ «بدون پیش‌نیاز» روی Windows اثبات شود. <a class="source" href="https://kling.ai/app/mcp/guide">[۱]</a> <a class="source" href="https://raw.githubusercontent.com/klingai-tech/skills/main/SKILL.md">[راهنمای مهارت رسمی]</a></p>
+    <p><strong>ورود CLI برخلاف تصورِ بدون‌مرورگر نیست:</strong> دستور رسمی <span class="latin">kling login</span> مرورگر را برای OAuth باز می‌کند و به یک گیرندهٔ موقتی در <span class="latin">127.0.0.1</span> بازمی‌گردد؛ صاحب برنامه سروری را دستی راه نمی‌اندازد. پس از ورود، کارت Kling با <span class="latin">kling who_am_i</span> نتیجه را بررسی می‌کند؛ توکن در محل اعتبارنامهٔ خود CLI نزد کاربر Windows می‌ماند و برنامه آن را کپی نمی‌کند. برنامه فقط هنگام ورود یا تجدیدِ لازم، با اقدام مالک مرورگر را باز می‌کند و پس از موفقیت به پیش‌زمینه بازمی‌گردد. <strong>بستن خودکار تبِ مرورگر خارجی در همهٔ مرورگرها تضمین‌شدنی نیست</strong>؛ استفادهٔ روزمره بدون مرورگر ممکن است، اما ورود اولیهٔ رسمی بدون مرورگر نه. <a class="source" href="https://kling.ai/app/mcp/guide">[۱]</a> <a class="source" href="https://raw.githubusercontent.com/klingai-tech/skills/main/SKILL.md">[راهنمای مهارت رسمی]</a> <a class="source" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/close">[۱]</a></p>
+    <p><strong>Zernio:</strong> تنها مسیر انتشار و اتصال شبکه‌های اجتماعیِ استودیو است؛ کارتِ مستقیم و مستقل برای YouTube، Instagram، Telegram یا Manus ساخته نمی‌شود. <strong>FLUX:</strong> اتصالِ قابل‌پیکربندی با کلید و نشانیِ ارائه‌دهندهٔ منتخب؛ هیچ ارائه‌دهنده یا هزینه‌ای از پیش فرض نمی‌شود. کارت‌های عمومی برای HTTP API و MCP امکان افزودن ابزارهای آینده را بدون بازطراحی برنامه می‌دهند. اسرار «Vault پورتال» فقط در سمت سرور پورتال مصرف می‌شوند؛ برنامهٔ رومیزی نباید بتواند آن‌ها را از پورتال استخراج کند. کلیدهایی که خود مالک به برنامه می‌دهد، مستقل و محلی نگهداری می‌شوند. <a class="source" href="https://docs.zernio.com/guides/connecting-accounts">[۲]</a></p>
+  </section>
+
+  <section id="security">
+    <h2>۶. فرمان‌های آزاد، ولی تحت اختیار مالک</h2>
+    <p>موتور فرمان <strong>به چند دستور ازپیش‌تعریف‌شده محدود نیست</strong>: ایجنت می‌تواند درخواستِ HTTP با روش/نشانی/بدنهٔ دلخواه برای سرویسِ تأییدشده، فراخوانی ابزارهای کشف‌شدهٔ MCP، یا اجرای فرمان سیستم‌عامل را با پارامترهای ساخت‌یافته بفرستد. کارتِ پیش‌فرضِ ابزار به معنی محدودکردن قابلیت‌های آن نیست. با این حال «فرمان دلخواه از راه دور بدون کنترل» عملاً دسترسی کامل به رایانه و اسرار محلی می‌دهد؛ چنین کاری را نمی‌توان هم‌زمان نامحدود و ایمن نامید. OWASP نیز خطر اجرای فرمان سیستم‌عامل را روشن کرده است. <a class="source" href="https://cheatsheetseries.owasp.org/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html">[۱]</a></p>
+    <ul>
+      <li><strong>خواندن و آزمون بی‌هزینه:</strong> مطابق اجازهٔ نشستِ فعال؛ نشانی‌های مقصد، حجم پاسخ و زمان اجرا محدود و در لاگ ثبت می‌شود.</li>
+      <li><strong>تغییر فایل، اجرای shell، نصب/به‌روزرسانی و درخواست به مقصد تازه:</strong> پیش‌نمایش دقیقِ فرمان و تأییدِ موردیِ مالک در خود برنامه؛ بازهٔ زمانی، پوشهٔ کار و دسترسی محدود؛ امکان لغو/قطع. فرمانِ ردشده هرگز اجرا نشود.</li>
+      <li><strong>انتشار، ارسال پیام، خرید اعتبار یا هر هزینه‌کرد:</strong> اجازهٔ روشن، جداگانه و مربوط به همان اقدام؛ تأییدِ اتصال یا اجازهٔ فرمان عمومی جای آن را نمی‌گیرد.</li>
+      <li><strong>اسرار:</strong> فقط نزد کارگزارِ ابزار استفاده شوند و خودِ مقدار برای ایجنت/لاگ ارسال نشود. ذخیره با DPAPI در محدودهٔ کاربر Windows و دسترسی فایل محدود؛ نه در چت، مخزن GitHub، EXE یا Vault سمت‌سرورِ قابل‌خواندن از کلاینت. DPAPI در برابر بدافزار یا فرمانِ آزادِ اجراشده با همان حساب Windows تضمین مطلق نمی‌دهد: اجرای OS باید در پردازش کم‌دسترسیِ جداگانه، دور از مخزن اسرار، و با تأیید مالک طراحی و روی Windows آزموده شود. <a class="source" href="https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.protecteddata?view=windowsdesktop-10.0">[۱]</a></li>
+    </ul>
+    <p>برای درخواست‌های راه‌دور، علاوه بر مجوز GitHub، امضا/چالشِ نشست، جلوگیری از تکرار، مهلت انقضا، قطع فوری و ثبتِ تصمیم مالک لازم است. اگر هویتِ پایدارِ ایجنت در محیط فعلی میسر نباشد، امنیت را با «اثر انگشت و جفت‌سازیِ تکراری» ظاهرسازی نمی‌کنیم؛ آن را به‌عنوان ریسک طراحی ثبت می‌کنیم و عملیات حساس را بدون تأیید محلی اجرا نمی‌کنیم.</p>
+  </section>
+
+  <section id="repair">
+    <h2>۷. تشخیص و رفع اشکال، بدون ساخت دوباره برای هر خطا</h2>
+    <p>در همان برنامه، ایجنت می‌تواند با اجازهٔ مالک «بستهٔ تشخیصیِ پاک‌سازی‌شده» درخواست کند: نسخهٔ برنامه، نسخه و در دسترس‌بودن Kling CLI، سلامت GitHub، DNS/TLS، پراکسی، وضعیت ورود از طریق آزمون <span class="latin">who_am_i</span> و زمان پاسخ هر ابزار، آخرین خطاها و هم‌بستگی درخواست‌ها؛ بدون خواندن فایل اعتبارنامهٔ CLI. صفحهٔ اتصال علت را به زبان ساده نشان می‌دهد: «GitHub در دسترس نیست»، «توکن منقضی شده» یا «Kling از این شبکه پاسخ نمی‌دهد»، نه فقط چراغ قرمز. آزمون‌ها مخرب و پرهزینه نیستند.</p>
+    <p>اصلاح نشانی سرویس، پراکسی، کلید، الگوی درخواست یا تنظیمِ کارتِ سفارشی <strong>درجا</strong> اعمال می‌شود؛ ایجنت می‌تواند تغییرِ پیشنهادی را بفرستد، اما ذخیرهٔ تغییر حساس پس از پیش‌نمایش و تأیید مالک انجام می‌شود. برای نقصِ خودِ کد، مسیرِ به‌روزرسانیِ امضاشده با حفظ تنظیمات و بازگشت به نسخهٔ قبلی لازم است؛ ClickOnce برای به‌روزرسانی و rollback برنامه‌های Windows مستند شده است، اما انتخاب نهاییِ بسته‌بندی پس از آزمونِ نصب و امضا تعیین می‌شود. خرابیِ خودِ فایل اجرایی، فایروال یا قطع اینترنت را همیشه نمی‌توان با یک فرمان داخل همان فایل اجرایی ترمیم کرد؛ گاهی به‌روزرسانی باینری یا اقدام دستیِ مالک لازم است. <a class="source" href="https://learn.microsoft.com/en-us/visualstudio/deployment/clickonce-security-and-deployment?view=vs-2022">[۵]</a></p>
+  </section>
+
+  <section id="steps">
+    <h2>۸. ترتیب ساخت و شرط تحویل</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>مرحله</th><th>خروجیِ قابل بررسی</th><th>شرطِ گذر</th></tr></thead>
+      <tbody>
+        <tr><td>صفر: اثبات امکان</td><td>آزمون واقعی روی Windows مالک: دسترسی GitHub، هویت پایدار ایجنت بدون جفت‌سازیِ تکراری، انتخاب منطقهٔ حساب Kling توسط مالک، نصب CLI و Node سازگار، <span class="latin">kling login</span> با مرورگر موقت، <span class="latin">kling who_am_i</span>، مسیر شبکه و پراکسی هر ابزار.</td><td>اگر CLI/ورود روی Windows یا GitHub در شبکهٔ مالک کار نکرد، پیش از توسعهٔ کامل طرح اصلاح شود؛ «ورود بدون مرورگر» وعده داده نشود.</td></tr>
+        <tr><td>یک: پوسته و تنظیمات</td><td>برنامهٔ بومی فارسی/راست‌چین، سه صفحه، Connect/Disconnect، کارت‌ها و نگهداری امن اسرار.</td><td>استفادهٔ روزانه بدون مرورگر، سرور دائمی یا اجرای دستیِ Node/npm؛ پیش‌نیاز CLI در نصب یک‌باره مدیریت شود؛ دکمه‌ها در Windows واقعی خوانا باشند.</td></tr>
+        <tr><td>دو: مسیر فرمان</td><td>صندوق خصوصی GitHub، کلاینتِ ایجنت، نشست/مهلت/تأیید/لغو، پاسخ و خطا.</td><td>با Bridge مرورگر خاموش، فرمانِ خواندنی کار کند؛ پس از قطع یا بستن برنامه هیچ فرمان تازه‌ای اجرا نشود؛ پیام قدیمی تکرار نشود.</td></tr>
+        <tr><td>سه: ابزارها</td><td>CLI رسمی Kling به‌جای ادغام MCP مستقل، Zernio، FLUX و کارت/API/MCP سفارشی برای ابزارهای دیگر؛ آزمون سالم/ناسالم جداگانه.</td><td>افزودن سرویس و متغیر جدید بدون rebuild؛ تست‌های Kling و دیگر ابزارها بی‌هزینه باشند؛ تولید/انتشار فقط با اجازهٔ جداگانه.</td></tr>
+        <tr><td>چهار: پایداری و ترمیم</td><td>لاگ کاملِ پالایش‌شده، فیلتر و کپی، عیب‌یابی، به‌روزرسانی امضاشده و بازگشت نسخه.</td><td>خرابی پراکسی، OAuth، GitHub و مقصد از هم قابل تشخیص و با ثبت جزئیاتِ بدون اسرار باشند.</td></tr>
+        <tr><td>پنج: پذیرش</td><td>نسخهٔ ساخته‌شده را روی Windows واقعی نصب و اجرا می‌کنیم، نه فقط آزمون واحد یا لاگِ ارسالی.</td><td>مالک مسیر «باز کن ← اتصال ← کار ← قطع/خروج» را تأیید کند؛ آزمون خطرناک، انتشار و هزینه‌کرد بدون مجوز انجام نشود.</td></tr>
+      </tbody>
+    </table></div>
+    <p>آزمون نهایی باید قطع وسطِ کار، درخواست هم‌زمان، پرشدن سهمیهٔ GitHub، خرابی پراکسی و OAuth، خروجیِ خیلی بزرگ، کپی لاگ بدون نشت کلید، قطع برنامه هنگام فرمان و نصب نسخهٔ جدید/بازگشت را هم پوشش دهد. فقط پس از آن دربارهٔ کنارگذاشتن نسخهٔ قدیم تصمیم می‌گیریم. اگر انتقال تنظیمات قدیمی لازم شد، با رضایت مالک و در همان حساب Windows، بدون استخراجِ اسرار به مخزن یا چت انجام می‌شود.</p>
+    <div class="note"><strong>جمع‌بندی تصمیم:</strong> ساختِ بومی از صفر + GitHub به‌عنوان صندوق احتمالی فرمان + Kling از مسیر CLI رسمی روی Windows (نه MCP مستقل) + مرورگر فقط هنگام ورود رسمی + سه صفحهٔ مشخص + فرمان‌های باز با رضایت متناسب با خطر + تشخیص و به‌روزرسانی امن. انتخاب منطقهٔ حساب، نصب عملی Node/CLI و کیفیت مسیر GitHub روی Windows مالک باید قبل از پیاده‌سازی کامل راستی‌آزمایی شوند.</div>
+  </section>
+
+  <section id="sources" class="sources">
+    <h2>منابع اصلی پژوهش</h2>
+    <ol>
+      <li>مستندات مایکروسافت دربارهٔ <a href="https://learn.microsoft.com/en-us/dotnet/core/releases-and-support">پشتیبانی ‎.NET</a>، <a href="https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/publish-first-app">انتشار برنامهٔ رومیزی</a> و <a href="https://learn.microsoft.com/en-us/dotnet/desktop/wpf/advanced/bidirectional-features-in-wpf-overview">راست‌به‌چپ در WPF</a>.</li>
+      <li><a href="https://kling.ai/app/mcp/guide">راهنمای رسمی Kling CLI</a>، <a href="https://raw.githubusercontent.com/klingai-tech/skills/main/SKILL.md">راهنمای مهارت رسمی CLI</a> برای تفاوت نصب Skill/CLI، منطقهٔ حساب، Node و ورود مرورگری؛ <a href="https://www.rfc-editor.org/rfc/rfc8252.html">RFC 8252</a> برای OAuth نرم‌افزار بومی.</li>
+      <li>مستندات GitHub: <a href="https://docs.github.com/en/rest/repos/contents?apiVersion=2026-03-10">Contents API</a>، <a href="https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api">سهمیهٔ REST API</a> و <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens">توکن‌های ریزدانه</a>.</li>
+      <li>مستندات <a href="https://docs.zernio.com/guides/connecting-accounts">اتصال و سلامت حساب‌های Zernio</a>؛ <a href="https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.protecteddata?view=windowsdesktop-10.0">DPAPI ویندوز</a> و <a href="https://learn.microsoft.com/en-us/visualstudio/deployment/clickonce-security-and-deployment?view=vs-2022">ClickOnce</a>.</li>
+      <li>راهنمای OWASP برای <a href="https://cheatsheetseries.owasp.org/cheatsheets/OS_Command_Injection_Defense_Cheat_Sheet.html">اجرای امن فرمان</a> و <a href="https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html">لاگ‌گذاری</a>؛ توضیح MDN دربارهٔ <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/close">محدودیت بستن تب مرورگر</a>.</li>
+    </ol>
+  </section>
+  <footer>طرح پژوهشیِ ساخت ـ بدون تغییر در برنامهٔ موجود، بدون اجرای فرمان روی Windows و بدون انتشار یا هزینه‌کرد.</footer>
+</main>
+</body>
+</html>

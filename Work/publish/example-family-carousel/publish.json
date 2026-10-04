@@ -1,0 +1,27 @@
+{
+  "approved": false,
+  "approvedBy": "EXAMPLE — NOT APPROVED",
+  "approvedAt": "2026-09-28T07:00:00Z",
+  "claimsVerified": false,
+  "_comment": "This is a shape example, deliberately NOT approved. The publisher refuses it, which is the correct behaviour. Copy the folder, change approved/approvedBy/approvedAt/claimsVerified to the owner's real values, replace the media, and only then run the workflow.",
+  "platforms": [
+    "instagram",
+    "facebook"
+  ],
+  "accountIds": {
+    "instagram": "REPLACE_WITH_ZERNIO_ACCOUNT_INSTAGRAM",
+    "facebook": "REPLACE_WITH_ZERNIO_ACCOUNT_FACEBOOK"
+  },
+  "content": "چه چیزی سالن بازینو را برای یک خانواده جا می‌کند؟\n\n۱. فضای کنترل‌شده\n۲. بدون الکل و دخانیات\n۳. بازی‌های مناسب سن\n۴. ساعت و رزرو ساده\n۵. نشانی که پیدا کردنش راحت است\n\nبرای شنبه سیو کنید.\n\n#BAZINO #GamingLounge #Iskele #AileZamanı #KuzeyKıbrıs",
+  "media": [
+    {
+      "type": "image",
+      "path": "slide-1.jpg"
+    },
+    {
+      "type": "image",
+      "path": "slide-2.jpg"
+    }
+  ],
+  "scheduledFor": "2026-10-03T17:00:00.000Z"
+}

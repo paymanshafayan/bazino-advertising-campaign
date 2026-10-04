@@ -22,6 +22,8 @@ test('browser tab reports authenticated departure without leaking its session to
     await dom.window.marketing.startup();
     const started=JSON.parse(requests[0].options.body);
     assert.equal(started.action,'startup');assert.ok(started.arg.tabId);
+    await dom.window.marketing.diagnostics();
+    assert.equal(JSON.parse(requests[1].options.body).action,'diagnostics');
     dom.window.dispatchEvent(new dom.window.Event('pagehide'));
     await flush();
     const left=requests.at(-1);
@@ -32,7 +34,38 @@ test('browser tab reports authenticated departure without leaking its session to
   }finally{dom.window.close();}
 });
 
-function fixture({engagementError=false,reports=[]}={}){
+test('the stop button is readable on light settings while the dark-hero ghost stays light',()=>{
+  const dom=new JSDOM(html,{url:'http://127.0.0.1:59670/'});
+  try{
+    const css=fs.readFileSync(path.join(root,'style.css'),'utf8');
+    const sheet=dom.window.document.createElement('style');sheet.textContent=css;
+    dom.window.document.head.append(sheet);
+    const rgb=value=>{
+      const match=/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/.exec(value);
+      assert.ok(match,`Expected an opaque RGB color, got ${value}`);
+      return match.slice(1).map(Number);
+    };
+    const luminance=channels=>channels.map(value=>{
+      const c=value/255;return c<=0.04045?c/12.92:((c+0.055)/1.055)**2.4;
+    }).reduce((total,value,index)=>total+value*[0.2126,0.7152,0.0722][index],0);
+    const stop=dom.window.document.querySelector('#app-stop');
+    const footer=dom.window.document.querySelector('.settings-footer');
+    const stopStyle=dom.window.getComputedStyle(stop);
+    const foreground=luminance(rgb(stopStyle.color));
+    const background=luminance(rgb(stopStyle.backgroundColor));
+    assert.ok((Math.max(foreground,background)+0.05)/(Math.min(foreground,background)+0.05)>=7,
+      'the stop label must meet AAA text contrast on its actual background');
+    assert.notEqual(stopStyle.backgroundColor,dom.window.getComputedStyle(footer).backgroundColor,
+      'the stop button must be distinguishable from the footer panel');
+    assert.deepEqual(rgb(dom.window.getComputedStyle(
+      dom.window.document.querySelector('.hero-actions .btn.ghost')).color),[228,237,246],
+      'the hero ghost still needs light text on the dark hero');
+    assert.match(css,/\.settings-footer #app-stop:focus-visible\s*\{[^}]*outline:/);
+  }finally{dom.window.close();}
+});
+
+function fixture({engagementError=false,reports=[],relayError=false,researchError=false,
+  diagnosticsRows=[]}={}){
   const dom=new JSDOM(html,{url:'http://127.0.0.1:59670/',runScripts:'outside-only'});
   const {window}=dom;
   window.scrollTo=()=>{};window.confirm=()=>true;
@@ -43,7 +76,10 @@ function fixture({engagementError=false,reports=[]}={}){
     accountId:`${platform}-account`,platform,profileId:'brand-profile',displayName:`Brand ${platform}`,
     connected:true,canPost:true,tokenValid:true}));
   window.marketing={
-    startup:async()=>({settings,history:[],assets:[],relay:{connected:false}}),
+    startup:async()=>({settings,history:[],assets:[],relay:{connected:false},
+      buildId:'studio-logs-2026-09-26.1'}),
+    diagnostics:async()=>({buildId:'studio-logs-2026-09-26.1',
+      startedAt:'2026-09-26T12:00:00.000Z',relayConnected:false,rows:diagnosticsRows}),
     saveSettings:async patch=>{saved.push(patch);return {...settings,...patch,configured:{zernioKey:!!patch.secrets?.zernioKey}};},
     listConnectors:async()=>({ok:true,connectors:registered.map(x=>x.public)}),
     saveConnector:async row=>{
@@ -65,12 +101,15 @@ function fixture({engagementError=false,reports=[]}={}){
       }
       if(op.kind==='editorial'&&op.action==='list')return {ok:true,reports};
       if(op.kind==='editorial'&&op.action==='save')return {ok:true,report:{id:'saved-report'}};
-      if(op.kind==='research')return {ok:true,observedAt:new Date().toISOString(),sources:[{source:'VGC',items:[
-        {title:'New gameplay update',url:'https://example.com/article',sourceName:'VGC',publishedAt:new Date().toISOString()}]}]};
+      if(op.kind==='research')return researchError?
+        {ok:false,observedAt:new Date().toISOString(),sources:[{source:'VGC',items:[],error:'fetch failed'}]}:
+        {ok:true,observedAt:new Date().toISOString(),sources:[{source:'VGC',items:[
+          {title:'New gameplay update',url:'https://example.com/article',sourceName:'VGC',publishedAt:new Date().toISOString()}]}]};
       if(op.kind==='api'&&op.path==='/v1/posts')return {ok:true,status:202,body:{post:{status:'processing'}}};
       return {ok:true,status:200,body:{message:'success'}};
     },
-    connectRelay:async()=>({connected:false,error:'token needed'}),disconnectRelay:async()=>({connected:false}),
+    connectRelay:async()=>{if(relayError)throw Error('fetch failed');return {connected:true};},
+    disconnectRelay:async()=>({connected:false}),
     pairAgent:async()=>({paired:false}),importAsset:async()=>null,openAsset:async()=>true,
     authorizeKling:async()=>({ok:true}),klingIdentity:async()=>({ok:true}),
     klingTools:async()=>({ok:true}),logoutKling:async()=>({ok:true}),stopApp:async()=>({ok:true}),
@@ -80,6 +119,75 @@ function fixture({engagementError=false,reports=[]}={}){
   return {dom,window,calls,saved,opened,registered,logins,
     q:selector=>window.document.querySelector(selector)};
 }
+
+test('visible diagnostics show build/CSS state, refresh and copy only safe codes',async()=>{
+  const secret='OWNER_SECRET_MUST_NOT_COPY';
+  const rows=[
+    {at:'2026-09-26T12:00:01.000Z',component:'operation',code:'OP_FAILED',
+      kind:'research',reason:'NETWORK'},
+    {at:'2026-09-26T12:00:02.000Z',component:'server',code:secret,
+      reason:secret,action:secret}
+  ];
+  const {dom,window,q}=fixture({diagnosticsRows:rows});
+  const copied=[];
+  try{
+    const css=fs.readFileSync(path.join(root,'style.css'),'utf8');
+    const sheet=window.document.createElement('style');sheet.textContent=css;
+    window.document.head.append(sheet);
+    Object.defineProperty(window.navigator,'clipboard',{configurable:true,
+      value:{writeText:async text=>{copied.push(text);}}});
+    await flush();q('[data-nav="diagnostics"]').click();await flush();
+    assert.equal(q('#view-diagnostics').classList.contains('active'),true);
+    assert.equal(q('#app-build-badge').textContent,'LOGS 1');
+    const log=q('#diagnostics-text');
+    assert.match(log.value,/UI_BUILD=studio-logs-2026-09-26\.1/);
+    assert.match(log.value,/SERVER_BUILD=studio-logs-2026-09-26\.1/);
+    assert.match(log.value,/STYLE=CSS_OK/);
+    assert.match(log.value,/OP_FAILED kind=research reason=NETWORK/);
+    assert.doesNotMatch(log.value,new RegExp(secret));
+    window.dispatchEvent(new window.ErrorEvent('error',{message:secret,error:new Error(secret)}));
+    assert.match(log.value,/BROWSER UI_SCRIPT_ERROR/);
+    assert.doesNotMatch(log.value,new RegExp(secret));
+    q('#diagnostics-copy').click();await flush();
+    assert.equal(copied[0],log.value);
+    assert.match(q('#diagnostics-copy-status').textContent,/کپی شد/);
+    q('#app-stop').style.backgroundColor='#eaf1f1';
+    q('#diagnostics-refresh').click();await flush();
+    assert.match(log.value,/STYLE=CSS_MISMATCH/);
+    assert.match(q('#diagnostics-style-state').textContent,/ناهماهنگ/);
+    Object.defineProperty(window.navigator,'clipboard',{configurable:true,value:undefined});
+    q('#diagnostics-copy').click();await flush();
+    assert.match(q('#diagnostics-copy-status').textContent,/Ctrl\+C/);
+    assert.equal(log.selectionStart,0);
+  }finally{dom.window.close();}
+});
+
+test('a temporary GitHub relay outage is visible instead of silently breaking the connect button',async()=>{
+  const failed=fixture({relayError:true});
+  try{
+    await flush();
+    assert.match(failed.q('#view-relay').textContent,/پل مرورگر فقط تب Chrome/);
+    failed.q('#relay-connect').click();await flush();
+    assert.match(failed.q('#relay-feedback').textContent,/اتصال برقرار نشد: fetch failed/);
+    assert.equal(failed.q('#relay-badge').textContent,'قطع');
+    assert.equal(failed.q('#relay-connect').disabled,false);
+  }finally{failed.dom.window.close();}
+  const recovered=fixture();
+  try{
+    await flush();recovered.q('#relay-connect').click();await flush();
+    assert.equal(recovered.q('#relay-badge').textContent,'متصل');
+    assert.match(recovered.q('#relay-feedback').textContent,/اتصال امن برقرار شد/);
+  }finally{recovered.dom.window.close();}
+});
+
+test('research shows actionable network guidance when every public feed is unreachable',async()=>{
+  const {dom,q}=fixture({researchError:true});
+  try{
+    await flush();q('#research-scan').click();await flush();
+    assert.match(q('#research-status').textContent,/fetch failed/);
+    assert.match(q('#research-status').textContent,/بازشدن سایت در Chrome کافی نیست/);
+  }finally{dom.window.close();}
+});
 
 test('desktop UI routes social only through discovered Zernio accounts, schedule/keys and portal FLUX',async()=>{
   const {dom,calls,saved,opened,q}=fixture();

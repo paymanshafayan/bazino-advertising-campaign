@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BazinoMarketing.Core/BazinoMarketing.Core.csproj" />
+    <Project Path="src/BazinoMarketing.App/BazinoMarketing.App.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BazinoMarketing.Core.Tests/BazinoMarketing.Core.Tests.csproj" />
+  </Folder>
+</Solution>

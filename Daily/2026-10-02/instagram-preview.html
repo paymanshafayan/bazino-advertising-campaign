@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محتوای آمادهٔ انتشار — بازینو (پیش‌نمایش به شکل اینستاگرام)</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#000; font-family: -apple-system, "Segoe UI", Roboto, Tahoma, sans-serif; color:#f5f5f5; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:16px 8px 90px; }
+  .appbar { width:100%; max-width:470px; display:flex; align-items:center; justify-content:space-between; padding:10px 6px; position:sticky; top:0; background:#000; z-index:50; border-bottom:1px solid #262626; }
+  .appbar .title { font-size:22px; font-weight:700; }
+  .appbar .badge { background:#1a3a5c; color:#7fd4ff; font-size:12px; padding:4px 10px; border-radius:14px; }
+  .card { width:100%; max-width:470px; background:#000; border:1px solid #262626; border-radius:12px; margin-bottom:22px; overflow:hidden; }
+  .card.hidden { display:none; }
+  .cardhead { display:flex; align-items:center; gap:10px; padding:10px 12px; }
+  .cardhead .avatar { width:36px; height:36px; border-radius:50%; padding:2px; background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); flex-shrink:0; }
+  .cardhead .avatar img { width:100%; height:100%; border-radius:50%; border:2px solid #000; display:block; }
+  .cardhead .uname { font-size:13.5px; font-weight:600; }
+  .cardhead .uname span { color:#a8a8a8; font-weight:400; }
+  .ptime { margin-inline-start:auto; background:#1a3a5c; color:#7fd4ff; font-size:12px; font-weight:700; padding:5px 10px; border-radius:14px; white-space:nowrap; }
+  .media { position:relative; background:#000; }
+  .media img, .media video { width:100%; display:block; aspect-ratio:4/5; object-fit:cover; }
+  .media video { aspect-ratio:9/16; object-fit:contain; background:#000; }
+  .navbtn { position:absolute; top:50%; transform:translateY(-50%); background:rgba(30,30,30,.75); color:#fff; border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:15px; display:none; align-items:center; justify-content:center; z-index:5; }
+  .navbtn.l { left:8px; } .navbtn.r { right:8px; }
+  .media.multi .navbtn { display:flex; }
+  .dots { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); display:flex; gap:4px; z-index:5; }
+  .dots i { width:6px; height:6px; border-radius:50%; background:#fff; opacity:.4; }
+  .dots i.on { opacity:1; }
+  .actions { display:flex; align-items:center; gap:16px; padding:10px 12px 4px; }
+  .actions svg { width:25px; height:25px; cursor:pointer; }
+  .actions .spacer { flex:1; }
+  .icon-btn { background:none; border:none; padding:0; display:flex; }
+  .likes { padding:0 12px; font-size:13.5px; font-weight:600; }
+  .caption { padding:6px 12px 8px; font-size:14px; line-height:1.7; white-space:pre-line; }
+  .caption .t { font-weight:700; margin-inline-end:6px; }
+  .timeago { padding:0 12px 12px; font-size:11px; color:#a8a8a8; text-transform:uppercase; }
+  .statebar { display:none; padding:26px 16px; text-align:center; font-size:15px; line-height:2; }
+  .statebar.ok { background:#0b2417; color:#5eeaa0; }
+  .statebar.fb { background:#241505; color:#ffc966; }
+  .card.done .ig-body { display:none; } .card.done .statebar { display:block; }
+  .cmtbar { display:none; border-top:1px solid #262626; padding:10px 12px; display:none; align-items:center; gap:10px; background:#0d0d0d; }
+  .cmtbar.open { display:flex; }
+  .cmtbar input { flex:1; background:#121212; border:1px solid #333; color:#fff; border-radius:20px; padding:10px 14px; font-size:13.5px; outline:none; }
+  .cmtbar input:focus { border-color:#555; }
+  .cmtbar button { background:none; border:none; color:#3897f0; font-weight:700; font-size:13.5px; cursor:pointer; }
+  .cmtbar button:disabled { color:#3897f055; cursor:default; }
+  .toast { position:fixed; bottom:22px; left:50%; transform:translateX(-50%); background:#1f1f1f; border:1px solid #333; color:#fff; padding:11px 20px; border-radius:22px; font-size:13.5px; opacity:0; transition:.3s; z-index:99; pointer-events:none; }
+  .toast.show { opacity:1; }
+  .note { max-width:470px; width:100%; background:#121212; border:1px dashed #333; color:#a8a8a8; border-radius:12px; padding:14px 16px; font-size:12.5px; line-height:2; margin-bottom:20px; }
+  .note b { color:#ddd; }
+</style>
+</head>
+<body>
+
+<div class="appbar">
+  <div class="title">بازینو</div>
+  <div class="badge">محتوای آمادهٔ انتشار · پیش‌نمایش</div>
+</div>
+
+<div class="note">
+  <b>راهنما:</b> این دقیقاً همان چیزی است که در بخش جدید ژینوس می‌بینید — فید شبیه اینستاگرام. آیکون ✈️ (ارسال) = تأیید و قرارگرفتن در صف انتشار ساعت مقرر؛ آیکون 💬 (کامنت) = ثبت نظر شما برای ویرایش/حذف. قلب، ذخیره و بقیهٔ آیکون‌ها فقط نمایشی‌اند. هر پست، ساعت انتشارش را بالای خودش نشان می‌دهد.
+</div>
+
+<!-- POST 1 : carousel -->
+<div class="card" id="p1">
+  <div class="ig-body">
+    <div class="cardhead">
+      <div class="avatar"><img src="post-1-news/carousel-3.png" alt=""></div>
+      <div class="uname">bazino.pro <span>· اصلی</span></div>
+      <div class="ptime">🕐 انتشار: امروز ۱۲:۰۰</div>
+    </div>
+    <div class="media multi" id="car1">
+      <img id="c1img" src="post-1-news/carousel-1.png" alt="">
+      <button class="navbtn l" onclick="carMove(-1)">‹</button>
+      <button class="navbtn r" onclick="carMove(1)">›</button>
+      <div class="dots" id="c1dots"><i class="on"></i><i></i><i></i></div>
+    </div>
+    <div class="actions">
+      <button class="icon-btn" title="نمایشی" onclick="toast('نمایشی است — در اینستاگرام واقعی لایک می‌شود')"><svg viewBox="0 0 24 24" fill="none" stroke="#f5f5f5" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+      <button class="icon-btn" title="ثبت نظر برای ویرایش" onclick="openCmt('p1')"><svg viewBox="0 0 24 24" fill="none" stroke="#f5f5f5" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.6 8.6 0 0 1-3.8-.9L3 21l1.9-5.6a8.4 8.4 0 1 1 16.1-3.9z"/></svg></button>
+      <button class="icon-btn" title="تأیید و صف انتشار" onclick="approve('p1','پست ۱ — اخبار گیم (فینال LoL + FC 26)')"><svg viewBox="0 0 24 24" fill="none" stroke="#f5f5f5" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></button>
+      <span class="spacer"></span>
+      <button class="icon-btn" title="نمایشی" onclick="toast('نمایشی است — در اینستاگرام واقعی ذخیره می‌شود')"><svg viewBox="0 0 24 24" fill="none" stroke="#f5f5f5" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+    </div>
+    <div class="likes">۱٬۲۴۷ بازدید پیش‌بینی‌شده · کاروسل ۳ اسلایدی</div>
+    <div class="caption"><span class="t">bazino.pro</span>🎮 دو خبر داغ دنیای گیم، مخصوص امروز!
+🏆 فینال لیگ آو لجندز بازی‌های آسیایی — همین امروز در ناگویا.
+⚽ به‌روزرسانی جام‌جهانی FC 26 زنده شد — قرعه‌کشی ۴۸ تیمی + ضربات پنالتی!
+💡 همین شنبه در مسابقات FIFA 26 بازینو تجربه‌اش می‌کنیم؛ جایگاه‌ت را رزرو کن (لینک بیو).
+💬 کدام فینال را امشب می‌بینی؟
+#بازی_نو #بازینو #گیمینگ #موست_واچ #FC26 #گیمرهای_ایرانی</div>
+    <div class="timeago">پست ۱ از ۵ · امروز</div>
+    <div class="cmtbar" id="cmt-p1">
+      <input id="inp-p1" type="text" placeholder="نظر شما برای ویرایش یا حذف این محتوا...">
+      <button id="btn-p1" onclick="sendCmt('p1','پست ۱ — اخبار گیم')">ارسال</button>
+    </div>
+  </div>
+  <div class="statebar ok" id="ok-p1">✅ تأیید شد!<br>«پست ۱ — اخبار گیم» با ساعت ۱۲:۰۰ در صف انتشار قرار گرفت و از لیست حذف شد.<br><small>در ژینوس همین لحظه فایل تأیید برای دستیار ارسال می‌شود تا با زرنیو + لوکیشن منتشر گردد.</small></div>
+  <div class="statebar fb" id="fb-p1"></div>
+</div>
+
+<!-- POST 2 : video reel -->
+<div class="card" id="p2">
+  <div class="ig-body">
+    <div class="cardhead">
+      <div class="avatar"><img src="post-1-news/carousel-3.png" alt=""></div>
+      <div class="uname">bazino.pro <span>· ریل</span></div>
+      <div class="ptime">🕐 انتشار: امروز ۱۵:۰۰</div>
+    </div>
+    <div class="media">
+      <video controls preload="metadata" src="post-2-didactic-tr/post-2-didactic-TR-subbed.mp4"></video>
+    </div>
+    <div class="actions">
+      <button class="icon-btn" title="نمایشی" onclick="toast('نمایشی است — در اینستاگرام واقعی لایک می‌شود')"><svg viewBox="0 0 24 24" fill="none" stroke="#f5f5f5" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>
+      <button class="icon-btn" title="ثبت نظر برای ویرایش" onclick="openCmt('p2')"><svg viewBox="0 0 24 24" fill="none" stroke="#f5f5f5" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.6 8.6 0 0 1-3.8-.9L3 21l1.9-5.6a8.4 8.4 0 1 1 16.1-3.9z"/></svg></button>
+      <button class="icon-btn" title="تأیید و صف انتشار" onclick="approve('p2','پست ۲ — ریل ترکی (نسخهٔ ترایال ۱۴:۰۰ + اصلی ۱۵:۰۰)')"><svg viewBox="0 0 24 24" fill="none" stroke="#f5f5f5" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></button>
+      <span class="spacer"></span>
+      <button class="icon-btn" title="نمایشی" onclick="toast('نمایشی است — در اینستاگرام واقعی ذخیره می‌شود')"><svg viewBox="0 0 24 24" fill="none" stroke="#f5f5f5" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+    </div>
+    <div class="likes">ریل ۹:۱۶ · زیرنویس ترکی · نسخهٔ ترایال یک ساعت زودتر</div>
+    <div class="caption"><span class="t">bazino.pro</span>🎮 Bugünün didaktik videosu: gamer dostların pratik ipuçları! 🧠
+Kaydet (Save) et, akşam oyun seansında lazım olur! 📌
+#Oyunİpuçları #Gamer #Bazino #OyunNeşesi</div>
+    <div class="timeago">پست ۲ از ۵ · امروز</div>
+    <div class="cmtbar" id="cmt-p2">
+      <input id="inp-p2" type="text" placeholder="نظر شما برای ویرایش یا حذف این محتوا...">
+      <button id="btn-p2" onclick="sendCmt('p2','پست ۲ — ریل ترکی')">ارسال</button>
+    </div>
+  </div>
+  <div class="statebar ok" id="ok-p2">✅ تأیید شد!<br>«پست ۲ — ریل ترکی» با ترتیب ترایال ۱۴:۰۰ و نسخهٔ اصلی ۱۵:۰۰ در صف انتشار قرار گرفت و از لیست حذف شد.<br><small>در ژینوس همین لحظه فایل تأیید برای دستیار ارسال می‌شود تا با زرنیو + لوکیشن منتشر گردد.</small></div>
+  <div class="statebar fb" id="fb-p2"></div>
+</div>
+
+<div class="note">برای پست‌های ۳، ۴ و ۵ هنوز فایل ویدئوی نهایی تأیید نشده — پس در این پیش‌نمایش نیستند تا تصویب‌شده‌ها را ببینید.</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const carFiles = ["post-1-news/carousel-1.png","post-1-news/carousel-2.png","post-1-news/carousel-3.png"];
+let carIdx = 0;
+function carMove(d){
+  carIdx = (carIdx + d + carFiles.length) % carFiles.length;
+  document.getElementById('c1img').src = carFiles[carIdx];
+  document.querySelectorAll('#c1dots i').forEach((el,i)=>el.classList.toggle('on', i===carIdx));
+}
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+function approve(id, title){
+  const c = document.getElementById(id);
+  c.classList.add('done');
+  toast('«'+title+'» به صف انتشار اضافه شد');
+}
+function openCmt(id){
+  const bar = document.getElementById('cmt-'+id);
+  bar.classList.toggle('open');
+  if(bar.classList.contains('open')) document.getElementById('inp-'+id).focus();
+}
+function sendCmt(id, title){
+  const inp = document.getElementById('inp-'+id);
+  const txt = inp.value.trim();
+  if(!txt){ toast('اول نظرت را بنویس'); return; }
+  const fb = document.getElementById('fb-'+id);
+  fb.className = 'statebar fb';
+  fb.innerHTML = '💬 نظر شما ثبت شد:<br>«'+txt+'»<br>«'+title+'» از لیست حذف شد و برای ویرایش/بازسازی به دستیار ارسال گردید.';
+  document.getElementById(id).classList.add('done');
+  toast('نظر ارسال شد — محتوا برای ویرایش برگشت');
+}
+</script>
+</body>
+</html>

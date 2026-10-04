@@ -3,7 +3,7 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
-const {BRANCH,BUS,safeNav}=require('../browser-link/agent-session.cjs');
+const {BRANCH,BUS,STUDIO_URL,safeNav}=require('../browser-link/agent-session.cjs');
 const script=fs.readFileSync(path.resolve(__dirname,'../browser-link/BazinoStudioBridge.ps1'),'utf8');
 const workflow=fs.readFileSync(path.resolve(__dirname,'../browser-link/workflow-build-studio-bridge.yml'),'utf8');
 const root=path.resolve(__dirname,'../../..');
@@ -35,9 +35,10 @@ test('browser adapter and agent client are pinned to the tracked branch and an i
 });
 
 test('browser navigation is restricted to official sites without OAuth codes in URL',()=>{
+  assert.equal(STUDIO_URL,'http://127.0.0.1:59670/');
   assert.equal(safeNav('https://github.com/paymanshafayan/bazino-gamenet-portal'),
     'https://github.com/paymanshafayan/bazino-gamenet-portal');
-  for(const value of ['http://github.com','https://evil.example','https://github.com.evil.example',
+  for(const value of [STUDIO_URL,'http://github.com','https://evil.example','https://github.com.evil.example',
     'https://kling.ai/callback?code=SENSITIVE','https://github.com/?access_token=ABC']){
     assert.throws(()=>safeNav(value));
   }

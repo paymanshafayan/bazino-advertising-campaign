@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" data-ui-build="studio-logs-2026-09-26.1">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -54,6 +54,9 @@
           <button class="nav-item" data-nav="relay">
             <span class="nav-icon">⇄</span> ارتباط GitHub
           </button>
+          <button class="nav-item" data-nav="diagnostics">
+            <span class="nav-icon">≡</span> لاگ و عیب‌یابی
+          </button>
           <button class="nav-item" data-nav="settings">
             <span class="nav-icon">⚙</span> تنظیمات و کلیدها
           </button>
@@ -74,6 +77,7 @@
           </div>
           <div class="topbar-right">
             <span class="pill subtle">LOCAL BROWSER · WINDOWS</span
+            ><span class="pill build" id="app-build-badge">LOGS 1</span
             ><span class="pill" id="top-status">● آماده برای تنظیم</span>
           </div>
         </header>
@@ -691,8 +695,9 @@
               <h1>GitHub <em>↔ Desktop</em></h1>
               <p>
                 ارتباط مستقیم با ایجنت از طریق فایل‌های رمزگذاری‌شده در شاخهٔ
-                همین نشست؛ بدون GitHub Actions، بدون برنامهٔ پل، بدون ارسال راز
-                در مخزن.
+                همین نشست؛ بدون GitHub Actions و بدون ارسال راز در مخزن.
+                پل مرورگر فقط تب Chrome را وصل می‌کند؛ اتصال این رله و
+                جفت‌سازی ایجنت دو مرحلهٔ جداگانه‌اند.
               </p>
             </div>
             <div class="relay-grid">
@@ -767,6 +772,35 @@
                   اطلاعات فوق‌حساس از کوتاه‌نویسی و حداقل‌گرایی استفاده کنید.
                 </p>
               </div>
+            </div>
+          </section>
+
+          <section class="view" id="view-diagnostics">
+            <div class="eyebrow">LOCAL DIAGNOSTICS / COPYABLE</div>
+            <div class="page-intro">
+              <h1>لاگ و <em>عیب‌یابی</em></h1>
+              <p>رویدادهای این اجرای برنامه و خطاهای شبکه با کدهای کوتاه نمایش داده می‌شوند.
+                متن خام پاسخ‌ها، نشانی‌های ورود و کلیدها در این لاگ ثبت نمی‌شوند.
+                لاگ فقط تا وقتی همین برنامه باز است در حافظه می‌ماند.</p>
+            </div>
+            <div class="panel diagnostics-panel">
+              <div class="diagnostics-meta" aria-live="polite">
+                <span>نسخهٔ رابط: <code id="diagnostics-ui-build">studio-logs-2026-09-26.1</code></span>
+                <span>نسخهٔ سرور: <code id="diagnostics-server-build">در انتظار پاسخ</code></span>
+                <span>رنگ دکمهٔ بستن: <b id="diagnostics-style-state">در انتظار بررسی</b></span>
+              </div>
+              <div class="button-pair diagnostics-actions">
+                <button class="btn outline" type="button" id="diagnostics-refresh">به‌روزرسانی لاگ</button>
+                <button class="btn primary" type="button" id="diagnostics-copy">کپی لاگ</button>
+              </div>
+              <p id="diagnostics-copy-status" role="status" aria-live="polite">
+                اگر کپی خودکار مجاز نبود، داخل کادر کلیک کنید و Ctrl+A و سپس Ctrl+C بزنید.
+              </p>
+              <label for="diagnostics-text" class="diagnostics-label">لاگ قابل انتخاب و کپی</label>
+              <textarea id="diagnostics-text" class="diagnostics-text" dir="ltr" readonly
+                spellcheck="false" aria-label="لاگ قابل کپی برنامه"></textarea>
+              <p class="note-small">قبل از اشتراک‌گذاری لاگ آن را مرور کنید. هیچ عملیات انتشار یا هزینه‌داری
+                از این صفحه اجرا نمی‌شود.</p>
             </div>
           </section>
 

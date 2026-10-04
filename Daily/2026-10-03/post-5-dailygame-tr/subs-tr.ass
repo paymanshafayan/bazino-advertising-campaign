@@ -1,0 +1,19 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 720
+PlayResY: 1280
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Bazino,Tahoma,30,&H00FFFFFF,&H000000FF,&H00202020,&H80000000,-1,0,0,0,100,100,0,0,1,2.4,1,2,40,40,320,162
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:01.60,Bazino,,0,0,0,,Komboyu bilmeyen o arkadaş…
+Dialogue: 0,0:00:01.60,0:00:03.00,Bazino,,0,0,0,,ve… ne oldu?
+Dialogue: 0,0:00:03.00,0:00:04.60,Bazino,,0,0,0,,Son 10 saniye! Takım bağırıyor,\Nkalp hızlanıyor…
+Dialogue: 0,0:00:04.60,0:00:06.20,Bazino,,0,0,0,,Ve… neredeyse!\NBir saniye daha gerekirdi!
+Dialogue: 0,0:00:06.20,0:00:07.40,Bazino,,0,0,0,,Bu anlar tanıdık geliyor, değil mi?\NArkadaşını etiketle!
+Dialogue: 0,0:00:07.40,0:00:08.43,Bazino,,0,0,0,,Bu heyecanı birlikte yaşamak ister misin?\NBaZino'da buluşalım!
