@@ -1,0 +1,197 @@
+name: Build Bazino Bridge
+
+on:
+  push:
+    branches:
+      - 'arena/**'
+      - main
+    paths:
+      - 'tools/bazino-bridge/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show PowerShell version
+        shell: pwsh
+        run: $PSVersionTable | Format-List
+
+      - name: Syntax check BazinoBridge.ps1
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $path = 'tools/bazino-bridge/BazinoBridge.ps1'
+          $errors = $null
+          $tokens = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path $path).Path, [ref]$tokens, [ref]$errors) | Out-Null
+          if ($errors -and $errors.Count -gt 0) {
+            Write-Host "::error::PowerShell parse errors found:"
+            foreach ($e in $errors) {
+              $line = $e.Extent.StartLineNumber
+              Write-Host "::error file=$path,line=$line::$($e.Message)"
+            }
+            exit 1
+          }
+          Write-Host "Syntax OK - $($tokens.Count) tokens parsed"
+
+      - name: Smoke test - run as plain script
+        shell: pwsh
+        timeout-minutes: 3
+        run: |
+          $ErrorActionPreference = 'Stop'
+          & 'tools/bazino-bridge/BazinoBridge.ps1' -SelfTest
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "::error::Self-test failed with exit code $LASTEXITCODE"
+            exit 1
+          }
+          Write-Host "Self-test passed"
+
+      - name: Install ps2exe
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Install-Module -Name ps2exe -Scope CurrentUser -Force -AllowClobber
+          Import-Module ps2exe
+          Write-Host "ps2exe version: $((Get-Module ps2exe).Version)"
+
+      - name: Build executable
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+
+          $iconArg = @{}
+          if (Test-Path 'tools/bazino-bridge/icon.ico') {
+            $iconArg['iconFile'] = (Resolve-Path 'tools/bazino-bridge/icon.ico').Path
+          }
+
+          Invoke-ps2exe `
+            -inputFile  (Resolve-Path 'tools/bazino-bridge/BazinoBridge.ps1').Path `
+            -outputFile 'dist/BazinoBridge.exe' `
+            -noConsole `
+            -title       'Bazino Bridge' `
+            -description 'CDP bridge between the Bazino agent and Chrome' `
+            -company     'BAZINO' `
+            -product     'Bazino Bridge' `
+            -version     '1.0.0' `
+            @iconArg
+
+          if (-not (Test-Path 'dist/BazinoBridge.exe')) {
+            Write-Host "::error::Build produced no executable"
+            exit 1
+          }
+          $size = [math]::Round((Get-Item 'dist/BazinoBridge.exe').Length / 1MB, 2)
+          Write-Host "Built dist/BazinoBridge.exe - $size MB"
+
+      - name: Inspect the built exe
+        shell: pwsh
+        run: |
+          $f = Get-Item 'dist/BazinoBridge.exe'
+          $kb = [math]::Round($f.Length / 1KB, 1)
+          Write-Host "Size on disk: $kb KB ($($f.Length) bytes)"
+
+          # A ps2exe wrapper is small by design - the payload is the embedded
+          # script, not a bundled runtime - but under ~20 KB means the script
+          # never made it in.
+          if ($f.Length -lt 20000) {
+            Write-Host "::error::Executable is only $kb KB - the script was probably not embedded"
+            exit 1
+          }
+
+          $v = $f.VersionInfo
+          Write-Host "Product:  $($v.ProductName)"
+          Write-Host "Version:  $($v.FileVersion)"
+          Write-Host "Company:  $($v.CompanyName)"
+
+          $bytes = [IO.File]::ReadAllBytes($f.FullName)
+          $mz = [Text.Encoding]::ASCII.GetString($bytes[0..1])
+          if ($mz -ne 'MZ') {
+            Write-Host "::error::Not a valid Windows executable (header: $mz)"
+            exit 1
+          }
+          Write-Host "Valid PE executable"
+
+      - name: Generate checksum
+        shell: pwsh
+        run: |
+          $hash = (Get-FileHash 'dist/BazinoBridge.exe' -Algorithm SHA256).Hash
+          $hash | Out-File 'dist/BazinoBridge.exe.sha256' -Encoding ascii
+          Write-Host "SHA256: $hash"
+
+      - name: Upload artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: BazinoBridge
+          path: |
+            dist/BazinoBridge.exe
+            dist/BazinoBridge.exe.sha256
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Verify the executable launches
+        shell: pwsh
+        timeout-minutes: 2
+        continue-on-error: true
+        env:
+          BAZINO_SELFTEST: '1'
+        run: |
+          # Advisory only. A GUI binary that refuses to exit must never block a
+          # build whose artifact is already uploaded above.
+          $log = Join-Path $env:TEMP 'bazino-selftest.log'
+          if (Test-Path $log) { Remove-Item $log -Force }
+
+          $p = Start-Process -FilePath 'dist/BazinoBridge.exe' -PassThru
+
+          if ($p.WaitForExit(45000)) {
+            if (Test-Path $log) {
+              Write-Host "--- self-test output ---"
+              Get-Content $log | ForEach-Object { Write-Host "  $_" }
+            }
+            if ($p.ExitCode -eq 0) {
+              Write-Host "Packaged exe verified clean"
+            } else {
+              Write-Host "::warning::Packaged exe exited with code $($p.ExitCode)"
+            }
+          } else {
+            try { $p.Kill() } catch { }
+            Write-Host "::warning::Packaged exe did not exit within 45 s - GUI host kept running."
+            Write-Host "::warning::The exe is still uploaded; test it manually."
+            if (Test-Path $log) {
+              Write-Host "--- partial output ---"
+              Get-Content $log | ForEach-Object { Write-Host "  $_" }
+            }
+          }
+
+      - name: Summary
+        shell: pwsh
+        if: always()
+        run: |
+          $size = if (Test-Path 'dist/BazinoBridge.exe') {
+            "$([math]::Round((Get-Item 'dist/BazinoBridge.exe').Length / 1KB, 1)) KB"
+          } else { 'not built' }
+          $hash = if (Test-Path 'dist/BazinoBridge.exe.sha256') {
+            (Get-Content 'dist/BazinoBridge.exe.sha256').Trim()
+          } else { '-' }
+
+          @"
+          ## Bazino Bridge build
+
+          | Item | Value |
+          |---|---|
+          | Executable | $size |
+          | SHA256 | ``$hash`` |
+          | Commit | ``$env:GITHUB_SHA`` |
+
+          Download it from the **Artifacts** section at the bottom of this page.
+          "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
