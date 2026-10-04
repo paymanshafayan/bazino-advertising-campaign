@@ -137,3 +137,8 @@
 - **Release خصوصی:** [`marketing-app-dev-41`](https://github.com/paymanshafayan/bazino-gamenet-portal/releases/tag/marketing-app-dev-41)، نسخهٔ `0.8.1`; `BazinoMarketing.exe` برابر `62,281,281` بایت، SHA-256 برابر `024cd59a406f997f4ffe024d50c0972a265ebd76cdcc07f64a003292acbbc648`. فایل self-contained و امضانشده است.
 - **نصب واقعی:** ping شمارهٔ `395` پیش از به‌روزرسانی نسخهٔ `0.7.1` را برگرداند. تلاش اول `app.update` با خطای موقت DNS متوقف شد؛ تلاش بعدی برای تگ دقیق `marketing-app-dev-41` با `apply=true` موفق شد، `applied=true` داد و SHA را با Release تطبیق داد. پس از restart، state امضاشده در `2026-10-02T12:39:34Z` وضعیت `active/listening` و نسخهٔ `0.8.1` را گزارش کرد؛ ping شمارهٔ `401` در `12:39:44Z` نیز `pong=true`, `version=0.8.1` داد. بنابراین نصب و اجرای ۰٫۸٫۱ روی دستگاه مالک در آن زمان تأیید شده است.
 - این شواهد **سلامت فعلی Zernio/Portal، اجرای واقعی Task/Insights یا مجوز انتشار** را ثابت نمی‌کنند. برای وضعیت جاری به بخش‌های ۲ و ۴ مراجعه شود.
+
+## وضعیت پلن ۷ (بازطراحی رابط کاربری ژینوس):
+- مسیر سند: plans/PLAN-007-jinus-ui-redesign-fa.md
+- وضعیت: در انتظار تأیید مالک
+- توضیحات: تولید موکاپ اولیه انجام شد. پیاده‌سازی نیازمند تأیید طراحی است.
