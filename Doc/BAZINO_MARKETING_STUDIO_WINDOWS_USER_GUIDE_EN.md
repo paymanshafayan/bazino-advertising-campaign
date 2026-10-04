@@ -378,3 +378,4 @@ Sample-mode renders never contain real keys; they are safe to attach to a privat
 | Owner action | The owner states that he approved the session fingerprint in the app (2026-10-04). The matching live test (*approved → command executes*, and later *disabled → refused again*) has **not** been run yet; it is queued as the first action of the next working session. |
 
 Record each future build in the same shape and keep the run number, tag, checksum, installation result and verification time in the project handoff.
+
