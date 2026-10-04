@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:infra="clr-namespace:BazinoMarketing.App.Infrastructure">
 
@@ -337,7 +337,7 @@
         <Setter Property="Padding" Value="12,8" />
         <Setter Property="MinHeight" Value="38" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="PasswordChar" Value="●" />
+        <Setter Property="PasswordChar" Value="â—" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="PasswordBox">
@@ -610,7 +610,7 @@
         <Setter Property="Background" Value="{StaticResource AccentColor}" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="CornerRadius" Value="8" />
+        
         <Setter Property="Padding" Value="12,8" />
         <Setter Property="FontSize" Value="13" />
     </Style>
@@ -628,3 +628,4 @@
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 </ResourceDictionary>
+
