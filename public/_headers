@@ -1,0 +1,5 @@
+/*
+  # Applies the same third-party-script policy when the Vite build is deployed as a
+  # static Cloudflare Pages site (where Express server.ts is not in the request path).
+  # It blocks Cloudflare Web Analytics' edge-injected beacon before the browser fetches it.
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https: ws: wss:; frame-src 'self' https:
