@@ -1,4 +1,4 @@
-using BazinoMarketing.Core.Publishing;
+﻿using BazinoMarketing.Core.Publishing;
 using Xunit;
 
 namespace BazinoMarketing.Core.Tests;
@@ -10,7 +10,7 @@ public class PublishQueueTests
     {
         var item = MakeItem();
         item.Media[0].Path = "agent-media-inbox/reused.mp4";
-        Assert.Contains("پوشهٔ امن صف انتشار", item.Validate());
+        Assert.Contains("Ù¾ÙˆØ´Ù‡Ù” Ø§Ù…Ù† ØµÙ Ø§Ù†ØªØ´Ø§Ø±", item.Validate());
     }
 
     [Fact]
@@ -18,7 +18,7 @@ public class PublishQueueTests
     {
         var item = MakeItem();
         item.Media[0].PreviewPath = "marketing-app-mailbox/publish-queue/media/../preview.jpg";
-        Assert.Contains("پیش‌نمایش", item.Validate());
+        Assert.Contains("Ù¾ÛŒØ´â€ŒÙ†Ù…Ø§ÛŒØ´", item.Validate());
     }
 
     [Fact]
@@ -31,11 +31,11 @@ public class PublishQueueTests
         {
             Kind = "interactive",
             Language = "tr",
-            Keywords = new List<string> { "Hazır" },
-            DmMessage = "İstediğin bilgiler burada.",
-            FollowGateMessage = "Lütfen önce bizi takip et, sonra aşağıdaki düğmeye dokun.",
+            Keywords = new List<string> { "HazÄ±r" },
+            DmMessage = "Ä°stediÄŸin bilgiler burada.",
+            FollowGateMessage = "LÃ¼tfen Ã¶nce bizi takip et, sonra aÅŸaÄŸÄ±daki dÃ¼ÄŸmeye dokun.",
             FollowButtonLabel = "Takip ettim",
-            NotFollowingMessage = "Takip görünmüyor. Lütfen takip et ve yeniden dokun."
+            NotFollowingMessage = "Takip gÃ¶rÃ¼nmÃ¼yor. LÃ¼tfen takip et ve yeniden dokun."
         };
 
         var body = ZernioAutomationBuilder.Build(item, "ig-account", "profile", "17840000000000000");
@@ -43,9 +43,9 @@ public class PublishQueueTests
         Assert.Equal("17840000000000000", body["platformPostId"]!.GetValue<string>());
         Assert.Equal("follower", body["audience"]!["followerStatus"]!.GetValue<string>());
         Assert.Equal("verify", body["audience"]!["whenUnknown"]!.GetValue<string>());
-        Assert.Equal("Lütfen önce bizi takip et, sonra aşağıdaki düğmeye dokun.", body["followGate"]!["message"]!.GetValue<string>());
+        Assert.Equal("LÃ¼tfen Ã¶nce bizi takip et, sonra aÅŸaÄŸÄ±daki dÃ¼ÄŸmeye dokun.", body["followGate"]!["message"]!.GetValue<string>());
         Assert.Equal("Takip ettim", body["followGate"]!["buttonLabel"]!.GetValue<string>());
-        Assert.Equal("İstediğin bilgiler burada.", body["dmMessage"]!.GetValue<string>());
+        Assert.Equal("Ä°stediÄŸin bilgiler burada.", body["dmMessage"]!.GetValue<string>());
     }
 
     [Theory]
@@ -60,7 +60,7 @@ public class PublishQueueTests
         item.Kind = format;
         item.Media[0].Type = format == "post" || format == "story" ? "image" : "video";
         if (format == "carousel") item.Media.Add(new PublishMediaItem { Path = "marketing-app-mailbox/publish-queue/media/second.jpg", Type = "image" });
-        Assert.Contains("فقط با mediaFormat=reel", item.Validate());
+        Assert.Contains("ÙÙ‚Ø· Ø¨Ø§ mediaFormat=reel", item.Validate());
     }
 
     [Fact]
@@ -69,12 +69,12 @@ public class PublishQueueTests
         var item = MakeItem();
         item.ContentType = "Affiliate";
         item.Topic = "affiliate-reel";
-        item.AffiliateDisclosure = "همکاری در فروش؛ شرایط در صفحهٔ رسمی درج شده است.";
-        Assert.Contains("بازنشر آن به مقصدهای دیگر باید خاموش باشد", item.Validate());
+        item.AffiliateDisclosure = "Ù‡Ù…Ú©Ø§Ø±ÛŒ Ø¯Ø± ÙØ±ÙˆØ´Ø› Ø´Ø±Ø§ÛŒØ· Ø¯Ø± ØµÙØ­Ù‡Ù” Ø±Ø³Ù…ÛŒ Ø¯Ø±Ø¬ Ø´Ø¯Ù‡ Ø§Ø³Øª.";
+        Assert.Contains("Ø¨Ø§Ø²Ù†Ø´Ø± Ø¢Ù† Ø¨Ù‡ Ù…Ù‚ØµØ¯Ù‡Ø§ÛŒ Ø¯ÛŒÚ¯Ø± Ø¨Ø§ÛŒØ¯ Ø®Ø§Ù…ÙˆØ´ Ø¨Ø§Ø´Ø¯", item.Validate());
         item.RepublishToConnectedPlatforms = false;
         Assert.Equal("", item.Validate());
         item.Engagement = new EngagementAutomation { Kind = "interactive" };
-        Assert.Contains("Affiliate به پورتال می‌رود", item.Validate());
+        Assert.Contains("Affiliate Ø¨Ù‡ Ù¾ÙˆØ±ØªØ§Ù„ Ù…ÛŒâ€ŒØ±ÙˆØ¯", item.Validate());
     }
 
     [Fact]
@@ -92,7 +92,9 @@ public class PublishQueueTests
         Assert.Equal("", item.Validate());
         var body = ZernioPublishBuilder.BuildInstagramPost(item, "ig-account", new[] { "https://media.zernio.com/sample.jpg" });
         Assert.Null(body["platforms"]![0]!["locationId"]);
-        Assert.Null(body["platforms"]![0]!["platformSpecificData"]);
+        Assert.Equal("story", body["platforms"]![0]!["platformSpecificData"]?["contentType"]?.GetValue<string>());
+        Assert.Null(body["platforms"]![0]!["platformSpecificData"]?["locationId"]);
+        Assert.False(body.ContainsKey("content"));
     }
 
     [Fact]
@@ -141,9 +143,9 @@ public class PublishQueueTests
         };
 
         Assert.Equal("", PublishApprovalGuard.Validate(item, item.Id, approval, readySha, media));
-        Assert.Contains("فایل محتوا", PublishApprovalGuard.Validate(item, item.Id, approval, new string('d', 40), media));
+        Assert.Contains("ÙØ§ÛŒÙ„ Ù…Ø­ØªÙˆØ§", PublishApprovalGuard.Validate(item, item.Id, approval, new string('d', 40), media));
         media[item.Media[0].Path] = new string('e', 40);
-        Assert.Contains("رسانه", PublishApprovalGuard.Validate(item, item.Id, approval, readySha, media));
+        Assert.Contains("Ø±Ø³Ø§Ù†Ù‡", PublishApprovalGuard.Validate(item, item.Id, approval, readySha, media));
     }
 
     [Fact]
@@ -155,7 +157,7 @@ public class PublishQueueTests
             ReadyFileSha: new string('a', 40),
             Media: new[] { new ApprovedQueueMedia(item.Media[0].Path, new string('b', 40)) });
 
-        Assert.Contains("رسانه‌های دیده‌شده", PublishApprovalGuard.Validate(item, item.Id, approval,
+        Assert.Contains("Ø±Ø³Ø§Ù†Ù‡â€ŒÙ‡Ø§ÛŒ Ø¯ÛŒØ¯Ù‡â€ŒØ´Ø¯Ù‡", PublishApprovalGuard.Validate(item, item.Id, approval,
             new string('a', 40), new Dictionary<string, string> { [item.Media[0].Path] = new string('b', 40) }));
     }
 
@@ -170,7 +172,7 @@ public class PublishQueueTests
         item.Kind = "post";
         item.Media[0].Type = "image";
         item.Media[0].PreviewPath = null;
-        Assert.Contains("فقط برای ریل", item.Validate());
+        Assert.Contains("ÙÙ‚Ø· Ø¨Ø±Ø§ÛŒ Ø±ÛŒÙ„", item.Validate());
     }
 
     [Fact]
@@ -188,15 +190,15 @@ public class PublishQueueTests
     {
         var item = MakeItem();
         item.Media[0].Transcript = null;
-        Assert.Contains("متن پیاده‌شدهٔ گفتار", item.Validate());
+        Assert.Contains("Ù…ØªÙ† Ù¾ÛŒØ§Ø¯Ù‡â€ŒØ´Ø¯Ù‡Ù” Ú¯ÙØªØ§Ø±", item.Validate());
 
         item.Media[0].Transcript = "   ";
-        Assert.Contains("متن پیاده‌شدهٔ گفتار", item.Validate());
+        Assert.Contains("Ù…ØªÙ† Ù¾ÛŒØ§Ø¯Ù‡â€ŒØ´Ø¯Ù‡Ù” Ú¯ÙØªØ§Ø±", item.Validate());
 
         item.Media[0].Transcript = new string('x', 12001);
-        Assert.Contains("۱۲۰۰۰", item.Validate());
+        Assert.Contains("Û±Û²Û°Û°Û°", item.Validate());
 
-        item.Media[0].Transcript = "Konuşma metni";
+        item.Media[0].Transcript = "KonuÅŸma metni";
         Assert.Equal("", item.Validate());
     }
 
@@ -216,7 +218,7 @@ public class PublishQueueTests
     private static PublishQueueItem MakeItem() => new()
     {
         Id = "post-20261002-01",
-        Title = "نمونهٔ محتوای تعاملی",
+        Title = "Ù†Ù…ÙˆÙ†Ù‡Ù” Ù…Ø­ØªÙˆØ§ÛŒ ØªØ¹Ø§Ù…Ù„ÛŒ",
         Kind = "reel",
         ContentType = "reels",
         Topic = "daily-reels",
@@ -224,12 +226,12 @@ public class PublishQueueTests
         TopicCycle = "2026-10-02",
         ContentSlot = "daily-reels-01",
         Language = "fa",
-        Caption = "کپشن نمونه",
+        Caption = "Ú©Ù¾Ø´Ù† Ù†Ù…ÙˆÙ†Ù‡",
         PublishAt = DateTimeOffset.Now.AddHours(2),
         TimeZoneId = TimeZoneInfo.Local.Id,
         TargetPlatform = "instagram",
         TargetAccountId = ZernioAutomationBuilder.InstagramAccountId,
-        Cta = "برای جزئیات لینک بیو را ببینید.",
+        Cta = "Ø¨Ø±Ø§ÛŒ Ø¬Ø²Ø¦ÛŒØ§Øª Ù„ÛŒÙ†Ú© Ø¨ÛŒÙˆ Ø±Ø§ Ø¨Ø¨ÛŒÙ†ÛŒØ¯.",
         ProductionStatus = "final",
         PreviewReviewed = true,
         Media = new List<PublishMediaItem>
@@ -239,9 +241,10 @@ public class PublishQueueTests
                 Path = "marketing-app-mailbox/publish-queue/media/sample.mp4",
                 Type = "video",
                 PreviewPath = "marketing-app-mailbox/publish-queue/media/sample-preview.jpg",
-                Transcript = "نمونهٔ متن گفتار",
+                Transcript = "Ù†Ù…ÙˆÙ†Ù‡Ù” Ù…ØªÙ† Ú¯ÙØªØ§Ø±",
                 TranscriptLanguage = "tr"
             }
         }
     };
 }
+
