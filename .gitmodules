@@ -1,3 +1,9 @@
  [submodule "OpenMontage"]
 	path = OpenMontage
 	url = https://github.com/calesthio/OpenMontage.git
+[submodule "Marketing-Agent-OS"]
+	path = Marketing-Agent-OS
+	url = https://github.com/iamwaqargulzar/Marketing-Agent-OS.git
+[submodule "growth-os"]
+	path = growth-os
+	url = https://github.com/nocodework/growth-os.git
