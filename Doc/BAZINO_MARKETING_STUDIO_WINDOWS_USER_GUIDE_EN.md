@@ -1,16 +1,18 @@
-# Jinus for Windows — User Guide
+﻿# Jinus for Windows — User Guide
 
 > **App name:** in English documents this Windows app is written **Jinus**; in Persian documents the same app is written **«ژینوس»**. The executable is still `BazinoMarketing.exe` and the data folder is still `%LOCALAPPDATA%\BazinoMarketing\`.
 
 **Audience:** the Windows owner/operator<br>
 **Source of truth:** the implemented `marketing-app/` source and its publishing contract, not older proposals or mock screenshots.<br>
-**Reviewed:** 2 October 2026 · **Current app:** 0.8.1 · **Validated private release:** [`marketing-app-dev-41`](https://github.com/paymanshafayan/bazino-gamenet-portal/releases/tag/marketing-app-dev-41)
+**Reviewed:** 4 October 2026 · **Current app:** 0.8.5 · **Validated private release:** [`marketing-app-dev-57`](https://github.com/paymanshafayan/bazino-gamenet-portal/releases/tag/marketing-app-dev-57)
 
-> **Important current status:** Version 0.8.1 has already been installed on the owner’s Windows computer. This guide does not ask you to repeat that update. The recorded live check was a mailbox `ping` that returned `pong=true` and `version=0.8.1`; that proves the app answered that command at that time, not that every connected service or publishing operation is currently healthy.
+> **Important current status:** Version 0.8.5 is already installed on the owner’s Windows computer (pre-release `marketing-app-dev-57`, 62,335,936 bytes, SHA-256 `2c6eebc73234edf9af740c0e36f76607ad26bb5c0dc26708261bb8f1562ac3ae`, installed through the mailbox `app.update` and confirmed after restart with `app: 0.8.5`). This guide does not ask you to repeat that update, and do not re-install 0.8.2–0.8.5. The recorded live check was an `app.update` reply followed by an app reply that carried `app: 0.8.5`; that proves the app answered at that time, not that every connected service or publishing operation is currently healthy.
+
+> **Owner approval gate (new in 0.8.5):** the mailbox no longer runs commands from an unknown agent fingerprint. Each fingerprint must be approved by the owner in the app, and the owner can disable it again at any time. Unapproved or disabled fingerprints receive a clear refusal reply (`agent_not_approved` / `agent_disabled`) instead of execution. See §3.
 
 ## 1. What the app does
 
-Jinus is a self-contained Windows desktop app for service checks, browser-assisted research, local media work, content review, publishing and logs. The interface installed as 0.8.1 has six Persian-labeled tabs. The current branch adds a seventh section (the daily-report page), a light sidebar layout and a full-screen start; the Windows CI build for these changes is green (run `37105410361`, 7/7 pages rendered, pre-release `marketing-app-dev-45`), but they are **not installed on your computer yet** — treat them as built-but-not-installed until that release is installed with your approval.
+Jinus is a self-contained Windows desktop app for service checks, browser-assisted research, local media work, content review, publishing and logs. The interface installed as 0.8.5 has **seven** Persian-labeled tabs, a light sidebar layout and a full-screen start; the Windows CI builds for the current changes are green (the 0.8.5 build: run `37198685120`, 7/7 pages rendered, pre-release `marketing-app-dev-57`) and, unlike the earlier 0.8.1 note in this guide’s history, that build **is installed** on the owner’s computer.
 
 | Persian tab | English meaning | Main purpose |
 |---|---|---|
@@ -20,13 +22,14 @@ Jinus is a self-contained Windows desktop app for service checks, browser-assist
 | رسانه | Media | Download one specified Instagram post/Reel, manage local files, edit with FFmpeg, transcribe speech and optionally send selected files to the private GitHub mailbox. |
 | محتوای آماده انتشار | Ready-to-publish content | Review queue cards in an Instagram-like preview, approve a specific item or return feedback. |
 | لاگ | Logs | Search, filter, copy and inspect sanitized app events. |
-| گزارش روزانه | Daily report | (branch) Read the newest daily Instagram report from the repository as KPI tiles, bar/line/donut diagrams and a best-posts table. Read-only; it never writes to the repository. |
+| گزارش روزانه | Daily report | Read the newest daily Instagram report from the repository as KPI tiles, bar/line/donut diagrams and a best-posts table. Read-only; it never writes to the repository. |
 
 The app is a workstation tool, not a content idea editor or a general-purpose Instagram account browser. Its checked-in code does **not** expose a command to list Instagram Saved collections or automatically unsave items. Older content documents that describe those actions are workflow proposals, not app capabilities.
 
 ### Safety and approval model — read before connecting
 
-- While the app is listening to the configured GitHub mailbox, valid commands from the paired agent are executed **without an in-app approval prompt**. Risk labels are logged but do not create a confirmation dialog. The Settings permission checkboxes are not a reliable command-execution safety boundary in this version. Use **Stop listening** or close the app when remote access is not wanted.
+- **Agent approval gate (0.8.5, owner decision 2026-10-04).** While the app is listening to the configured GitHub mailbox, a command is executed only if it comes from a fingerprint the owner has **approved**. A fingerprint that appears for the first time is recorded as **«در انتظار تأیید» (pending)** and every command from it is refused with the reply `agent_not_approved` and a message pointing back to the app’s approval list. A fingerprint the owner switched off gets `agent_disabled`. Approve, disable or forget a fingerprint in **اتصال (Connection) → کارت «صندوق فرمان» → «ایجنت‌های ثبت‌شده» (Registered agents)**; the app never approves anything by itself and never stores an agent key or token.
+- Risk labels are logged but still do not create a confirmation dialog per command; the approval gate is per fingerprint, not per command. Use **Stop listening** or close the app when remote access is not wanted.
 - A specific content card’s **Approve** action is a consequential action: the app records approval and the scheduler may publish it at its approved time while the app is open. Inspect the media, caption, content type, destination, time and attached engagement instructions before clicking it.
 - Public posts and real DMs must have separate, explicit approval for that specific content/operation. Do not infer permission from this guide, a plan, a successful connection check, or a queued draft.
 - Do not test Portal Ingest by sending a sample POST. The existing endpoint records media, and a test request could create real data. The Portal card currently has no connection-test button; this guide explains that limitation rather than pretending it has been tested.
@@ -70,9 +73,38 @@ Open **اتصال (Connection)**. The page has service cards, mailbox controls a
 
 ### GitHub command mailbox
 
-The current defaults point to the private repository `paymanshafayan/bazino-gamenet-portal`, branch `arena/01a0f126-bazino-gamenet-portal`, and mailbox path `marketing-app-mailbox`. The app starts listening automatically when GitHub is configured; the Connection page displays the current mailbox/agent state and recent commands. It also offers immediate polling and a listening stop/start control.
+The default mailbox points at the private repository `paymanshafayan/bazino-gamenet-portal`, a session branch under `arena/`, and the mailbox path `marketing-app-mailbox`. The app starts listening automatically when GitHub is configured; the Connection page displays the current mailbox/agent state and recent commands. It also offers immediate polling and a listening stop/start control.
 
-The mailbox is a remote command channel, not merely a status widget. Keep it listening only while the agent needs it. Press **Stop listening** or close the app to stop accepting new work; closing the app is the clearest off switch. The same card can request an app restart and shows the app fingerprint and recent command history. Do not change repository, branch or mailbox path unless the operator has coordinated the matching agent-side configuration.
+The mailbox is a remote command channel, not merely a status widget. Keep it listening only while the agent needs it. Press **Stop listening** or close the app to stop accepting new work; closing the app is the clearest off switch. The same card can request an app restart and shows the app fingerprint and recent command history.
+
+### Registered agents — the owner approval gate
+
+The mailbox card contains the **«ایجنت‌های ثبت‌شده» (Registered agents)** list. Every agent fingerprint the app has seen appears there with one of three states:
+
+| State | Meaning | Effect on commands |
+|---|---|---|
+| در انتظار تأیید | Seen for the first time; nobody has decided yet. | **Refused** with `agent_not_approved` and a message that explains how to approve. |
+| تأییدشده | Approved by the owner. | Executed normally (subject to the ordinary command risk/logging). |
+| غیرفعال | Switched off by the owner. | **Refused** with `agent_disabled` until the owner enables it again. |
+
+- **تأیید (Approve)** gives that fingerprint full access; **غیرفعال (Disable)** blocks it; **حذف از دفتر (Forget)** removes the record — if the fingerprint is still published in the mailbox it will reappear as pending.
+- The app records only the fingerprint, its label and the source branch. No agent key, token or secret is stored in this list, and nothing is ever approved automatically.
+- Approving a fingerprint does not approve content: publishing still requires the owner’s explicit approval of each specific item (§7).
+
+### Registered branches — several repositories/branches in one mailbox
+
+The same card contains the **«شاخه‌های ثبت‌شده» (Registered branches)** list. The primary repository/branch from Settings is the first row (marked «شاخهٔ اصلی»); every other row is an extra branch the owner added. The app polls **all registered branches**, answers each command **on the branch it arrived from**, and keeps its duplicate/replay ledger per branch, so two branches never interfere.
+
+To add a branch, paste the **public URL of that branch** into the box and choose **افزودن شاخه (Add branch)**. Accepted shape:
+
+```
+https://github.com/OWNER/REPO/tree/BRANCH            e.g. https://github.com/owner/repo/tree/main
+https://github.com/OWNER/REPO/tree/arena%2Fsession   (URL-encoded slash in the branch name is supported)
+```
+
+- The repository and branch names are free; `owner/repo` shorthand and a plain `https://github.com/owner/repo` (which means the default branch `main`) are also accepted.
+- Removing a row (**برداشتن**) stops polling that branch. The primary branch cannot be removed here; change it in Settings.
+- A branch the owner adds is stored in the app settings on this computer. The GitHub token itself stays in the secret store — it is never written into the branch list or into the repository.
 
 ## 4. Configure services in Settings
 
@@ -160,6 +192,10 @@ The default is `%USERPROFILE%\Downloads\BazinoMarketing\`. Use **Browse folder**
 
 The Ready-to-publish tab reads complete queue items from the private mailbox and shows an Instagram-style preview with media, caption, CTA, content type, format, language and scheduled local time. Use **Refresh list** to reload.
 
+**Layout (0.8.5).** Every card is two columns: the Instagram-style media frame on the right, and a sidebar on the left holding the review chips (time, type, format, language, topic, cycle), the title, the caption, the spoken-text (transcript) box and the decision buttons. The media frame is sized from the current window height, so the whole post fits the window in one look instead of forcing a scroll. Carousel slide controls (arrow buttons, ← → keys, mouse drag, thumbnail strip, page dots) work as before, and the transcript law is unchanged: a video is reviewed together with its spoken text.
+
+**Full-frame preview (0.8.5).** The ⤢ button (or a double-click on the frame) opens the slide in its own window. That window is sized from the operating system’s work area — never wider or taller than the visible screen — and opens centered on the screen, so the top of the preview can no longer fall outside the display (the earlier fixed 900×1080 size could do exactly that on a 1080p screen). ← / → switch slides and close the preview, Esc closes it.
+
 ### Review an item
 
 Before approval, check at minimum:
@@ -221,9 +257,11 @@ Open **لاگ (Logs)** to search message/detail/category/request ID, filter by t
 
 ## 10. Updates and current limitations
 
-The app updater is an agent mailbox command (`app.update`) that downloads a release asset, verifies its published SHA-256, then replaces/restarts the executable when requested. There is no general-purpose “update now” button in the current UI. The owner’s computer is already confirmed on 0.8.1; do not repeat the installation unless explicitly requested.
+The app updater is an agent mailbox command (`app.update`) that downloads a release asset, verifies its published SHA-256, then replaces/restarts the executable when requested. There is no general-purpose “update now” button in the current UI. The owner’s computer is already confirmed on **0.8.5**; do not repeat the installation of 0.8.2–0.8.5 unless the owner explicitly asks for an update to a newer build.
 
-**Not current app features:** Instagram Saved-list browsing/unsaving; a Portal Ingest connection test or read-only health GET; a newly created Portal webhook/callback; automatic approval prompts for mailbox commands; and a guarantee that a connection probe implies live publish/DM permission. Older design proposals and archived desktop-app material are not the implementation source of truth.
+**Window behaviour (0.8.5).** Jinus does not force itself above other windows: the app never sets the topmost flag, and on start it also clears a leftover topmost flag on its own window handle if an older capture tool left one. The agent’s automation can ask the app itself to bring the window back to normal after a screenshot/capture run with the mailbox command **`window.state`** (args: `mode` = `restore` | `normal` | `maximize` | `minimize`; the reply reports the resulting window state, style, topmost flag and geometry). This keeps window handling inside the app instead of external Win32 scripts.
+
+**Not current app features:** Instagram Saved-list browsing/unsaving; a Portal Ingest connection test or read-only health GET; a newly created Portal webhook/callback; per-command confirmation dialogs (the 0.8.5 gate is per approved fingerprint, not per command); and a guarantee that a connection probe implies live publish/DM permission. Older design proposals and archived desktop-app material are not the implementation source of truth.
 
 ## 11. Building and Updating the App by the Agent
 
@@ -261,7 +299,7 @@ Record the run ID and wait for it to finish. Do not treat a queued or failed run
 
 1. Follow the approved implementation plan and make only the app changes covered by that approval.
 2. If the app’s user-visible version is changing, update the `<Version>` value in `marketing-app/Directory.Build.props` to the intended semantic version before building. The GitHub pre-release tag is separate: the workflow creates a tag in the form `marketing-app-dev-<RUN_NUMBER>`. The run number is not the app version.
-3. Commit the approved app source and version change to the fixed session branch `arena/01a0f126-bazino-gamenet-portal`. (Note added by the agent: this branch name comes from an earlier session. The active session branch is `arena/01a10048-bazino-gamenet-portal`, and the installed app is configured to it — that is the branch used below.) Keep mailbox state, private agent files, media and unrelated changes out of the commit.
+3. Commit the approved app source and version change to the **active session branch** — `arena/01a10048-bazino-gamenet-portal` for the 2026-10-04 sessions; the installed app is configured to it. (Older sections of this guide may still show `arena/01a0f126-bazino-gamenet-portal` from an earlier session; always build and push the branch the installed app is configured to, and never a different branch.) Keep mailbox state, private agent files, media and unrelated changes out of the commit.
 4. Verify that the workflow will build the intended commit. A manual workflow run builds the selected branch’s current commit; it does not build uncommitted files from the agent’s workspace.
 
 A push to an `arena/**` branch normally starts only the Linux test job. Do not add `[build]` to a commit message unless a Windows build and private pre-release are intended and authorized; that marker causes the Windows job and release step to run automatically.
@@ -311,3 +349,32 @@ The app downloads `BazinoMarketing.exe` and `SHA256SUMS.txt` from the selected p
 4. If the command fails, the checksum differs, the app does not return after restart, or the version is unexpected, report the observed error and stop. Do not claim the update succeeded or blindly retry it. Reconcile the release and app state first.
 
 A successful build proves that the workflow produced an executable; it does not prove that the owner’s app installed or started it. A successful update reply and post-restart version check are required to report installation as complete.
+
+### 11.6 How the agent captures images of the app for review
+
+The agent cannot see the owner’s screen. Review images are produced in one of these ways, and every one of them is a render of a **real binary**, never a mock-up:
+
+1. **CI render (automatic).** The Windows job of `marketing-app-ci.yml` runs the freshly published executable with `--render-screenshots <dir>` in *sample mode* (bundled sample data, no secrets, no network). It renders the app pages at 1280×800, writes `render-info.txt` (page count, size and version), and attaches the PNGs plus the checksum file to the pre-release.
+2. **Render from the installed binary (on the owner’s PC).** Through the mailbox command `os.run`, the exact installed executable is started with the same switch, e.g.
+   `BazinoMarketing-marketing-app-dev-57.exe --render-screenshots C:\Users\payman\Downloads\BazinoMarketing\dev57`.
+   This proves what the *installed* build renders, not just what CI built.
+3. **Bringing the images back for review.** The rendered PNGs are handed to the agent’s side with the mailbox command `media.upload`, which copies them into the private repository’s `agent-media-inbox/` folder on the session branch; there the agent reads them (and, when needed, crops/compares them with ImageMagick) and reports what is actually visible.
+4. **End-user evidence for a specific window.** For anything that is only visible on the live desktop (a full-frame preview, a branch added by hand), the owner takes the screenshot and the agent reviews that file; the renderer covers pages, not arbitrary desktop states.
+
+Sample-mode renders never contain real keys; they are safe to attach to a private pre-release. Do not use a sample-mode render as proof that a live publishing operation works.
+
+### 11.7 Recorded build and installation — 0.8.5
+
+| Item | Value |
+|---|---|
+| App version | `0.8.5` (`marketing-app/Directory.Build.props`) |
+| Workflow run | `37198685120` (Core tests + Windows build + pre-release, both green) |
+| Pre-release tag | `marketing-app-dev-57` |
+| Executable size | 62,335,936 bytes |
+| SHA-256 | `2c6eebc73234edf9af740c0e36f76607ad26bb5c0dc26708261bb8f1562ac3ae` |
+| Contents | Phases 5–8 of plan 6: two-column queue review layout, screen-fitted full-frame preview, never-topmost window with the `window.state` command, multi-branch mailbox with the owner approval gate |
+| Installation | Applied with `app.update {tag: marketing-app-dev-57, apply: true}` through the mailbox; the app restarted and a later reply reported `app: 0.8.5` |
+| Live verification (observed) | An unapproved fingerprint’s command was refused with `agent_not_approved` and a message pointing at the approval list — this refusal was observed directly after installation. |
+| Owner action | The owner states that he approved the session fingerprint in the app (2026-10-04). The matching live test (*approved → command executes*, and later *disabled → refused again*) has **not** been run yet; it is queued as the first action of the next working session. |
+
+Record each future build in the same shape and keep the run number, tag, checksum, installation result and verification time in the project handoff.
