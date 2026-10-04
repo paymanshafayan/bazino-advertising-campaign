@@ -337,7 +337,7 @@
         <Setter Property="Padding" Value="12,8" />
         <Setter Property="MinHeight" Value="38" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="PasswordChar" Value="â—" />
+        <Setter Property="PasswordChar" Value="*" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="PasswordBox">
@@ -628,4 +628,5 @@
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 </ResourceDictionary>
+
 
