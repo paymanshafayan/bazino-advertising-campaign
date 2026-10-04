@@ -1,0 +1,13 @@
+{
+  "v": 1,
+  "commands": [
+    {
+      "id": "cmd-1791119508990",
+      "agent": "c4eb:c220:44a5:a53b",
+      "method": "app.ping",
+      "params": {},
+      "timestamp": "2026-10-04T13:11:48.990Z"
+    }
+  ],
+  "sig": "MEUCIQC4bMOeAJ5CdfvzoHBUUXlJyyy/f/48b1LzpXDgT5orewIgGc6u42IeNvdWxCfc4aivv89HWVNSCs2WS6iQDfmFghM="
+}
