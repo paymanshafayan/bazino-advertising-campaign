@@ -1,0 +1,12 @@
+node_modules/
+dist/
+*.log
+*.credentials
+settings.json
+secrets.json
+runtime-state.json
+relay/private/
+.agent-signing-key.json
+.agent-replies.json
+*.exe
+*.zip

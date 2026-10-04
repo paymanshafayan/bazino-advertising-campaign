@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <title>BAZINO · Marketing Control</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="ناوبری اصلی">
+        <div class="brand">
+          <span class="brand-mark">B<span class="brand-dot">.</span></span>
+          <div class="brand-copy">
+            <strong>BAZINO<span class="brand-lite"> / studio</span></strong
+            ><small>MARKETING CONTROL</small>
+          </div>
+        </div>
+        <div class="side-label">فضای کار</div>
+        <nav class="nav">
+          <button class="nav-item active" data-nav="overview">
+            <span class="nav-icon">◈</span> نمای کلی
+            <span class="nav-index">01</span>
+          </button>
+          <button class="nav-item" data-nav="intelligence">
+            <span class="nav-icon">◇</span> رصد و پژوهش روزانه
+            <span class="nav-index">02</span>
+          </button>
+          <button class="nav-item" data-nav="zernio">
+            <span class="nav-icon">◉</span> مرکز Zernio
+            <span class="nav-index">03</span>
+          </button>
+          <button class="nav-item" data-nav="explorer">
+            <span class="nav-icon">⌘</span> API Explorer
+            <span class="nav-index">04</span>
+          </button>
+          <button class="nav-item" data-nav="gateway">
+            <span class="nav-icon">⇧</span> گیت دسترسی آنلاین
+            <span class="nav-index">05</span>
+          </button>
+          <button class="nav-item" data-nav="media">
+            <span class="nav-icon">▧</span> کتابخانه رسانه
+            <span class="nav-index">05</span>
+          </button>
+          <button class="nav-item" data-nav="kling">
+            <span class="nav-icon">✧</span> Kling AI
+            <span class="nav-index">06</span>
+          </button>
+          <div class="nav-divider"></div>
+          <button class="nav-item" data-nav="relay">
+            <span class="nav-icon">⇄</span> ارتباط GitHub
+          </button>
+          <button class="nav-item" data-nav="settings">
+            <span class="nav-icon">⚙</span> تنظیمات و کلیدها
+          </button>
+        </nav>
+        <div class="side-bottom">
+          <div class="connection-dot" id="sidebar-dot"></div>
+          <div>
+            <strong id="sidebar-status">ارتباط غیرفعال</strong
+            ><small>GitHub ↔ Windows</small>
+          </div>
+        </div>
+      </aside>
+      <div class="workspace">
+        <header class="topbar">
+          <div class="breadcrumb">
+            <span>استودیوی بازاریابی</span><span class="crumb-slash">/</span
+            ><b id="page-title">نمای کلی</b>
+          </div>
+          <div class="topbar-right">
+            <span class="pill subtle">LOCAL BROWSER · WINDOWS</span
+            ><span class="pill" id="top-status">● آماده برای تنظیم</span>
+          </div>
+        </header>
+        <main>
+          <section class="view active" id="view-overview">
+            <div class="eyebrow">CAMPAIGN OPERATIONS / 2026</div>
+            <div class="hero">
+              <div class="hero-text">
+                <div class="hero-tag">◈ مرکز فرمان بازاریابی</div>
+                <h1>از ایده تا انتشار،<br /><em>همه‌چیز در یک میز کار.</em></h1>
+                <p>
+                  Zernio برای همهٔ شبکه‌ها، FLUX از پورتال و Kling با OAuth؛
+                  همراه ارتباط رمزگذاری‌شده با ایجنت و تأیید شما برای هر اقدام واقعی.
+                </p>
+                <div class="hero-actions">
+                  <button class="btn primary" data-go="zernio">
+                    شروع با Zernio <span>←</span></button
+                  ><button class="btn ghost" data-go="settings">
+                    وارد کردن دسترسی‌ها
+                  </button>
+                </div>
+              </div>
+              <div class="hero-art">
+                <div class="orbit orbit-a"></div>
+                <div class="orbit orbit-b"></div>
+                <div class="hero-center">B<span>.</span></div>
+                <span class="orbit-label top">CREATE</span
+                ><span class="orbit-label bottom">MEASURE</span>
+              </div>
+            </div>
+            <div class="section-heading">
+              <div>
+                <div class="eyebrow">YOUR TOOLKIT</div>
+                <h2>ابزارهای کمپین</h2>
+              </div>
+              <span class="section-caption">Zernio + FLUX پورتال + Kling</span>
+            </div>
+            <div class="tool-grid" id="tool-grid">
+              <button class="tool-card" data-go="gateway">
+                <span class="tool-icon z">⇧</span><span class="tool-name">گیت آنلاین</span>
+                <span class="tool-sub">API و MCP ثبت‌شدنی؛ استخراج متن از URL عمومی</span>
+                <span class="tool-foot"><span>بدون نصب مجدد برای سرویس جدید</span><span>↗</span></span>
+              </button>
+              <button class="tool-card" data-go="intelligence">
+                <span class="tool-icon z">◇</span><span class="tool-name">رصد بازی‌ها</span>
+                <span class="tool-sub">RSS عمومی، شواهد چندمنبعی و گزارش محلی</span>
+                <span class="tool-foot"><span>خبر ≠ واقعیت تأییدشده</span><span>↗</span></span>
+              </button>
+              <button class="tool-card main-tool" data-go="zernio">
+                <span class="tool-icon z">Z</span><span class="tool-name">Zernio</span>
+                <span class="tool-sub">همهٔ شبکه‌ها · انتشار و تحلیل</span>
+                <span class="tool-foot"><span data-config="zernioKey">نیاز به کلید محلی Zernio</span><span>↗</span></span>
+              </button>
+              <button class="tool-card" data-url="https://bazino.pro/admin/content">
+                <span class="tool-icon flux">✳</span><span class="tool-name">FLUX پورتال</span>
+                <span class="tool-sub">تولید تصویر با Vault پورتال؛ بدون کپی کلید</span>
+                <span class="tool-foot"><span>ورود به استودیوی محتوای پورتال</span><span>↗</span></span>
+              </button>
+              <button class="tool-card" data-go="kling">
+                <span class="tool-icon kling">✦</span><span class="tool-name">Kling MCP</span>
+                <span class="tool-sub">ویدئو، تصویر و Element</span>
+                <span class="tool-foot"><span id="kling-card-status">نیاز به OAuth</span><span>↗</span></span>
+              </button>
+              <button class="tool-card" data-go="zernio" data-platform="youtube">
+                <span class="tool-icon yt">▶</span><span class="tool-name">YouTube از Zernio</span>
+                <span class="tool-sub">ویدئو، Shorts و آمارِ حساب متصل</span>
+                <span class="tool-foot"><span>بدون OAuth مستقیم YouTube</span><span>↗</span></span>
+              </button>
+              <button class="tool-card" data-go="zernio" data-platform="telegram">
+                <span class="tool-icon tg">➤</span><span class="tool-name">Telegram از Zernio</span>
+                <span class="tool-sub">کانال، گروه و پیامِ حساب متصل</span>
+                <span class="tool-foot"><span>بدون Bot token محلی</span><span>↗</span></span>
+              </button>
+              <button class="tool-card" data-go="zernio" data-platform="instagram">
+                <span class="tool-icon z">◎</span><span class="tool-name">Instagram از Zernio</span>
+                <span class="tool-sub">پست، Reel و Storyِ حساب متصل</span>
+                <span class="tool-foot"><span>بدون اتصال مستقیم Meta</span><span>↗</span></span>
+              </button>
+            </div>
+            <div class="overview-bottom">
+              <div class="note-panel">
+                <span class="note-icon">✳</span>
+                <div>
+                  <b>تصمیم با شماست</b>
+                  <p>
+                    مشاهده و ساخت پیش‌نویس با انتشار فرق دارد. هر درخواست نوشتنی
+                    روی دستگاه شما تأیید می‌شود؛ تأیید خودکار به‌صورت پیش‌فرض
+                    خاموش است.
+                  </p>
+                </div>
+              </div>
+              <div class="mini-stat">
+                <small>محیط اجرا</small
+                ><strong>LOCAL<span> / OS ENCRYPTED</span></strong
+                ><small>کلیدها هرگز وارد Git نمی‌شوند</small>
+              </div>
+            </div>
+            <div class="section-heading">
+              <div>
+                <div class="eyebrow">RECENT ACTIVITY</div>
+                <h2>رویدادهای اخیر</h2>
+              </div>
+            </div>
+            <div class="panel" id="activity-list">
+              <p class="empty">هنوز عملیاتی انجام نشده است.</p>
+            </div>
+          </section>
+
+          <section class="view" id="view-intelligence">
+            <div class="eyebrow">DAILY GAMING INTELLIGENCE / READ BEFORE WRITE</div>
+            <div class="page-intro">
+              <h1>رصد بازی‌ها و <em>شواهد محتوا</em></h1>
+              <p>خوراک‌های عمومی فقط سرنخ هستند؛ مقالهٔ اصلی و منبع مستقل را واقعاً بخوانید، تاریخ/نسخهٔ بازی را بررسی کنید و سپس نسخهٔ اصیل ترکی استانبولی بسازید. بدون دسترسی و راستی‌آزمایی، ادعای خبر قطعی یا نشر خودکار نمی‌شود.</p>
+            </div>
+            <div class="panel">
+              <div class="panel-heading"><span class="panel-icon teal">⌕</span><div><b>منابع عمومی بدون کلید</b><small>RSS · no credentials · no automatic publishing</small></div></div>
+              <p class="helper">Eurogamer، PC Gamer، VGC، Merlin’in Kazanı و وبلاگ رسمی PlayStation؛ دسترسی RSS می‌تواند در شبکهٔ مالک مسدود باشد. NewsAPI/Newscatcher و IGDB در این نسخه اتصال یا کلید خودکار ندارند. Reddit فقط در صورت اتصال حساب در Zernio از Explorer قابل جست‌وجوست.</p>
+              <button type="button" id="research-scan" class="btn primary">دریافت تیترهای عمومی ←</button>
+              <p class="setup-feedback" id="research-status">هنوز خوراکی خوانده نشده است.</p>
+              <div class="research-list" id="research-results"><p class="empty">تیتر، اثبات صحت خبر نیست.</p></div>
+            </div>
+            <div class="section-heading"><div><div class="eyebrow">SOURCE NOTES / LOCAL DPAPI</div><h2>پروندهٔ پژوهش و نسخه‌های بومی</h2></div></div>
+            <form class="panel" id="editorial-form">
+              <div class="panel-heading"><span class="panel-icon">▣</span><div><b>گزارش موضوع</b><small>local, encrypted, not automatically verified</small></div></div>
+              <input type="hidden" id="report-id" />
+              <div class="field-row"><label class="field"><span>موضوع / تیتر کاری</span><input id="report-title" maxlength="180" required /></label>
+                <label class="field narrow"><span>نام بازی</span><input id="report-game" maxlength="100" /></label></div>
+              <div class="field-row"><label class="field narrow"><span>نوع</span><select id="report-category"><option value="news">خبر</option><option value="update">آپدیت / پچ</option><option value="guide">راهنما</option><option value="community">گفت‌وگوی بازیکنان</option><option value="event">رویداد</option><option value="other">سایر</option></select></label>
+                <label class="field narrow"><span>اولویت دستی (۰ تا ۱۰۰)</span><input id="report-rank" type="number" min="0" max="100" value="0" /></label></div>
+              <div class="field-row"><label class="field"><span>لینک منبع اصلی (HTTPS)</span><input id="report-primary-url" dir="ltr" placeholder="https://publisher.example/..." /></label>
+                <label class="field"><span>چه چیزی را در اصل منبع خواندید؟</span><input id="report-primary-note" maxlength="900" /></label></div>
+              <div class="field-row"><label class="field"><span>منبع مستقل دوم (HTTPS)</span><input id="report-support-url" dir="ltr" /></label>
+                <label class="field"><span>تأیید/تعارضِ منبع دوم</span><input id="report-support-note" maxlength="900" /></label></div>
+              <div class="field-row"><label class="field"><span>واقعیت‌های قابل استناد و نسخهٔ بازی</span><textarea id="report-facts" class="short" maxlength="4000"></textarea></label>
+                <label class="field"><span>عدم قطعیت، شایعه یا نکتهٔ نیازمند بررسی</span><textarea id="report-uncertainty" class="short" maxlength="1500"></textarea></label></div>
+              <p class="helper">صرف ثبت دو URL یا نوشتن یادداشت، بررسی مستقل را اثبات نمی‌کند؛ وضعیت گزارش همیشه نیازمند بازبینی انسانی/ایجنت است. مقاله را رونویسی نکنید.</p>
+              <div class="field-row"><label class="field"><span>نسخهٔ ترکی Instagram</span><textarea id="report-instagram" class="short" lang="tr" maxlength="4000"></textarea></label>
+                <label class="field"><span>نسخهٔ ترکی Telegram (با منبع)</span><textarea id="report-telegram" class="short" lang="tr" maxlength="4000"></textarea></label></div>
+              <label class="field"><span>پیش‌نویس مقالهٔ Blog ترکی (انتشار فقط از پنل مجاز پورتال)</span><textarea id="report-blog" class="short" lang="tr" maxlength="4000"></textarea></label>
+              <div class="field-row"><label class="field narrow"><span>کلیدواژهٔ اختیاریِ کامنت</span><input id="report-keyword" maxlength="40" placeholder="مثلاً AYAR" /></label>
+                <label class="field"><span>اطلاعات اضافه‌ای که واقعاً آمادهٔ تحویل است</span><input id="report-promised" maxlength="1000" /></label></div>
+              <button type="submit" class="btn primary" id="report-save">ذخیرهٔ رمزگذاری‌شدهٔ گزارش ←</button>
+              <p class="setup-feedback" id="report-feedback">این فرم هیچ محتوایی منتشر یا DM ارسال نمی‌کند.</p>
+            </form>
+            <div class="section-heading"><div><div class="eyebrow">RECENT TOPICS / DEDUPE</div><h2>موضوع‌های ثبت‌شده</h2></div></div>
+            <div class="panel research-list" id="editorial-list"><p class="empty">هنوز گزارشی ثبت نشده است.</p></div>
+          </section>
+
+          <section class="view" id="view-zernio">
+            <div class="eyebrow">CORE PLATFORM / ZERNIO</div>
+            <div class="page-intro">
+              <h1>مرکز فرمان <em>Zernio</em></h1>
+              <p>
+                از پروفایل و حساب‌های متصل تا پست، زمان‌بندی، تبلیغات و گزارش.
+                مسیر API دلخواه را در Explorer اجرا کنید.
+              </p>
+            </div>
+            <div class="feature-banner">
+              <div class="feature-mark">Z</div>
+              <div>
+                <b>یک نقطهٔ مرکزی، چندین کانال</b>
+                <p>
+                  انتشار YouTube، Telegram، Instagram و دیگر شبکه‌ها فقط با API
+                  رسمی Zernio انجام می‌شود. حساب هر شبکه باید قبلاً در خود Zernio متصل شده باشد؛
+                  کلید Zernio را فقط روی همین دستگاه در تنظیمات وارد کنید.
+                </p>
+              </div>
+              <button class="btn primary" data-go="settings">
+                تنظیم کلید ↗
+              </button>
+            </div>
+            <div class="panel" id="zernio-access-panel">
+              <div class="panel-heading"><span class="panel-icon teal">✓</span><div><b>دسترسی‌های واقعیِ حساب</b><small>GET /v1/accounts?status=connected + /v1/accounts/health</small></div></div>
+              <button class="btn outline" id="refresh-access">کشف حساب‌ها و سلامت دسترسی ←</button>
+              <p class="helper" id="access-status">حساب/مجوزی هنوز تأیید نشده است؛ قبل از ساخت پست یا تعامل، بررسی زنده لازم است.</p>
+              <div id="access-accounts" class="research-list"></div>
+              <p class="helper">وضعیت «قابل انتشار» فقط سلامت اتصال است؛ مجوز خواندن کامنت/DM، ارسال پاسخ خصوصی و دسترسی آمار را جدا آزمایش کنید. شناسهٔ حساب را حدس نزنید.</p>
+            </div>
+            <div class="section-heading">
+              <div>
+                <div class="eyebrow">QUICK START</div>
+                <h2>دسترسی‌های پرکاربرد</h2>
+              </div>
+            </div>
+            <div class="quick-grid">
+              <button class="quick-card" data-preset="zernio-profiles">
+                <span>01 / ORGANIZE</span><strong>پروفایل‌ها</strong>
+                <p>فهرست فضاهای کاری و برندها</p>
+                <i>GET /v1/profiles ←</i></button
+              ><button class="quick-card" data-preset="zernio-accounts">
+                <span>02 / CONNECT</span><strong>حساب‌های شبکه‌ها</strong>
+                <p>کانال‌های متصل به Zernio</p>
+                <i>GET /v1/accounts ←</i></button
+              ><button class="quick-card" data-preset="zernio-posts">
+                <span>03 / PUBLISH</span><strong>پست‌ها</strong>
+                <p>بررسی، ساخت و مدیریت محتوا</p>
+                <i>GET /v1/posts ←</i></button
+              ><button class="quick-card" data-preset="zernio-analytics">
+                <span>04 / MEASURE</span><strong>آنالیتیکس</strong>
+                <p>گزارش عملکرد کمپین‌ها</p>
+                <i>GET /v1/analytics ←</i>
+              </button>
+              <button class="quick-card" data-preset="zernio-comments">
+                <span>05 / ENGAGE</span><strong>کامنت‌ها</strong><p>بازبینی پست‌های دارای کامنت؛ ممکن است تا ۱۰ دقیقه کش شود</p><i>GET /v1/inbox/comments ←</i>
+              </button>
+              <button class="quick-card" data-preset="zernio-automations">
+                <span>06 / DELIVER</span><strong>اتوماسیون کامنت</strong><p>فهرست و آمار تحویل؛ فقط حساب مجاز</p><i>GET /v1/comment-automations ←</i>
+              </button>
+              <button class="quick-card" data-preset="zernio-reddit">
+                <span>07 / RESEARCH</span><strong>جست‌وجوی Reddit</strong><p>نیازمند حساب Reddit متصل به Zernio؛ q و accountId را اضافه کنید</p><i>GET /v1/reddit/search ←</i>
+              </button>
+            </div>
+            <div class="section-heading">
+              <div>
+                <div class="eyebrow">POST COMPOSER / OWNER REVIEW</div>
+                <h2>ساخت محتوا و انتشار</h2>
+              </div>
+            </div>
+            <div class="panel composer">
+              <div class="panel-heading">
+                <span class="panel-icon teal">✎</span>
+                <div>
+                  <b>پست Zernio</b
+                  ><small
+                    >Draft first, publish only with explicit approval</small
+                  >
+                </div>
+              </div>
+              <label class="field"
+                ><span>متن یا کپشن مصوب</span
+                ><textarea
+                  id="post-content"
+                  class="short"
+                  placeholder="متن تأییدشدهٔ محتوا؛ از ادعاهای تأییدنشده پرهیز کنید."
+                ></textarea>
+              </label>
+              <div class="field-row">
+                <label class="field"
+                  ><span>پلتفرم مقصد <small>(پیش‌نویس/انتشار)</small></span
+                  ><select id="post-platform">
+                    <option value="instagram">Instagram</option>
+                    <option value="youtube">YouTube / Shorts</option>
+                    <option value="telegram">Telegram</option>
+                    <option value="facebook">Facebook</option>
+                    <option value="tiktok">TikTok</option>
+                    <option value="linkedin">LinkedIn</option>
+                    <option value="twitter">X / Twitter</option>
+                    <option value="threads">Threads</option>
+                    <option value="bluesky">Bluesky</option>
+                    <option value="pinterest">Pinterest</option>
+                    <option value="reddit">Reddit</option>
+                    <option value="googlebusiness">Google Business</option>
+                    <option value="snapchat">Snapchat (beta)</option>
+                    <option value="discord">Discord</option>
+                    <option value="slack">Slack</option>
+                  </select></label
+                ><label class="field"
+                  ><span>حساب متصل (فقط از کشف زنده)</span
+                  ><select id="post-account" dir="ltr"><option value="">ابتدا کشف حساب‌ها را اجرا کنید</option></select></label>
+              </div>
+              <div class="field-row">
+                <label class="field"
+                  ><span>URL رسانهٔ Zernio <small>(اختیاری)</small></span
+                  ><input
+                    id="post-media-url"
+                    dir="ltr"
+                    placeholder="https://media.zernio.com/..." /></label
+                ><label class="field narrow"
+                  ><span>نوع</span
+                  ><select id="post-media-type">
+                    <option value="image">تصویر</option>
+                    <option value="video">ویدئو</option>
+                    <option value="document">سند</option>
+                  </select></label
+                >
+              </div>
+              <div class="field-row">
+                <label class="field"><span>عنوان YouTube <small>(برای ویدئو)</small></span>
+                  <input id="post-youtube-title" maxlength="100" placeholder="عنوان ویدئو یا Shorts" /></label>
+                <label class="field narrow"><span>نمایش YouTube</span>
+                  <select id="post-youtube-visibility"><option value="private">خصوصی (پیش‌فرض)</option>
+                    <option value="unlisted">فهرست‌نشده</option><option value="public">عمومی</option></select></label>
+              </div>
+              <label class="field"><span>تنظیمات مخصوص مقصد <small>(JSON اختیاری؛ platformSpecificData)</small></span>
+                <textarea id="post-platform-options" class="short" dir="ltr" spellcheck="false"
+                  placeholder='{"parseMode":"HTML"}'></textarea></label>
+              <div class="field-row"><label class="field"><span>موضوع ثبت‌شدهٔ روزانه (اختیاری)</span>
+                <select id="post-topic"><option value="">بدون پیوند به گزارش</option></select></label>
+                <label class="field"><span>زمان پیشنهادی پس از بررسی آمار مخاطب (به وقت Windows)</span>
+                  <input id="post-scheduled-for" type="datetime-local" /></label></div>
+              <button type="button" class="btn outline small" id="use-topic-copy">بارگذاری متنِ ترکیِ همین پلتفرم از گزارش</button>
+              <p class="helper">
+                Account ID فقط پس از کشف زنده و بررسی سلامت قابل انتخاب است. YouTube به ویدئو نیاز دارد؛
+                Instagram به رسانه و Telegram به کانال/گروه متصل به Zernio. ویژگی‌های پیشرفته و زمان‌بندی
+                از API Explorer با ساختار مستندات رسمی Zernio در دسترس‌اند.
+                WhatsApp در Zernio از API پیام/برادکست استفاده می‌کند، نه این فرم پست؛
+                پیش از استفاده در Explorer، شرایط قالب، رضایت مخاطب و هزینه را در مستندات آن بررسی کنید.
+                «پیش‌نویس» بدون انتشار ذخیره می‌شود. «انتشار» پست را روی حساب
+                واقعی منتشر می‌کند و علاوه بر کلیک شما، پنجرهٔ تأیید مستقل دارد.
+                برای پروندهٔ دارای کلیدواژهٔ کامنت: نخست Draft با متن/ارزش آماده بسازید،
+                اتوماسیون را با postId همان Draft و آزمون مجازِ تحویل آماده کنید، سپس همان Draft را
+                در Explorer با PUT /v1/posts/{postId} و isDraft:false ارتقا دهید؛ پست CTA تازه نسازید.
+                اگر نتیجه نامطمئن بود، قبل از تلاش دوباره وضعیت Zernio را بررسی
+                کنید.
+              </p>
+              <div class="button-pair">
+                <button class="btn outline" id="post-draft">
+                  ذخیرهٔ پیش‌نویس</button
+                ><button class="btn outline" id="post-schedule">بررسی و زمان‌بندی ←</button>
+                <button class="btn primary" id="post-publish">بررسی و انتشار ←</button>
+              </div>
+              <pre
+                class="code-output compact composer-result"
+                id="post-result"
+                dir="ltr"
+              >
+هنوز پستی ساخته نشده است.</pre
+              >
+            </div>
+            <div class="section-heading"><div><div class="eyebrow">COMMENT → DELIVERY / IG & FACEBOOK</div><h2>تحویلِ وعدهٔ کامنت</h2></div></div>
+            <div class="panel">
+              <div class="panel-heading"><span class="panel-icon teal">↳</span><div><b>اتوماسیون هدفمندِ Zernio</b><small>POST /v1/comment-automations · activation sends real DMs</small></div></div>
+              <p class="helper">فقط Instagram/Facebook متصل؛ بات Zernio می‌تواند پس از ساختِ اتوماسیون فوراً DM بفرستد. پیش از آن، پست، کلیدواژهٔ مرتبط، متن سودمندِ آماده، مجوز کامنت و پیام، و شناسهٔ درست همان پست را بررسی کنید. پاسخ به هر کاربر/کمپین را از لاگ Zernio بسنجید، نه از تعداد نمایش. ارسال واقعی مجوز مستقل شما را می‌خواهد.</p>
+              <div class="field-row"><label class="field"><span>حساب Instagram/Facebook متصل</span><select id="automation-account"><option value="">کشف حساب‌ها لازم است</option></select></label>
+                <label class="field narrow"><span>نوع شناسهٔ پست</span><select id="automation-target-kind"><option value="postId">Zernio draft ID (۲۴ رقم هگز؛ فعال پس از انتشار)</option><option value="platformPostId">شناسهٔ پست منتشرشده در پلتفرم</option></select></label></div>
+              <div class="field-row"><label class="field"><span>شناسهٔ واقعی همان پست</span><input id="automation-target-id" dir="ltr" autocomplete="off" /></label>
+                <label class="field"><span>نام کمپین</span><input id="automation-name" maxlength="120" /></label></div>
+              <div class="field-row"><label class="field narrow"><span>کلیدواژهٔ دقیق ترکی</span><input id="automation-keyword" maxlength="40" placeholder="AYAR" /></label>
+                <label class="field"><span>پیام حاوی اطلاعاتِ وعده‌داده‌شده</span><textarea id="automation-dm" class="short" maxlength="950" lang="tr"></textarea></label></div>
+              <p class="helper">ساخت تنها وقتی مجاز است که فهرست پست‌های دارای کامنت و inbox همان حساب پاسخ مجاز بدهند؛ این آزمون **خواندن متن کامنت‌ها یا ارسال موفق DM** را اثبات نمی‌کند. «بررسی دسترسی تعامل» فقط وضعیت خواندن را می‌آورد. هیچ اتوماسیون سراسری یا کلیدواژهٔ خالی از این فرم ساخته نمی‌شود. اگر اتصال یا تحویل واقعی اثبات نشده است، در پست وعدهٔ DM ندهید.</p>
+              <div class="button-pair"><button class="btn outline" id="engagement-check">بررسی دسترسی تعامل ←</button>
+                <button class="btn primary" id="automation-create">تأیید و فعال‌سازی هدفمند ←</button></div>
+              <pre class="code-output compact" id="automation-result" dir="ltr">هنوز دسترسی تعامل بررسی نشده است.</pre>
+            </div>
+            <div class="flow-strip">
+              <span>برنامه‌ریزی</span><b>←</b><span>تولید رسانه</span><b>←</b
+              ><span>تأیید شما</span><b>←</b><span>انتشار</span><b>←</b
+              ><span>سنجش</span>
+            </div>
+          </section>
+
+          <section class="view" id="view-explorer">
+            <div class="eyebrow">ZERNIO API / OPTIONAL LOCAL FLUX</div>
+            <div class="page-intro">
+              <h1>API <em>Explorer</em></h1>
+              <p>
+                API رسمی Zernio برای همهٔ شبکه‌ها و عملیات JSON؛ FLUX محلی فقط به‌عنوان
+                جایگزین اختیاری پورتال. هر درخواست نوشتنی پیش از اجرا تأیید می‌خواهد.
+              </p>
+            </div>
+            <div class="editor-layout">
+              <div class="panel request-panel">
+                <div class="panel-heading">
+                  <span class="panel-icon">⌘</span>
+                  <div><b>درخواست جدید</b><small>API Request</small></div>
+                  <span class="panel-chip">HTTPS ONLY</span>
+                </div>
+                <div class="field-row">
+                  <label class="field"
+                    ><span>ارائه‌دهنده</span
+                    ><select id="api-provider">
+                      <option value="zernio">Zernio (همهٔ شبکه‌ها)</option>
+                      <option value="cloudflare">FLUX محلی (اختیاری)</option>
+                    </select></label
+                  ><label class="field narrow"
+                    ><span>متد</span
+                    ><select id="api-method">
+                      <option>GET</option>
+                      <option>POST</option>
+                      <option>PUT</option>
+                      <option>PATCH</option>
+                      <option>DELETE</option>
+                      <option>HEAD</option>
+                    </select></label
+                  >
+                </div>
+                <label class="field"
+                  ><span>مسیر نسبی API</span
+                  ><input
+                    id="api-path"
+                    dir="ltr"
+                    spellcheck="false"
+                    autocomplete="off"
+                    placeholder="/v1/accounts"
+                /></label>
+                <label class="field"
+                  ><span
+                    >بدنهٔ JSON
+                    <small>(فقط برای POST / PUT / PATCH / DELETE)</small></span
+                  ><textarea
+                    id="api-body"
+                    dir="ltr"
+                    spellcheck="false"
+                    placeholder='{"message":"..."}'
+                  ></textarea>
+                </label>
+                <label class="field"><span>Idempotency-Key برای Zernio POST /v1/posts <small>(UUID؛ در تلاشِ دوباره همان کلید و همان پست)</small></span>
+                  <input id="api-idempotency" dir="ltr" autocomplete="off" spellcheck="false" placeholder="برای اولین درخواست به‌طور تصادفی ساخته می‌شود" /></label>
+                <div class="helper">
+                  کلید Zernio فقط از Vault محلی Windows به درخواست افزوده می‌شود. FLUX از
+                  پورتال به‌طور پیش‌فرض در دسترس است؛ این مسیر Cloudflare تنها برای حالت
+                  اختیاریِ توکن محلی و مدل FLUX.1-schnell باز است.
+                </div>
+                <button class="btn primary full" id="run-api">
+                  بررسی و اجرای درخواست <span>←</span>
+                </button>
+                <div class="presets">
+                  <small>نمونه‌های آماده</small>
+                  <div class="preset-buttons">
+                    <button data-preset="zernio-profiles">Zernio · پروفایل‌ها</button
+                    ><button data-preset="zernio-accounts">حساب‌های همهٔ شبکه‌ها</button
+                    ><button data-preset="zernio-posts">Zernio · پست‌ها</button
+                    ><button data-preset="flux-image">FLUX محلی · اختیاری</button>
+                  </div>
+                </div>
+              </div>
+              <div class="panel result-panel">
+                <div class="panel-heading">
+                  <span class="panel-icon teal">↵</span>
+                  <div><b>پاسخ ابزار</b><small>Provider Response</small></div>
+                  <span class="panel-chip" id="result-status"
+                    >بدون درخواست</span
+                  >
+                </div>
+                <pre id="api-result" class="code-output" dir="ltr">
+{
+  "ready": true,
+  "message": "برای شروع یک مسیر انتخاب کنید."
+}</pre
+                >
+                <div class="result-bottom">
+                  فقط روی رایانهٔ شما اجرا می‌شود <span>●</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="view-gateway">
+            <div class="eyebrow">OWNER-REGISTERED CONNECTORS / PUBLIC WEB</div>
+            <div class="page-intro">
+              <h1>گیت <em>دسترسی آنلاین</em></h1>
+              <p>بعد از نصب این نسخه، سرویس HTTPS API یا MCP جدید را همین‌جا ثبت کنید؛ فقط اگر لازم بود کلید را در رایانهٔ خود وارد کنید. ایجنتِ جفت‌شده تنها به اتصال‌هایی که صریحاً برایش مجاز کرده‌اید دسترسی دارد.</p>
+            </div>
+            <div class="warning-line"><b>مرز امن گیت</b><span>فقط HTTPS عمومی روی پورت ۴۴۳؛ بدون IP داخلی، کوکی، اجرای JavaScript/stdio، دنبال‌کردن تغییرمسیر یا انتقال کلید به Git/ایجنت. ثبت سرویس و هر نوشتن/API هزینه‌دار یا فراخوانی ابزار MCP تأیید مستقل می‌خواهد. این گیت دورزنندهٔ لاگین، ضدبات، پرداخت یا مجوز پلتفرم نیست؛ انتشار شبکه‌های اجتماعی همچنان فقط از مسیر Zernio انجام می‌شود.</span></div>
+            <div class="editor-layout">
+              <form class="panel" id="gateway-register">
+                <div class="panel-heading"><span class="panel-icon teal">＋</span><div><b>ثبت یا ویرایش اتصال</b><small>encrypted on owner device · no reinstall</small></div></div>
+                <div class="field-row"><label class="field"><span>شناسهٔ ثابتِ اتصال (حروف کوچک انگلیسی، عدد و -)</span>
+                    <input id="gateway-id" maxlength="40" dir="ltr" required placeholder="gaming-api" /></label>
+                  <label class="field"><span>نام نمایشی</span><input id="gateway-name" maxlength="70" required placeholder="Gaming API" /></label></div>
+                <div class="field-row"><label class="field narrow"><span>نوع</span><select id="gateway-kind"><option value="api">HTTPS JSON API</option><option value="mcp">Remote MCP HTTP</option></select></label>
+                  <label class="field"><span>نشانی پایهٔ API یا endpoint مستقیم MCP</span><input id="gateway-url" type="url" dir="ltr" required spellcheck="false" placeholder="https://api.example.com/v1" /></label></div>
+                <div class="field-row"><label class="field narrow"><span>احراز هویت</span><select id="gateway-auth"><option value="none">عمومی / بدون کلید</option><option value="bearer">Bearer token</option><option value="header">API key در header</option><option value="oauth">OAuth / PKCE (فقط MCP)</option></select></label>
+                  <label class="field"><span>نام header (فقط حالت API key)</span><input id="gateway-header" dir="ltr" spellcheck="false" placeholder="X-API-Key" /></label></div>
+                <label class="field"><span>توکن یا کلید روی همین Windows (با ویرایش خالی بماند = نگه‌داری قبلی)</span>
+                  <input id="gateway-credential" type="password" autocomplete="off" dir="ltr" spellcheck="false" placeholder="فقط در Vault رمزگذاری‌شدهٔ محلی" /></label>
+                <label class="field"><span>اجازهٔ ایجنتِ جفت‌شده به این اتصال</span><select id="gateway-agent-access">
+                    <option value="none">غیرفعال (پیش‌فرض)</option><option value="read">فقط درخواست خواندنی / فهرست ابزارها</option>
+                    <option value="approved-writes">خواندن + نوشتن فقط با تأیید جداگانهٔ مالک</option></select></label>
+                <p class="helper">OAuth فقط برای MCP از طریق مرورگر مالک آغاز می‌شود؛ هر سرویس ممکن است این روش را پشتیبانی نکند. کلید قبلی هنگام تغییر URL یا روش احراز هویت عمداً حذف می‌شود. سرویس‌های تازه به‌صورت پیش‌فرض برای ایجنت بسته‌اند.</p>
+                <div class="button-pair"><button class="btn primary" id="gateway-save" type="submit">ثبت با تأیید Windows</button>
+                  <button class="btn outline" id="gateway-new" type="button">اتصال تازه</button>
+                  <button class="btn outline" id="gateway-remove" type="button">حذف همین اتصال</button></div>
+                <p class="setup-feedback" id="gateway-feedback">هنوز اتصالی ثبت نشده است.</p>
+              </form>
+              <div class="panel">
+                <div class="panel-heading"><span class="panel-icon teal">☷</span><div><b>اتصال‌های ثبت‌شده</b><small>only public metadata; secrets never shown</small></div></div>
+                <div class="research-list" id="gateway-list"><p class="empty">هنوز اتصالی ثبت نشده است.</p></div>
+                <p class="helper">انتخاب یک اتصال، مشخصات عمومی آن را در فرم باز می‌کند؛ کلید هرگز دوباره نمایش داده نمی‌شود. دکمهٔ ورود OAuth فقط برای اتصال MCP/OAuth فعال است.</p>
+                <button class="btn outline" type="button" id="gateway-oauth">ورود OAuth همین MCP در مرورگر مالک ←</button>
+              </div>
+            </div>
+            <div class="section-heading"><div><div class="eyebrow">EXTRACT, NEVER EXECUTE</div><h2>خواندن متن یک نشانی عمومی</h2></div></div>
+            <div class="panel"><label class="field"><span>لینک عمومی HTTPS به مقاله یا صفحه</span><input id="web-url" type="url" dir="ltr" spellcheck="false" placeholder="https://example.com/article" /></label>
+              <button class="btn primary" type="button" id="web-read">استخراج متن ←</button>
+              <p class="helper">فقط محتوای HTML/متن/JSON/XML تا ۱ مگابایت خوانده می‌شود؛ نه PDF، رسانه، صفحات نیازمند ورود یا محتوای تولیدشده فقط با JavaScript. پاسخ سرنخِ تأییدنشده است. ایجنت نیز می‌تواند همین نشانی را از پل رمزگذاری‌شده بفرستد.</p>
+              <pre class="code-output gateway-output" id="web-result" dir="ltr">هنوز صفحه‌ای خوانده نشده است.</pre></div>
+            <div class="section-heading"><div><div class="eyebrow">OWNER-SCOPED TOOLS</div><h2>API و MCP پویا</h2></div></div>
+            <div class="editor-layout">
+              <div class="panel"><div class="panel-heading"><span class="panel-icon">↗</span><div><b>درخواست API ثبت‌شده</b><small>relative path only · JSON body</small></div></div>
+                <label class="field"><span>اتصال API</span><select id="gateway-api-select"><option value="">ابتدا اتصال ثبت کنید</option></select></label>
+                <div class="field-row"><label class="field narrow"><span>متد</span><select id="gateway-api-method"><option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option><option>HEAD</option></select></label>
+                  <label class="field"><span>مسیر نسبی نسبت به نشانی پایه</span><input id="gateway-api-path" dir="ltr" spellcheck="false" placeholder="/games?limit=10" /></label></div>
+                <label class="field"><span>بدنهٔ JSON اختیاری</span><textarea id="gateway-api-body" class="short" dir="ltr" spellcheck="false" placeholder='{"query":"games"}'></textarea></label>
+                <button class="btn primary" type="button" id="gateway-api-run">اجرای درخواست با کنترل دسترسی ←</button>
+                <pre class="code-output gateway-output" id="gateway-api-result" dir="ltr">هنوز درخواستی اجرا نشده است.</pre>
+              </div>
+              <div class="panel"><div class="panel-heading"><span class="panel-icon purple">✧</span><div><b>Remote MCP ثبت‌شده</b><small>tools · resources · prompts</small></div></div>
+                <label class="field"><span>اتصال MCP</span><select id="gateway-mcp-select"><option value="">ابتدا اتصال ثبت کنید</option></select></label>
+                <div class="field-row"><label class="field narrow"><span>عملیات</span><select id="gateway-mcp-action"><option value="tools">tools/list</option><option value="call">tools/call (تأیید مستقل)</option><option value="resources">resources/list</option><option value="read-resource">resources/read</option><option value="prompts">prompts/list</option><option value="get-prompt">prompts/get</option></select></label>
+                  <label class="field"><span>نام ابزار/پرامپت یا URI منبع (در صورت نیاز)</span><input id="gateway-mcp-name" dir="ltr" spellcheck="false" placeholder="search / resource://..." /></label></div>
+                <label class="field"><span>آرگومان JSON برای call یا prompt (اختیاری)</span><textarea id="gateway-mcp-args" class="short" dir="ltr" spellcheck="false" placeholder="{}"></textarea></label>
+                <button class="btn primary" type="button" id="gateway-mcp-run">اجرا با کنترل دسترسی ←</button>
+                <p class="helper">نام ابزارها از سرور زنده دریافت می‌شوند؛ ابزارها را «فقط‌خواندنی» فرض نکنید. call همیشه پنجرهٔ تأیید مستقل می‌خواهد.</p>
+                <pre class="code-output gateway-output" id="gateway-mcp-result" dir="ltr">هنوز MCP بررسی نشده است.</pre>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="view-media">
+            <div class="eyebrow">ASSET LIBRARY / LOCAL FILES</div>
+            <div class="page-intro">
+              <h1>کتابخانهٔ <em>رسانه</em></h1>
+              <p>
+                فایل‌ها روی دستگاه شما می‌مانند. با تأیید شما به Zernio بارگذاری
+                و سپس از همان مسیر برای YouTube، Telegram، Instagram یا دیگر حساب‌ها استفاده می‌شوند.
+              </p>
+            </div>
+            <div class="media-layout">
+              <div class="panel">
+                <div class="panel-heading">
+                  <span class="panel-icon">▧</span>
+                  <div><b>رسانه‌های شما</b><small>Local vault</small></div>
+                  <button class="btn small primary" id="import-media">
+                    + افزودن فایل
+                  </button>
+                </div>
+                <div id="asset-list" class="asset-list">
+                  <p class="empty">هنوز فایلی اضافه نشده است.</p>
+                </div>
+              </div>
+              <div class="panel media-actions">
+                <div class="panel-heading">
+                  <span class="panel-icon teal">↗</span>
+                  <div>
+                    <b>انتقال با تأیید</b><small>Upload / publish</small>
+                  </div>
+                </div>
+                <label class="field"
+                  ><span>رسانهٔ انتخابی</span
+                  ><select id="selected-asset">
+                    <option value="">ابتدا فایل اضافه کنید</option>
+                  </select></label
+                >
+                <div class="action-row">
+                  <button class="btn outline full" id="upload-zernio">
+                    بارگذاری در Zernio</button
+                  ><small
+                    >یک URL رسانه برمی‌گرداند؛ انتشار پست مرحلهٔ جداگانه
+                    است.</small
+                  >
+                </div>
+                <div class="note-small">
+                  آپلود مستقیم Google یا Telegram انجام نمی‌شود. URL دریافتی از Zernio را در
+                  «ساخت محتوا و انتشار» وارد کنید، نوع رسانه و Account ID حساب متصل را انتخاب کنید.
+                  انتشار و بارگذاری دو عمل جداگانه با تأیید مستقل‌اند.
+                </div>
+              </div>
+            </div>
+            <div class="panel media-result">
+              <div class="panel-heading">
+                <span class="panel-icon">↵</span>
+                <div><b>نتیجهٔ آخرین انتقال</b></div>
+              </div>
+              <pre class="code-output compact" id="media-result" dir="ltr">
+هنوز انتقالی انجام نشده است.</pre
+              >
+            </div>
+          </section>
+
+          <section class="view" id="view-kling">
+            <div class="eyebrow">OFFICIAL REMOTE MCP / OAUTH</div>
+            <div class="page-intro">
+              <h1>استودیوی <em>Kling AI</em></h1>
+              <p>اتصال مستقیم به سرور رسمی MCP از Windows؛ بدون Electron، نصب CLI، کلید دستی یا کوکی.</p>
+            </div>
+            <div class="warning-line">
+              <b>اتصال صاحب حساب</b><span>endpoint ثابت: <code dir="ltr">https://kling.ai/mcp</code>. فقط خودتان در مرورگر بازشده اجازهٔ OAuth را تأیید کنید. نخستین آزمون <code>who_am_i</code> است؛ تا پاسخ واقعی نیاید «متصل» نمایش داده نمی‌شود.</span>
+            </div>
+            <div class="kling-layout">
+              <div class="panel">
+                <div class="panel-heading"><span class="panel-icon purple">✦</span><div><b>احراز هویت رسمی</b><small>OAuth on this computer only</small></div></div>
+                <div class="setup-steps">
+                  <div class="setup-step"><span class="step-number">01</span><div><b>اتصال با مرورگر</b><p>برنامه با پروتکل MCP، OAuth/PKCE و callback محلی درخواست اتصال می‌کند. دادهٔ حساب فقط بعد از پاسخ Kling دریافت می‌شود.</p>
+                    <button class="btn small primary" id="kling-login">اتصال Kling MCP</button></div></div>
+                  <div class="setup-step"><span class="step-number">02</span><div><b>راستی‌آزمایی</b><p>هویت حساب و فهرست ابزارهای واقعی را از خود سرویس بخوانید؛ ساخت رسانه بدون تأیید جدا انجام نمی‌شود.</p>
+                    <div class="button-pair"><button class="btn small outline" id="kling-identity">who_am_i</button><button class="btn small outline" id="kling-tools">ابزارهای حساب</button></div></div></div>
+                  <div class="setup-step"><span class="step-number">03</span><div><b>قطع اتصال</b><p>توکن محلی OAuth حذف می‌شود. ابطال سشن سرور را از تنظیمات حساب Kling انجام دهید.</p>
+                    <button class="btn small subtle-btn" id="kling-logout">حذف توکن محلی</button></div></div>
+                </div>
+                <p class="setup-feedback" id="kling-setup-status">وضعیت: OAuth و who_am_i هنوز تأیید نشده‌اند.</p>
+              </div>
+              <div class="panel">
+                <div class="panel-heading"><span class="panel-icon teal">⌘</span><div><b>اجرای ابزار MCP</b><small>tools/call · JSON arguments</small></div></div>
+                <label class="field"><span>ابزار</span><select id="kling-command">
+                    <option value="who_am_i">who_am_i · هویت / مدل‌های مجاز</option>
+                    <option value="query_membership_and_credits">query_membership_and_credits</option>
+                    <option value="text_to_image">text_to_image · ساخت تصویر</option>
+                    <option value="image_to_image">image_to_image · تصویر مرجع</option>
+                    <option value="text_to_video">text_to_video · ساخت ویدئو</option>
+                    <option value="image_to_video">image_to_video · جان‌بخشی</option>
+                    <option value="motion_control">motion_control · حرکت</option>
+                    <option value="query_tasks">query_tasks · وضعیت تولید</option>
+                    <option value="file_upload">file_upload · دریافت مجوز آپلود</option>
+                    <option value="element_create">element_create</option>
+                    <option value="element_list">element_list</option>
+                    <option value="element_get">element_get</option>
+                    <option value="element_update">element_update</option>
+                    <option value="element_delete">element_delete</option>
+                    <option value="motion_library_list">motion_library_list</option>
+                  </select></label>
+                <label class="field"><span>پارامترها <small>شیء JSON؛ کلیدها را از طرح ابزار واقعی بگیرید</small></span>
+                  <textarea id="kling-args" class="short" dir="ltr" spellcheck="false" placeholder='{"prompt":"...","model":"..."}'>{}</textarea></label>
+                <div class="helper">پیش از تولید <b>who_am_i</b> و فهرست ابزارها را ببینید؛ ابزارهای تولید، حذف یا بارگذاری می‌توانند اعتبار مصرف کنند و روی Windows تأیید محلی می‌خواهند. <b>file_upload</b> فقط ticket می‌دهد؛ انتقال بایت مستقیم در این نسخه هنوز تأیید نشده است.</div>
+                <button class="btn primary full" id="run-kling">اجرای ابزار <span>←</span></button>
+              </div>
+            </div>
+            <div class="panel media-result"><div class="panel-heading"><span class="panel-icon">↵</span><div><b>خروجی MCP</b></div></div>
+              <pre class="code-output compact" id="kling-result" dir="ltr">هنوز پاسخ احراز هویت‌شده دریافت نشده است.</pre></div>
+          </section>
+
+          <section class="view" id="view-relay">
+            <div class="eyebrow">ENCRYPTED TRANSPORT / NO ACTIONS</div>
+            <div class="page-intro">
+              <h1>GitHub <em>↔ Desktop</em></h1>
+              <p>
+                ارتباط مستقیم با ایجنت از طریق فایل‌های رمزگذاری‌شده در شاخهٔ
+                همین نشست؛ بدون GitHub Actions، بدون برنامهٔ پل، بدون ارسال راز
+                در مخزن.
+              </p>
+            </div>
+            <div class="relay-grid">
+              <div class="panel relay-main">
+                <div class="panel-heading">
+                  <span class="panel-icon teal">⇄</span>
+                  <div>
+                    <b>وضعیت ارتباط</b><small>Private repository relay</small>
+                  </div>
+                  <span id="relay-badge" class="status-badge">قطع</span>
+                </div>
+                <div class="relay-visual">
+                  <span>AGENT</span><i>○ ─ ─ ─ ◇ ─ ─ ─ ○</i
+                  ><span>YOUR COMPUTER</span>
+                </div>
+                <p class="muted">
+                  قبل از اتصال، توکن محدود GitHub را در تنظیمات ثبت کنید. برنامه
+                  فقط به مخزن خصوصی و شاخهٔ ازپیش‌تعیین‌شده وصل می‌شود.
+                </p>
+                <div class="button-pair">
+                  <button class="btn primary" id="relay-connect">
+                    اتصال به GitHub <span>←</span></button
+                  ><button class="btn outline" id="relay-disconnect">
+                    قطع اتصال
+                  </button>
+                </div>
+                <p class="setup-feedback" id="relay-feedback">
+                  هنوز متصل نیست.
+                </p>
+              </div>
+              <div class="panel">
+                <div class="panel-heading">
+                  <span class="panel-icon purple">◇</span>
+                  <div>
+                    <b>هویت رمزنگاری</b><small>X25519 / AES-256-GCM</small>
+                  </div>
+                </div>
+                <p class="muted">
+                  اثر انگشت کلید عمومی را با ایجنت مقایسه کنید. اگر تغییر
+                  غیرمنتظره‌ای دیدید، اتصال را متوقف کنید.
+                </p>
+                <div class="fingerprint" id="relay-fingerprint" dir="ltr">
+                  پس از اتصال نمایش داده می‌شود
+                </div>
+                <div class="agent-pair">
+                  <b>کلید امضای ایجنت</b
+                  ><span id="agent-fingerprint" dir="ltr">هنوز جفت نشده</span
+                  ><button class="btn small outline" id="relay-pair">
+                    مقایسه و جفت‌سازی
+                  </button>
+                </div>
+                <div class="policy">
+                  <b>سیاست اجرای درخواست‌ها</b>
+                  <div>
+                    <span>درخواست‌های خواندنی</span
+                    ><span id="read-policy">خودکار</span>
+                  </div>
+                  <div>
+                    <span>نوشتن / انتشار / هزینه</span
+                    ><span id="write-policy">تأیید هر مورد</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="note-panel relay-note">
+              <span class="note-icon">!</span>
+              <div>
+                <b>ایمنی مسیر ارتباط</b>
+                <p>
+                  توکن GitHub فقط روی این رایانه ذخیره می‌شود. فایل‌های داخل
+                  مخزن شامل درخواست/پاسخ رمزگذاری‌شده و کلید عمومی هستند؛ برای
+                  اطلاعات فوق‌حساس از کوتاه‌نویسی و حداقل‌گرایی استفاده کنید.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="view-settings">
+            <div class="eyebrow">LOCAL SETTINGS / OS ENCRYPTED</div>
+            <div class="page-intro">
+              <h1>کلیدها و <em>تنظیمات</em></h1>
+              <p>
+                اطلاعات حساس با رمزگذاری سیستم‌عامل Windows فقط روی همین رایانه
+                نگهداری می‌شوند. فیلد خالی، مقدار قبلی را حفظ می‌کند.
+              </p>
+            </div>
+            <form id="settings-form">
+              <div class="settings-grid">
+                <div class="panel">
+                  <div class="panel-heading">
+                    <span class="panel-icon">Z</span>
+                    <div><b>کمپین و رسانه</b><small>Zernio / FLUX</small></div>
+                  </div>
+                  <label class="field"><span>Zernio · API key (محلی)</span>
+                    <input type="password" data-secret="zernioKey" autocomplete="off" placeholder="فقط روی همین دستگاه" /></label>
+                  <div class="note-small">
+                    YouTube، Telegram و Instagram در Zernio وصل می‌شوند؛ کلید یا OAuth جداگانه
+                    در این برنامه ندارند. Vault پورتال مقدار کلید را به برنامه نمی‌دهد؛ کلید Zernio
+                    فقط در صورت استفاده از API محلی باید توسط شما وارد شود.
+                  </div>
+                  <button type="button" class="btn outline full" data-url="https://bazino.pro/admin/content">
+                    FLUX پیش‌فرض: باز کردن استودیوی محتوای پورتال ↗</button>
+                  <div class="note-small">
+                    FLUX پورتال از Vault سرور استفاده می‌کند و ورود به پورتال لازم است، نه
+                    وارد کردن کلید در اینجا. گزینه‌های زیر فقط برای اجرای مستقیمِ اختیاری
+                    FLUX روی همین رایانه‌اند؛ به‌صورت خودکار از Vault کپی نمی‌شوند.
+                  </div>
+                  <label class="field"><span>Cloudflare · توکن FLUX محلی (اختیاری)</span>
+                    <input type="password" data-secret="cloudflareToken" autocomplete="off" /></label>
+                  <label class="field"><span>Cloudflare · Account ID محلی (اختیاری)</span>
+                    <input data-setting="cloudflareAccountId" dir="ltr" autocomplete="off" /></label>
+                </div>
+                <div class="panel">
+                  <div class="panel-heading">
+                    <span class="panel-icon purple">⇄</span>
+                    <div><b>ارتباط ایجنت</b><small>GitHub desktop relay</small></div>
+                  </div>
+                  <label class="field"><span>GitHub · Fine-grained token <small>(Contents: read/write)</small></span>
+                    <input type="password" data-secret="githubToken" autocomplete="off" /></label>
+                  <div class="note-small">
+                    کلید GitHub فقط در Windows خودتان ثبت می‌شود. کلیدهای شبکه‌های اجتماعی
+                    یا `BAZINO_SECRETS_KEY` را از پورتال استخراج یا در EXE قرار ندهید.
+                  </div>
+                </div>
+                <div class="panel">
+                  <div class="panel-heading">
+                    <span class="panel-icon purple">✦</span>
+                    <div>
+                      <b>سیاست‌های اجرا</b><small>Owner controls</small>
+                    </div>
+                  </div>
+                  <div class="toggle-row">
+                    <div>
+                      <b>خواندن خودکار درخواست‌های ایجنت</b
+                      ><small>GET / HEAD و دستورهای خواندنی</small>
+                    </div>
+                    <input
+                      type="checkbox"
+                      data-setting="autoApproveReads"
+                      checked
+                    />
+                  </div>
+                  <div class="toggle-row dangerous">
+                    <div>
+                      <b>نوشتن خودکار بدون تأیید محلی</b
+                      ><small
+                        >انتشار، حذف، تولید و هزینه‌کرد؛ خاموش بماند مگر با مجوز
+                        صریح و محدود.</small
+                      >
+                    </div>
+                    <input type="checkbox" data-setting="autoApproveWrites" />
+                  </div>
+                  <div class="note-small">Kling فقط با MCP رسمی و OAuth مرورگر وصل می‌شود؛ نصب CLI یا ورود توکن Kling در این فرم لازم نیست.</div>
+                </div>
+              </div>
+              <div class="settings-footer">
+                <span id="settings-feedback"
+                  >مقادیر جدید در Git ثبت نمی‌شوند.</span
+                ><button class="btn ghost" type="button" id="app-stop">قطع ارتباط و بستن برنامه</button
+                ><button class="btn primary" type="submit">
+                  ذخیرهٔ امن تنظیمات <span>←</span>
+                </button>
+              </div>
+            </form>
+          </section>
+        </main>
+        <footer class="footer">
+          <span>BAZINO STUDIO <b>© 2026</b></span
+          ><span>PRIVATE BY DESIGN <i>·</i> MADE FOR HUMAN APPROVAL</span>
+        </footer>
+      </div>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./client.js"></script>
+    <script src="./ui.js"></script>
+  </body>
+</html>
