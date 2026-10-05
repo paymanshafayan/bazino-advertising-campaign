@@ -1,4 +1,10 @@
 ﻿# render-slides.ps1 — ساخت اسلایدهای کاروسل و استوری بازینو
+# نسخهٔ ۴ (۲۰۲۶-۱۰-۰۴ — فاز ۳ پلن ۶، دستور مالک):
+#   * لایهٔ تیرهٔ تمام‌قاب (سایه‌انداز پیشین) کاملاً حذف شد؛ متن مستقیم روی تصویر با سایهٔ نرم چهارطرفه.
+#   * رفع اشکال تمام‌قاب‌نبودن تصویر: در پاورشل `$W` و `$w` یک متغیرند؛ عرض متن به `$cw` تغییر نام یافت
+#     تا بوم و تصویر پس‌زمینه تمام‌عرض (۱۰۸۰) بمانند. حاشیهٔ متن در استوری‌ها ۹۶ و در کاروسل ۷۰ است.
+#   * قرص‌های متن (امیزی/CTA/گزینه‌ها) تیرهٔ نیمه‌شفاف شدند تا روی تصویر روشن خوانا بمانند.
+#   * قرص «HABER» اسلاید خبری هم وسط‌چین شد و شمارهٔ خبر در آن برگشت (رفع تداخل نام $w/$W).
 # نسخهٔ ۳ (۲۰۲۶-۱۰-۰۳): بازنویسی بر اساس سند الگوی کاروسل (Doc/carousel-content-pattern-fa.md)
 #   * تصویر قهرمان (تولیدشده با مدل تصویرساز) پایهٔ هر اسلاید است، نه شکل‌های تخت.
 #   * کاور: لوگوی برند بالاوسط، تیتر دورنگ (زرد + سفید) و تصویر قهرمان در نیمهٔ پایین.
@@ -118,14 +124,6 @@ function New-Canvas([int]$W, [int]$H) {
     return @($bmp, $g)
 }
 
-function Draw-Scrim($g, [float]$X, [float]$Y, [float]$W, [float]$H, [int]$A1, [int]$A2, [float]$Angle = 90.0) {
-    $rect = New-Object System.Drawing.RectangleF($X, $Y, $W, $H)
-    $c1 = Col 6 10 24 $A1
-    $c2 = Col 6 10 24 $A2
-    $br = New-Object System.Drawing.Drawing2D.LinearGradientBrush($rect, $c1, $c2, $Angle)
-    $g.FillRectangle($br, $rect)
-    $br.Dispose()
-}
 
 function Draw-ImageCover($g, [string]$ImgPath, [float]$X, [float]$Y, [float]$W, [float]$H) {
     if ([string]::IsNullOrWhiteSpace($ImgPath) -or -not (Test-Path $ImgPath)) { Write-Host ("WARN image missing: {0}" -f $ImgPath); return }
@@ -251,6 +249,16 @@ function Draw-Text {
     return $size.Height
 }
 
+function Draw-TextS {
+    # متن با سایهٔ موضعی نازک روی تصویر (جای لایهٔ تیرهٔ تمام‌قاب)
+    param($g, [string]$Text, $Font, $BrushObj, [float]$X, [float]$Y, [float]$W, [string]$Align = 'Near')
+    if ([string]::IsNullOrEmpty($Text)) { return 0 }
+    $sh = New-Object System.Drawing.SolidBrush((Col 0 0 0 120))
+    foreach ($d in @(@(-2,-2), @(2,-2), @(-2,2), @(2,2))) { Draw-Text $g $Text $Font $sh ($X + $d[0]) ($Y + $d[1]) $W $Align | Out-Null }
+    $sh.Dispose()
+    return (Draw-Text $g $Text $Font $BrushObj $X $Y $W $Align)
+}
+
 function Measure-Block {
     param($g, [string]$Text, $Font, [float]$MaxW)
     if ([string]::IsNullOrEmpty($Text)) { return 0.0 }
@@ -304,11 +312,12 @@ function Draw-Counter($g, [int]$Index, [int]$Total, [int]$H) {
 }
 
 function Draw-Tab($g, [int]$W, [float]$Y, [string]$Text) {
+    # در پاورشل $w و $W یکی‌اند؛ نام محلی به $tw تغییر کرد تا عرض بوم پاک نشود (قرص وسط‌چین شود)
     $font = New-Font $famText 26
-    $w = (Measure-Typo $g $Text $font) + 84
-    $x = ($W - $w) / 2
-    Round-Rect $g $x $Y $w 58 29 (Brush $cYellow)
-    Draw-Text $g $Text $font (Brush $cDark) ($x + 42) ($Y + 13) ($w - 84) 'Near' | Out-Null
+    $tw = (Measure-Typo $g $Text $font) + 84
+    $x = ($W - $tw) / 2
+    Round-Rect $g $x $Y $tw 58 29 (Brush $cYellow)
+    Draw-Text $g $Text $font (Brush $cDark) $x ($Y + 13) $tw 'Center' | Out-Null
 }
 
 function Save-Slide {
@@ -335,7 +344,8 @@ foreach ($slide in $data.slides) {
     $canvas = New-Canvas $W $H
     $bmp = $canvas[0]; $g = $canvas[1]
     $x = 70
-    $w = $W - 140
+    $cw = $W - 140
+    if ($slide.kind -like 'story*') { $x = 96; $cw = $W - 192 }
     $bgPath = Resolve-Asset ([string]$slide.bg)
     $y = 0
 
@@ -344,7 +354,6 @@ foreach ($slide in $data.slides) {
             $bandH = [int]($H * 0.42)
             $bandY = $H - $bandH
             Draw-ImageCover $g $bgPath 0 $bandY $W $bandH
-            Draw-Scrim $g 0 $bandY $W 240 245 0
             $g.FillRectangle((Brush $cYellow), 0, ($bandY - 5), $W, 5)
             Draw-WordmarkTop $g $W
 
@@ -362,17 +371,17 @@ foreach ($slide in $data.slides) {
             $size = 92
             while ($size -ge 54) {
                 $f1 = New-Font $famHeavy $size
-                $block = Measure-Block $g $titleText $f1 $w
-                if ($title2Text -ne '') { $block += 8 + (Measure-Block $g $title2Text $f1 $w) }
-                if ($leadText -ne '') { $block += 26 + (Measure-Block $g $leadText (New-Font $famText 36) $w) }
+                $block = Measure-Block $g $titleText $f1 $cw
+                if ($title2Text -ne '') { $block += 8 + (Measure-Block $g $title2Text $f1 $cw) }
+                if ($leadText -ne '') { $block += 26 + (Measure-Block $g $leadText (New-Font $famText 36) $cw) }
                 if ($slide.cta) { $block += 30 + 92 }
                 if (($zoneTop + $block) -le $zoneBottom) { break }
                 $size -= 6
             }
             $y = $zoneTop
-            $y += Draw-Text $g $titleText (New-Font $famHeavy $size) (Brush $cYellow) $x $y $w 'Near'
-            if ($title2Text -ne '') { $y += 8; $y += Draw-Text $g $title2Text (New-Font $famHeavy $size) (Brush $cWhite) $x $y $w 'Near' }
-            if ($leadText -ne '') { $y += 26; Draw-Text $g $leadText (New-Font $famText 36) (Brush (Col 226 234 255)) $x $y $w 'Near' | Out-Null }
+            $y += Draw-Text $g $titleText (New-Font $famHeavy $size) (Brush $cYellow) $x $y $cw 'Near'
+            if ($title2Text -ne '') { $y += 8; $y += Draw-Text $g $title2Text (New-Font $famHeavy $size) (Brush $cWhite) $x $y $cw 'Near' }
+            if ($leadText -ne '') { $y += 26; Draw-Text $g $leadText (New-Font $famText 36) (Brush (Col 226 234 255)) $x $y $cw 'Near' | Out-Null }
 
             if ($slide.cta) {
                 $cf = New-Font $famHeavy 38
@@ -381,96 +390,92 @@ foreach ($slide in $data.slides) {
                 Round-Rect $g $x $ctaY $ctaW 92 46 (Brush $cYellow)
                 Draw-Line $g ([string]$slide.cta) $cf (Brush $cDark) ($x + 48) ($ctaY + 18)
             }
-            if ($slide.footer) { Draw-Text $g $slide.footer (New-Font $famBody 22) (Brush $cMuted) $x ($H - 62) $w 'Near' | Out-Null }
+            if ($slide.footer) { Draw-Text $g $slide.footer (New-Font $famBody 22) (Brush $cMuted) $x ($H - 62) $cw 'Near' | Out-Null }
         }
         'promise' {
             Draw-ImageCover $g $bgPath 0 0 $W $H
-            Draw-Scrim $g 0 0 $W $H 200 235
             $y = 170
-            $y += Draw-Text $g $slide.title (New-Font $famHeavy 92) (Brush $cYellow) $x $y $w 'Near'
+            $y += Draw-TextS $g $slide.title (New-Font $famHeavy 92) (Brush $cYellow) $x $y $cw 'Near'
             $y += 40
             foreach ($line in $slide.lines) {
-                $bh = Draw-Text $g $line (New-Font $famText 42) (Brush $cWhite) $x $y $w 'Near'
+                $bh = Draw-TextS $g $line (New-Font $famText 42) (Brush $cWhite) $x $y $cw 'Near'
                 $y += $bh + 40
             }
             if ($slide.note) {
-                Round-Rect $g $x ($H - 284) $w 92 24 (Brush (Col 255 255 255 34))
-                Draw-Text $g $slide.note (New-Font $famBody 28) (Brush (Col 214 224 250)) ($x + 34) ($H - 258) ($w - 68) 'Near' | Out-Null
+                Round-Rect $g $x ($H - 284) $cw 92 24 (Brush (Col 6 10 24 200))
+                Draw-Text $g $slide.note (New-Font $famBody 28) (Brush (Col 214 224 250)) ($x + 34) ($H - 258) ($cw - 68) 'Near' | Out-Null
             }
         }
         'news' {
             $frameY = 76
             $frameH = 500
-            Draw-ImageFrame $g (Resolve-Asset ([string]$slide.image)) $x $frameY $w $frameH 36 3
+            Draw-ImageFrame $g (Resolve-Asset ([string]$slide.image)) $x $frameY $cw $frameH 36 3
             Draw-Tab $g $W ($frameY - 29) ("HABER " + [string]$slide.index)
 
             $kickY = $frameY + $frameH + 62
-            Draw-Text $g $slide.kicker (New-Font $famText 28) (Brush $cCyan) $x $kickY $w 'Near' | Out-Null
+            Draw-Text $g $slide.kicker (New-Font $famText 28) (Brush $cCyan) $x $kickY $cw 'Near' | Out-Null
             $y = $kickY + 50
             $limit = $H - 214
             $size = 72
             while ($size -ge 52) {
                 $f1 = New-Font $famHeavy $size
-                $block = Measure-Block $g ([string]$slide.title) $f1 $w
-                if ($slide.title2) { $block += 6 + (Measure-Block $g ([string]$slide.title2) $f1 $w) }
+                $block = Measure-Block $g ([string]$slide.title) $f1 $cw
+                if ($slide.title2) { $block += 6 + (Measure-Block $g ([string]$slide.title2) $f1 $cw) }
                 $block += 26
                 $bf = New-Font $famText 34
-                foreach ($b in $slide.lines) { $block += [Math]::Max((Measure-Block $g $b $bf ($w - 60)), 46.0) + 16 }
+                foreach ($b in $slide.lines) { $block += [Math]::Max((Measure-Block $g $b $bf ($cw - 60)), 46.0) + 16 }
                 if (($y + $block) -le $limit) { break }
                 $size -= 4
             }
-            $y += Draw-Text $g $slide.title (New-Font $famHeavy $size) (Brush $cYellow) $x $y $w 'Near'
-            if ($slide.title2) { $y += 6; $y += Draw-Text $g $slide.title2 (New-Font $famHeavy $size) (Brush $cWhite) $x $y $w 'Near' }
+            $y += Draw-Text $g $slide.title (New-Font $famHeavy $size) (Brush $cYellow) $x $y $cw 'Near'
+            if ($slide.title2) { $y += 6; $y += Draw-Text $g $slide.title2 (New-Font $famHeavy $size) (Brush $cWhite) $x $y $cw 'Near' }
             $y += 26
             foreach ($b in $slide.lines) {
                 $g.FillEllipse((Brush $cYellow), ($x + 4), ($y + 15), 14, 14)
-                $bh = Draw-Text $g $b (New-Font $famText 34) (Brush $cWhite) ($x + 42) $y ($w - 60) 'Near'
+                $bh = Draw-Text $g $b (New-Font $famText 34) (Brush $cWhite) ($x + 42) $y ($cw - 60) 'Near'
                 $y += [Math]::Max($bh, 46.0) + 16
             }
-            if ($slide.credit) { Draw-Text $g $slide.credit (New-Font $famBody 22) (Brush $cMuted) $x ($H - 150) $w 'Near' | Out-Null }
+            if ($slide.credit) { Draw-Text $g $slide.credit (New-Font $famBody 22) (Brush $cMuted) $x ($H - 150) $cw 'Near' | Out-Null }
         }
         'closing' {
             Draw-ImageCover $g $bgPath 0 0 $W $H
-            Draw-Scrim $g 0 0 $W $H 150 215
             $y = 300
-            $y += Draw-Text $g $slide.title (New-Font $famHeavy 108) (Brush $cYellow) $x $y $w 'Near'
+            $y += Draw-TextS $g $slide.title (New-Font $famHeavy 108) (Brush $cYellow) $x $y $cw 'Near'
             $y += 30
-            $y += Draw-Text $g $slide.question (New-Font $famText 46) (Brush $cWhite) $x $y $w 'Near'
+            $y += Draw-TextS $g $slide.question (New-Font $famText 46) (Brush $cWhite) $x $y $cw 'Near'
             if ($slide.cta) {
                 $cf = New-Font $famText 38
-                Round-Rect $g $x ($H - 320) $w 124 40 (Brush (Col 255 212 0 46))
-                Draw-Text $g $slide.cta $cf (Brush $cYellow) ($x + 30) ($H - 288) ($w - 60) 'Center' | Out-Null
+                Round-Rect $g $x ($H - 320) $cw 124 40 (Brush (Col 6 10 24 200))
+                Draw-Text $g $slide.cta $cf (Brush $cYellow) ($x + 30) ($H - 288) ($cw - 60) 'Center' | Out-Null
             }
-            if ($slide.footer) { Draw-Text $g $slide.footer (New-Font $famBody 26) (Brush $cMuted) $x ($H - 178) $w 'Center' | Out-Null }
+            if ($slide.footer) { Draw-Text $g $slide.footer (New-Font $famBody 26) (Brush $cMuted) $x ($H - 178) $cw 'Center' | Out-Null }
         }
         'story_poll' {
             Draw-ImageCover $g $bgPath 0 0 $W $H
-            Draw-Scrim $g 0 0 $W $H 170 225
             $y = 500
-            Draw-Text $g $slide.badge (New-Font $famText 30) (Brush $cCyan) $x $y $w 'Center' | Out-Null
+            Draw-TextS $g $slide.badge (New-Font $famText 30) (Brush $cCyan) $x $y $cw 'Center' | Out-Null
             $y += 96
-            $y += Draw-Text $g $slide.question (New-Font $famHeavy 92) (Brush $cWhite) $x $y $w 'Center'
+            $y += Draw-TextS $g $slide.question (New-Font $famHeavy 92) (Brush $cWhite) $x $y $cw 'Center'
             $y += 70
             foreach ($opt in $slide.options) {
-                Round-Rect $g $x $y $w 150 40 (Brush (Col 255 212 0 34))
-                Draw-Text $g $opt (New-Font $famHeavy 58) (Brush $cYellow) ($x + 30) ($y + 38) ($w - 60) 'Center' | Out-Null
+                Round-Rect $g $x $y $cw 150 40 (Brush (Col 6 10 24 170))
+                Draw-Text $g $opt (New-Font $famHeavy 58) (Brush $cYellow) ($x + 30) ($y + 38) ($cw - 60) 'Center' | Out-Null
                 $y += 190
             }
-            if ($slide.note) { Draw-Text $g $slide.note (New-Font $famBody 34) (Brush $cMuted) $x ($y + 12) $w 'Center' | Out-Null }
+            if ($slide.note) { Draw-Text $g $slide.note (New-Font $famBody 34) (Brush $cMuted) $x ($y + 12) $cw 'Center' | Out-Null }
         }
         'story_news' {
             Draw-ImageCover $g $bgPath 0 0 $W $H
-            Draw-Scrim $g 0 0 $W $H 175 230
             $y = 430
-            Draw-Text $g $slide.badge (New-Font $famText 30) (Brush $cCyan) $x $y $w 'Center' | Out-Null
+            Draw-TextS $g $slide.badge (New-Font $famText 30) (Brush $cCyan) $x $y $cw 'Center' | Out-Null
             $y += 96
-            $y += Draw-Text $g $slide.title (New-Font $famHeavy 96) (Brush $cYellow) $x $y $w 'Center'
+            $y += Draw-TextS $g $slide.title (New-Font $famHeavy 96) (Brush $cYellow) $x $y $cw 'Center'
             $y += 52
             foreach ($line in $slide.lines) {
-                $bh = Draw-Text $g $line (New-Font $famText 42) (Brush $cWhite) $x $y $w 'Center'
+                $bh = Draw-TextS $g $line (New-Font $famText 42) (Brush $cWhite) $x $y $cw 'Center'
                 $y += $bh + 30
             }
-            if ($slide.cta) { Draw-Text $g $slide.cta (New-Font $famBody 34) (Brush $cMuted) $x ($y + 56) $w 'Center' | Out-Null }
+            if ($slide.cta) { Draw-TextS $g $slide.cta (New-Font $famBody 34) (Brush (Col 214 224 250)) $x ($y + 56) $cw 'Center' | Out-Null }
         }
     }
 

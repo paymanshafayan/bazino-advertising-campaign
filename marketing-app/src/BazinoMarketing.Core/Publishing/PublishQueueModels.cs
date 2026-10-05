@@ -332,8 +332,12 @@ public static class ZernioPublishBuilder
             ["accountId"] = accountId
         };
         // Stories are the owner's explicit location exception: do not look up, validate, or attach location data.
+        // Official Zernio contract: a Story publishes only with platformSpecificData.contentType = "story";
+        // without the flag Zernio publishes the media as a regular feed post (owner incident 2026-10-04).
         if (item.Kind != "story")
             platform["platformSpecificData"] = new JsonObject { ["locationId"] = ZernioAutomationBuilder.InstagramLocationId };
+        else
+            platform["platformSpecificData"] = new JsonObject { ["contentType"] = "story" };
         var body = new JsonObject
         {
             ["title"] = item.Title,

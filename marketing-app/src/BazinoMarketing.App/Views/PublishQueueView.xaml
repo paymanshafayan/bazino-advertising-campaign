@@ -7,6 +7,7 @@
              FontFamily="Vazirmatn, Segoe UI, Tahoma"
              Foreground="{StaticResource TextBrush}"
              Background="{StaticResource BgBrush}"
+             SizeChanged="View_SizeChanged"
              PreviewKeyDown="View_PreviewKeyDown">
     <Grid Margin="24">
         <Grid.RowDefinitions>
@@ -18,8 +19,8 @@
         <DockPanel Grid.Row="0" Margin="0,0,0,14">
             <StackPanel DockPanel.Dock="Right">
                 <TextBlock Text="محتوای آماده انتشار" Style="{StaticResource H1}" />
-                <TextBlock Text="کارت هر محتوا همان چیزی را نشان می‌دهد که منتشر می‌شود: عنوان، رسانه، کپشن و متن‌های خود محتوا. با دکمه‌های بعدی/قبلی، کلیدهای ← → یا کشیدن ماوس، اسلایدها را ورق بزنید؛ دوبار کلیک، اسلاید را تمام‌قاب می‌کند."
-                           Style="{StaticResource Muted}" Margin="0,4,0,0" MaxWidth="720" />
+                <TextBlock Text="کارت هر محتوا همان چیزی را نشان می‌دهد که منتشر می‌شود. رسانه و قاب در سمت راست، و توضیحات و دکمه‌های تصمیم در سایدبار چپ است تا کل پست یک‌جا دیده شود. با دکمه‌های بعدی/قبلی، کلیدهای ← → یا کشیدن ماوس اسلایدها را ورق بزنید؛ دوبار کلیک، اسلاید را تمام‌قاب می‌کند."
+                           Style="{StaticResource Muted}" Margin="0,4,0,0" MaxWidth="760" />
             </StackPanel>
             <Button DockPanel.Dock="Left" Content="بازخوانی فهرست" Command="{Binding RefreshCommand}" Style="{StaticResource GhostButton}" VerticalAlignment="Top" />
         </DockPanel>
@@ -67,160 +68,174 @@
                 <ItemsControl ItemsSource="{Binding Posts}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type vm:PublishQueuePostViewModel}">
-                            <Border Width="580" HorizontalAlignment="Center" Background="{StaticResource PhoneFrameBrush}" BorderBrush="{StaticResource LineBrush}" BorderThickness="1" CornerRadius="16" Padding="0" Margin="0,0,0,20"
+                            <!-- Phase 5 (2026-10-04): media on the right, description + decision buttons in the left sidebar,
+                                 and the frame shrinks with the window height so the whole post fits in one look. -->
+                            <Border HorizontalAlignment="Center" Background="{StaticResource PhoneFrameBrush}" BorderBrush="{StaticResource LineBrush}" BorderThickness="1" CornerRadius="16" Padding="0" Margin="0,0,0,20"
                                     MouseEnter="Card_MouseEnter" GotKeyboardFocus="Card_MouseEnter">
-                                <StackPanel>
-                                    <!-- باریکهٔ اطلاعات بازبینی: هیچ فیلدی خالی نمی‌ماند -->
-                                    <Border Background="{StaticResource PhoneHeaderBrush}" BorderBrush="{StaticResource PhoneHeaderLineBrush}" BorderThickness="0,0,0,1" CornerRadius="16,16,0,0" Padding="14,10">
-                                        <ItemsControl ItemsSource="{Binding Fields}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="380" MinWidth="320" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- ستون رسانه: همان قاب اینستاگرامی -->
+                                    <StackPanel Grid.Column="0">
+                                        <!-- سربرگ پست، مثل خود Instagram -->
+                                        <DockPanel Margin="16,12">
+                                            <Border DockPanel.Dock="Right" Width="38" Height="38" CornerRadius="19" Background="{StaticResource AccentSoftBrush}" VerticalAlignment="Center">
+                                                <TextBlock Text="B" Foreground="{StaticResource AccentBrush}" FontWeight="Bold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                            <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                                                <TextBlock Text="BAZINO" FontWeight="Bold" />
+                                                <TextBlock Text="@bazinopro" FontSize="12" Foreground="{StaticResource PhoneMutedBrush}" />
+                                            </StackPanel>
+                                            <TextBlock DockPanel.Dock="Left" Text="•••" FontSize="18" Foreground="{StaticResource PhoneMutedBrush}" VerticalAlignment="Center" />
+                                        </DockPanel>
+
+                                        <!-- نمایشگر اسلایدها: بعدی/قبلی، شمارنده، کشیدن ماوس و تمام‌قاب -->
+                                        <Grid HorizontalAlignment="Center">
+                                            <Grid Width="{Binding FrameWidth}" Height="{Binding FrameHeight}" Background="{StaticResource PhoneScreenBrush}" Focusable="True"
+                                                  MouseLeftButtonDown="Slide_MouseDown" MouseMove="Slide_MouseMove" MouseLeftButtonUp="Slide_MouseUp"
+                                                  MouseWheel="Slide_MouseWheel">
+                                                <Image Source="{Binding CurrentSlide.ImageUri}" Stretch="Uniform" Visibility="{Binding CurrentSlide.HasImage, Converter={StaticResource BoolToVis}}" />
+                                                <MediaElement Source="{Binding CurrentSlide.VideoUri}" LoadedBehavior="Play" UnloadedBehavior="Stop" Stretch="Uniform" Volume="0" Visibility="{Binding CurrentSlide.HasVideo, Converter={StaticResource BoolToVis}}" />
+                                                <TextBlock Text="{Binding CurrentSlide.PlaceholderText}" Visibility="{Binding CurrentSlide.ShowPlaceholder, Converter={StaticResource BoolToVis}}" Foreground="{StaticResource PhoneMutedBrush}" FontSize="15" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="300" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                <TextBlock Text="محتوای این کارت رسانه‌ای ندارد." Visibility="{Binding HasNoSlides, Converter={StaticResource BoolToVis}}" Foreground="{StaticResource PhoneMutedBrush}" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                                                <Button Content="›" Command="{Binding PreviousSlideCommand}" Style="{StaticResource GhostButton}" Width="42" Height="42" Padding="0" FontSize="24" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="6"
+                                                        Foreground="{StaticResource OnDarkBrush}" Background="{StaticResource OverlayChipBrush}" Visibility="{Binding HasMultipleSlides, Converter={StaticResource BoolToVis}}" ToolTip="اسلاید قبلی" />
+                                                <Button Content="‹" Command="{Binding NextSlideCommand}" Style="{StaticResource GhostButton}" Width="42" Height="42" Padding="0" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6"
+                                                        Foreground="{StaticResource OnDarkBrush}" Background="{StaticResource OverlayChipBrush}" Visibility="{Binding HasMultipleSlides, Converter={StaticResource BoolToVis}}" ToolTip="اسلاید بعدی" />
+
+                                                <Border HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" Background="{StaticResource OverlayChipBrush}" CornerRadius="14" Padding="10,4"
+                                                        Visibility="{Binding HasMultipleSlides, Converter={StaticResource BoolToVis}}">
+                                                    <TextBlock Text="{Binding CurrentPositionText}" FontSize="12" Foreground="{StaticResource OnDarkBrush}" />
+                                                </Border>
+                                                <Button Content="⤢" Style="{StaticResource GhostButton}" Width="38" Height="34" Padding="0" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"
+                                                        Foreground="{StaticResource OnDarkBrush}" Background="{StaticResource OverlayChipBrush}" Click="Zoom_Click" ToolTip="نمایش تمام‌قاب" />
+                                            </Grid>
+                                        </Grid>
+
+                                        <!-- نقطه‌های نشانگر -->
+                                        <ItemsControl ItemsSource="{Binding Slides}" HorizontalAlignment="Center" Margin="0,10,0,0" Visibility="{Binding HasMultipleSlides, Converter={StaticResource BoolToVis}}">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
-                                                    <WrapPanel Orientation="Horizontal" />
+                                                    <StackPanel Orientation="Horizontal" />
                                                 </ItemsPanelTemplate>
                                             </ItemsControl.ItemsPanel>
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Border Background="{StaticResource PhoneChipBrush}" BorderBrush="{StaticResource PhoneLineBrush}" BorderThickness="1" CornerRadius="10" Padding="8,4" Margin="0,0,8,6">
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <TextBlock Text="{Binding Label}" Foreground="{StaticResource Accent2Brush}" FontSize="11.5" />
-                                                            <TextBlock Text=": " Foreground="{StaticResource PhoneMutedBrush}" FontSize="11.5" />
-                                                            <TextBlock Text="{Binding Value}" Foreground="{StaticResource PhoneTextBrush}" FontSize="11.5" FontWeight="SemiBold" />
-                                                        </StackPanel>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </Border>
-
-                                    <!-- سربرگ پست، مثل خود Instagram -->
-                                    <DockPanel Margin="16,12">
-                                        <Border DockPanel.Dock="Right" Width="38" Height="38" CornerRadius="19" Background="{StaticResource AccentSoftBrush}" VerticalAlignment="Center">
-                                            <TextBlock Text="B" Foreground="{StaticResource AccentBrush}" FontWeight="Bold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        </Border>
-                                        <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
-                                            <TextBlock Text="BAZINO" FontWeight="Bold" />
-                                            <TextBlock Text="@bazinopro" FontSize="12" Foreground="{StaticResource PhoneMutedBrush}" />
-                                        </StackPanel>
-                                        <TextBlock DockPanel.Dock="Left" Text="•••" FontSize="18" Foreground="{StaticResource PhoneMutedBrush}" VerticalAlignment="Center" />
-                                    </DockPanel>
-
-                                    <TextBlock Text="{Binding Title}" Margin="16,0,16,10" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{StaticResource OnDarkBrush}" />
-
-                                    <!-- نمایشگر اسلایدها: بعدی/قبلی، شمارنده، کشیدن ماوس و تمام‌قاب -->
-                                    <Grid HorizontalAlignment="Center">
-                                        <Grid Width="{Binding FrameWidth}" Height="{Binding FrameHeight}" Background="{StaticResource PhoneScreenBrush}" Focusable="True"
-                                              MouseLeftButtonDown="Slide_MouseDown" MouseMove="Slide_MouseMove" MouseLeftButtonUp="Slide_MouseUp"
-                                              MouseWheel="Slide_MouseWheel">
-                                            <Image Source="{Binding CurrentSlide.ImageUri}" Stretch="Uniform" Visibility="{Binding CurrentSlide.HasImage, Converter={StaticResource BoolToVis}}" />
-                                            <MediaElement Source="{Binding CurrentSlide.VideoUri}" LoadedBehavior="Play" UnloadedBehavior="Stop" Stretch="Uniform" Volume="0" Visibility="{Binding CurrentSlide.HasVideo, Converter={StaticResource BoolToVis}}" />
-                                            <TextBlock Text="{Binding CurrentSlide.PlaceholderText}" Visibility="{Binding CurrentSlide.ShowPlaceholder, Converter={StaticResource BoolToVis}}" Foreground="{StaticResource PhoneMutedBrush}" FontSize="15" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="300" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                            <TextBlock Text="محتوای این کارت رسانه‌ای ندارد." Visibility="{Binding HasNoSlides, Converter={StaticResource BoolToVis}}" Foreground="{StaticResource PhoneMutedBrush}" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center" />
-
-                                            <Button Content="›" Command="{Binding PreviousSlideCommand}" Style="{StaticResource GhostButton}" Width="42" Height="42" Padding="0" FontSize="24" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="6"
-                                                    Foreground="{StaticResource OnDarkBrush}" Background="{StaticResource OverlayChipBrush}" Visibility="{Binding HasMultipleSlides, Converter={StaticResource BoolToVis}}" ToolTip="اسلاید قبلی" />
-                                            <Button Content="‹" Command="{Binding NextSlideCommand}" Style="{StaticResource GhostButton}" Width="42" Height="42" Padding="0" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="6"
-                                                    Foreground="{StaticResource OnDarkBrush}" Background="{StaticResource OverlayChipBrush}" Visibility="{Binding HasMultipleSlides, Converter={StaticResource BoolToVis}}" ToolTip="اسلاید بعدی" />
-
-                                            <Border HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" Background="{StaticResource OverlayChipBrush}" CornerRadius="14" Padding="10,4"
-                                                    Visibility="{Binding HasMultipleSlides, Converter={StaticResource BoolToVis}}">
-                                                <TextBlock Text="{Binding CurrentPositionText}" FontSize="12" Foreground="{StaticResource OnDarkBrush}" />
-                                            </Border>
-                                            <Button Content="⤢" Style="{StaticResource GhostButton}" Width="38" Height="34" Padding="0" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"
-                                                    Foreground="{StaticResource OnDarkBrush}" Background="{StaticResource OverlayChipBrush}" Click="Zoom_Click" ToolTip="نمایش تمام‌قاب" />
-                                        </Grid>
-                                    </Grid>
-
-                                    <!-- نقطه‌های نشانگر -->
-                                    <ItemsControl ItemsSource="{Binding Slides}" HorizontalAlignment="Center" Margin="0,10,0,0" Visibility="{Binding HasMultipleSlides, Converter={StaticResource BoolToVis}}">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <StackPanel Orientation="Horizontal" />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Ellipse Margin="4,0">
-                                                    <Ellipse.Style>
-                                                        <Style TargetType="Ellipse">
-                                                            <Setter Property="Width" Value="8" />
-                                                            <Setter Property="Height" Value="8" />
-                                                            <Setter Property="Fill" Value="{StaticResource PhoneMutedBrush}" />
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsCurrent}" Value="True">
-                                                                    <Setter Property="Width" Value="11" />
-                                                                    <Setter Property="Height" Value="11" />
-                                                                    <Setter Property="Fill" Value="{StaticResource AccentBrush}" />
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Ellipse.Style>
-                                                </Ellipse>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-
-                                    <!-- نوار بندانگشتی اسلایدها -->
-                                    <ItemsControl ItemsSource="{Binding Slides}" HorizontalAlignment="Center" Margin="0,10,0,4" Visibility="{Binding HasMultipleSlides, Converter={StaticResource BoolToVis}}">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <StackPanel Orientation="Horizontal" />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Button Command="{Binding SelectCommand}" Padding="0" Margin="3,0" Width="56" Height="70" Style="{StaticResource GhostButton}"
-                                                        Visibility="{Binding HasThumb, Converter={StaticResource BoolToVis}}" ToolTip="{Binding PositionText}">
-                                                    <Border BorderThickness="2" CornerRadius="6" ClipToBounds="True" Width="52" Height="66">
-                                                        <Border.Style>
-                                                            <Style TargetType="Border">
-                                                                <Setter Property="BorderBrush" Value="{StaticResource PhoneLineBrush}" />
+                                                    <Ellipse Margin="4,0">
+                                                        <Ellipse.Style>
+                                                            <Style TargetType="Ellipse">
+                                                                <Setter Property="Width" Value="8" />
+                                                                <Setter Property="Height" Value="8" />
+                                                                <Setter Property="Fill" Value="{StaticResource PhoneMutedBrush}" />
                                                                 <Style.Triggers>
                                                                     <DataTrigger Binding="{Binding IsCurrent}" Value="True">
-                                                                        <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
+                                                                        <Setter Property="Width" Value="11" />
+                                                                        <Setter Property="Height" Value="11" />
+                                                                        <Setter Property="Fill" Value="{StaticResource AccentBrush}" />
                                                                     </DataTrigger>
                                                                 </Style.Triggers>
                                                             </Style>
-                                                        </Border.Style>
-                                                        <Image Source="{Binding ImageUri}" Stretch="UniformToFill" />
-                                                    </Border>
-                                                </Button>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
+                                                        </Ellipse.Style>
+                                                    </Ellipse>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
 
-                                    <DockPanel Margin="16,10,16,8">
-                                        <Button DockPanel.Dock="Right" Content="➤" ToolTip="تأیید محتوا و قرار دادن در صف انتشار" Command="{Binding ApproveCommand}" Style="{StaticResource PrimaryButton}" Padding="14,6" />
-                                        <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
-                                            <TextBlock Text="♡" FontSize="26" Margin="0,0,14,0" Foreground="{StaticResource OnDarkBrush}" />
-                                            <Button Content="◉" ToolTip="ثبت نظر برای ویرایش محتوا" Command="{Binding CommentCommand}" Style="{StaticResource GhostButton}" Padding="10,5" Foreground="{StaticResource PhoneTextBrush}" BorderBrush="{StaticResource PhoneLineBrush}" />
-                                            <TextBlock Text="➤" FontSize="20" Margin="14,0" Foreground="{StaticResource OnDarkBrush}" />
-                                        </StackPanel>
-                                        <TextBlock Text="▱" FontSize="23" Foreground="{StaticResource OnDarkBrush}" VerticalAlignment="Center" />
-                                    </DockPanel>
+                                        <!-- نوار بندانگشتی اسلایدها -->
+                                        <ItemsControl ItemsSource="{Binding Slides}" HorizontalAlignment="Center" Margin="0,10,0,12" Visibility="{Binding HasMultipleSlides, Converter={StaticResource BoolToVis}}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button Command="{Binding SelectCommand}" Padding="0" Margin="3,0" Width="56" Height="70" Style="{StaticResource GhostButton}"
+                                                            Visibility="{Binding HasThumb, Converter={StaticResource BoolToVis}}" ToolTip="{Binding PositionText}">
+                                                        <Border BorderThickness="2" CornerRadius="6" ClipToBounds="True" Width="52" Height="66">
+                                                            <Border.Style>
+                                                                <Style TargetType="Border">
+                                                                    <Setter Property="BorderBrush" Value="{StaticResource PhoneLineBrush}" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                                                                            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Border.Style>
+                                                            <Image Source="{Binding ImageUri}" Stretch="UniformToFill" />
+                                                        </Border>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
 
-                                    <TextBlock Text="{Binding Caption}" Margin="16,0,16,6" TextWrapping="Wrap" LineHeight="22" Foreground="{StaticResource OnDarkBrush}" />
+                                    <!-- سایدبار چپ: مشخصات بازبینی، متن‌ها و دکمه‌های تصمیم (فاز ۵) -->
+                                    <Border Grid.Column="1" Background="{StaticResource PhoneCommentBrush}" BorderBrush="{StaticResource PhoneLineBrush}" BorderThickness="1,0,0,0" CornerRadius="0,16,16,0"
+                                            MaxHeight="{Binding FrameHeight}">
+                                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="14,12">
+                                            <StackPanel>
+                                                <!-- باریکهٔ اطلاعات بازبینی: هیچ فیلدی خالی نمی‌ماند -->
+                                                <ItemsControl ItemsSource="{Binding Fields}">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <WrapPanel Orientation="Horizontal" />
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Background="{StaticResource PhoneChipBrush}" BorderBrush="{StaticResource PhoneLineBrush}" BorderThickness="1" CornerRadius="10" Padding="8,4" Margin="0,0,8,6">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBlock Text="{Binding Label}" Foreground="{StaticResource Accent2Brush}" FontSize="11.5" />
+                                                                    <TextBlock Text=": " Foreground="{StaticResource PhoneMutedBrush}" FontSize="11.5" />
+                                                                    <TextBlock Text="{Binding Value}" Foreground="{StaticResource PhoneTextBrush}" FontSize="11.5" FontWeight="SemiBold" />
+                                                                </StackPanel>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
 
-                                    <!-- متن گفتار (transcript) — دستور مالک ۲۰۲۶-۱۰-۰۳: ویدئو همیشه با متن گفتارش بازبینی می‌شود. -->
-                                    <Border Margin="16,0,16,10" Padding="12,10" CornerRadius="10" Background="{StaticResource OverlayChipBrush}"
-                                            Visibility="{Binding CurrentSlide.HasTranscript, Converter={StaticResource BoolToVis}}">
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding CurrentSlide.TranscriptHeader}" FontWeight="SemiBold" FontSize="13" Foreground="{StaticResource PhoneMutedBrush}" TextWrapping="Wrap" />
-                                            <ScrollViewer MaxHeight="220" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,6,0,0">
-                                                <TextBlock Text="{Binding CurrentSlide.TranscriptText}" TextWrapping="Wrap" LineHeight="22" Foreground="{StaticResource OnDarkBrush}" />
-                                            </ScrollViewer>
-                                        </StackPanel>
+                                                <TextBlock Text="{Binding Title}" Margin="0,4,0,10" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{StaticResource OnDarkBrush}" />
+
+                                                <!-- دکمه‌های تصمیم: تأیید برای صف انتشار، یا ثبت نظر برای ویرایش -->
+                                                <DockPanel Margin="0,0,0,10">
+                                                    <Button DockPanel.Dock="Right" Content="➤ تأیید و صف انتشار" ToolTip="تأیید محتوا و قرار دادن در صف انتشار" Command="{Binding ApproveCommand}" Style="{StaticResource PrimaryButton}" Padding="14,6" />
+                                                    <Button DockPanel.Dock="Left" Content="◉ ثبت نظر" ToolTip="ثبت نظر برای ویرایش محتوا" Command="{Binding CommentCommand}" Style="{StaticResource GhostButton}" Padding="10,5" Foreground="{StaticResource PhoneTextBrush}" BorderBrush="{StaticResource PhoneLineBrush}" />
+                                                    <TextBlock Text="" />
+                                                </DockPanel>
+
+                                                <TextBlock Text="{Binding Caption}" Margin="0,0,0,10" TextWrapping="Wrap" LineHeight="22" Foreground="{StaticResource OnDarkBrush}" />
+
+                                                <!-- متن گفتار (transcript) — دستور مالک ۲۰۲۶-۱۰-۰۳: ویدئو همیشه با متن گفتارش بازبینی می‌شود. -->
+                                                <Border Margin="0,0,0,10" Padding="12,10" CornerRadius="10" Background="{StaticResource OverlayChipBrush}"
+                                                        Visibility="{Binding CurrentSlide.HasTranscript, Converter={StaticResource BoolToVis}}">
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding CurrentSlide.TranscriptHeader}" FontWeight="SemiBold" FontSize="13" Foreground="{StaticResource PhoneMutedBrush}" TextWrapping="Wrap" />
+                                                        <ScrollViewer MaxHeight="150" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,6,0,0">
+                                                            <TextBlock Text="{Binding CurrentSlide.TranscriptText}" TextWrapping="Wrap" LineHeight="22" Foreground="{StaticResource OnDarkBrush}" />
+                                                        </ScrollViewer>
+                                                    </StackPanel>
+                                                </Border>
+
+                                                <TextBlock Text="{Binding CtaText}" Margin="0,0,0,6" TextWrapping="Wrap" Foreground="{StaticResource PhoneMutedBrush}" />
+                                                <TextBlock Text="{Binding AffiliateDisclosureText}" Visibility="{Binding HasAffiliateDisclosure, Converter={StaticResource BoolToVis}}" Margin="0,0,0,10" TextWrapping="Wrap" Foreground="{StaticResource WarningBrush}" />
+
+                                                <Border Visibility="{Binding IsCommentOpen, Converter={StaticResource BoolToVis}}" Background="{StaticResource PhoneCommentBrush}" BorderBrush="{StaticResource PhoneLineBrush}" BorderThickness="1" CornerRadius="10" Padding="12">
+                                                    <StackPanel>
+                                                        <TextBlock Text="نظر برای ویرایش یا بازسازی" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="{StaticResource OnDarkBrush}" />
+                                                        <TextBox Text="{Binding FeedbackText, UpdateSourceTrigger=PropertyChanged}" MinHeight="70" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxLength="3000" />
+                                                        <Button Content="ثبت نظر و برگشت به ایجنت" Command="{Binding SubmitFeedbackCommand}" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left" Margin="0,10,0,0" />
+                                                    </StackPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </ScrollViewer>
                                     </Border>
-                                    <TextBlock Text="{Binding CtaText}" Margin="16,0,16,6" TextWrapping="Wrap" Foreground="{StaticResource PhoneMutedBrush}" />
-                                    <TextBlock Text="{Binding AffiliateDisclosureText}" Visibility="{Binding HasAffiliateDisclosure, Converter={StaticResource BoolToVis}}" Margin="16,0,16,14" TextWrapping="Wrap" Foreground="{StaticResource WarningBrush}" />
-
-                                    <Border Visibility="{Binding IsCommentOpen, Converter={StaticResource BoolToVis}}" Background="{StaticResource PhoneCommentBrush}" BorderBrush="{StaticResource LineBrush}" BorderThickness="1,1,0,0" Padding="14" CornerRadius="0,0,16,16">
-                                        <StackPanel>
-                                            <TextBlock Text="نظر برای ویرایش یا بازسازی" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="{StaticResource OnDarkBrush}" />
-                                            <TextBox Text="{Binding FeedbackText, UpdateSourceTrigger=PropertyChanged}" MinHeight="76" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxLength="3000" />
-                                            <Button Content="ثبت نظر و برگشت به ایجنت" Command="{Binding SubmitFeedbackCommand}" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left" Margin="0,10,0,0" />
-                                        </StackPanel>
-                                    </Border>
-                                </StackPanel>
+                                </Grid>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

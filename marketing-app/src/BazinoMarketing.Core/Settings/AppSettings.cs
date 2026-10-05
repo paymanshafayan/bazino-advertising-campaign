@@ -48,6 +48,74 @@ public sealed class GitHubSettings
     public int PollSeconds { get; set; } = 1;
     public ProxySettings Proxy { get; set; } = new();
     public ToolPermissions Permissions { get; set; } = new();
+
+    /// <summary>
+    /// Extra mailbox sources (owner decision 2026-10-04): each one is a repository + branch pair added by pasting the public
+    /// branch URL in the app. The main repository/branch above stays the primary source; this list holds the additional ones.
+    /// </summary>
+    public List<MailboxSourceSettings> Sources { get; set; } = new();
+
+    /// <summary>The primary source (repository + branch + mailbox folder) as a source entry.</summary>
+    public MailboxSourceSettings PrimarySource() => new()
+    {
+        Repository = Repository,
+        Branch = Branch,
+        MailboxPath = MailboxPath,
+        Enabled = true,
+        Label = "شاخهٔ اصلی"
+    };
+
+    /// <summary>
+    /// Every mailbox source the app must poll: the primary one first, then the extra registered ones (each branch once).
+    /// Disabled entries are skipped here; the UI still shows them so the owner can switch them back on.
+    /// </summary>
+    public IReadOnlyList<MailboxSourceSettings> EffectiveSources()
+    {
+        var list = new List<MailboxSourceSettings>();
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        void Add(MailboxSourceSettings source)
+        {
+            if (string.IsNullOrWhiteSpace(source.Repository) || string.IsNullOrWhiteSpace(source.Branch)) return;
+            var key = source.Key;
+            if (!seen.Add(key)) return;
+            list.Add(source);
+        }
+        Add(PrimarySource());
+        foreach (var source in Sources ?? new List<MailboxSourceSettings>()) Add(source);
+        return list;
+    }
+
+    /// <summary>A copy of these settings pointed at one source; used to build that source's transport.</summary>
+    public GitHubSettings ForSource(MailboxSourceSettings source) => new()
+    {
+        Repository = source.Repository,
+        Branch = source.Branch,
+        MailboxPath = source.MailboxPath,
+        PollSeconds = PollSeconds,
+        Proxy = Proxy,
+        Permissions = Permissions,
+        Sources = Sources
+    };
+}
+
+/// <summary>One repository + branch pair the mailbox listens to. Never contains a token; the Git token stays in the secret store.</summary>
+public sealed class MailboxSourceSettings
+{
+    public string Repository { get; set; } = "";
+    public string Branch { get; set; } = "main";
+    public string MailboxPath { get; set; } = "marketing-app-mailbox";
+    public bool Enabled { get; set; } = true;
+    /// <summary>Optional owner-facing name; empty means the repository + branch is shown.</summary>
+    public string Label { get; set; } = "";
+
+    [JsonIgnore]
+    public string Key => Mailbox.MailboxSourceUrl.KeyOf(Repository, Branch, MailboxPath);
+
+    [JsonIgnore]
+    public string Display => string.IsNullOrWhiteSpace(Label) ? $"{Repository} · {Branch}" : $"{Label} — {Repository} · {Branch}";
+
+    [JsonIgnore]
+    public string PublicUrl => $"https://github.com/{Repository}/tree/{Uri.EscapeDataString(Branch)}";
 }
 
 public sealed class KlingSettings

@@ -25,14 +25,20 @@ public static class ScreenshotRenderer
     public static int RenderAll(string outDir)
     {
         Directory.CreateDirectory(outDir);
+        Stage(outDir, "stage-10-renderall-enter");
         // Screenshots must capture settled states, never mid-animation frames.
         Infrastructure.Motion.Enabled = false;
         var services = AppServices.CreateSample();
+        Stage(outDir, "stage-11-services-created");
         SampleData.Populate(services);
+        Stage(outDir, "stage-12-sample-data");
         var main = new MainViewModel(services);
+        Stage(outDir, "stage-13-main-view-model");
         SampleData.ApplyStates(main);
+        Stage(outDir, "stage-14-sample-states");
 
         var view = new MainView { DataContext = main, Width = Width, Height = Height };
+        Stage(outDir, "stage-15-main-view");
         var pages = new (string Page, string File)[]
         {
             ("connection", "01-connection.png"),
@@ -55,6 +61,7 @@ public static class ScreenshotRenderer
             var path = Path.Combine(outDir, file);
             Save(view, path);
             if (new FileInfo(path).Length > 1024) written++;
+            Stage(outDir, "stage-16-page-" + page);
         }
 
         // The carousel reviewer must be provably browsable: shoot the publish card again after stepping one slide
@@ -89,7 +96,17 @@ public static class ScreenshotRenderer
         var info = $"rendered {written}/{pages.Length} pages at {Width}x{Height}, version {AppServices.Version}, {DateTimeOffset.Now:O}";
         // First line is a GitHub Actions workflow command: when CI prints this file, it becomes an annotation the agent can read via the API.
         File.WriteAllText(Path.Combine(outDir, "render-info.txt"), $"::notice title=marketing-app screenshots::{info}\n{info}\n");
+        Stage(outDir, "stage-17-renderall-done");
         return written == pages.Length ? 0 : 3;
+    }
+
+    /// <summary>
+    /// Writes a tiny marker file per render stage. CI prints the out folder listing, so when the renderer dies
+    /// without a managed exception the last marker tells exactly which step crashed.
+    /// </summary>
+    public static void Stage(string outDir, string name)
+    {
+        try { File.WriteAllText(Path.Combine(outDir, name + ".txt"), DateTimeOffset.Now.ToString("O")); } catch { }
     }
 
     /// <summary>Writes render-error.txt with a single-line workflow-command header so the failure text surfaces as a CI annotation.</summary>

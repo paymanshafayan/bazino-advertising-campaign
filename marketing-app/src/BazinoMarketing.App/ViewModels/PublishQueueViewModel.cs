@@ -14,6 +14,7 @@ public sealed class PublishQueueViewModel : ObservableObject
     private bool _isBusy;
     private string _message = "پیش‌نویس‌ها از پوشهٔ صف انتشار خوانده می‌شوند.";
     private PublishQueuePostViewModel? _activePost;
+    private double _viewportHeight = 820;
 
     public PublishQueueViewModel(AppServices services)
     {
@@ -33,6 +34,20 @@ public sealed class PublishQueueViewModel : ObservableObject
     {
         get => _activePost;
         set => SetProperty(ref _activePost, value);
+    }
+
+    /// <summary>
+    /// Phase 5 (2026-10-04): the height of the review area, set by the view. The card sizes its frame from it so the
+    /// whole post — image, caption and buttons — is visible in one look without a forced scroll.
+    /// </summary>
+    public double ViewportHeight
+    {
+        get => _viewportHeight;
+        set
+        {
+            if (!SetProperty(ref _viewportHeight, value)) return;
+            foreach (var post in Posts) post.ViewportHeight = value;
+        }
     }
 
     public bool IsBusy
@@ -60,7 +75,11 @@ public sealed class PublishQueueViewModel : ObservableObject
             var cards = await _services.PublishQueue.LoadReadyAsync();
             var reports = await _services.PublishQueue.LoadRecentResultsAsync();
             Posts.Clear();
-            foreach (var card in cards) Posts.Add(new PublishQueuePostViewModel(card, ApproveAsync, SubmitFeedbackAsync));
+            foreach (var card in cards)
+            {
+                var post = new PublishQueuePostViewModel(card, ApproveAsync, SubmitFeedbackAsync) { ViewportHeight = ViewportHeight };
+                Posts.Add(post);
+            }
             Reports.Clear();
             foreach (var report in reports) Reports.Add(new PublishQueueReportViewModel(report));
             Message = cards.Count == 0
@@ -308,9 +327,39 @@ public sealed class PublishQueuePostViewModel : ObservableObject
 
     public string CurrentPositionText => CurrentSlide?.PositionText ?? PublishPreviewModel.EmptyValue;
 
-    /// <summary>Every carousel slide uses Instagram's 4:5 feed frame; a single video keeps its vertical 9:16 frame.</summary>
-    public double FrameWidth => CurrentSlide is { HasVideo: true } && !HasMultipleSlides ? 380 : 460;
-    public double FrameHeight => Math.Round(FrameWidth / (HasMultipleSlides || CurrentSlide is not { HasVideo: true } ? 4d / 5d : 9d / 16d));
+    /// <summary>
+    /// Phase 5 (2026-10-04): the frame shrinks with the available height (set by the view) so the entire post fits the
+    /// window without scrolling. Every carousel slide keeps Instagram's 4:5 frame; a single video keeps its 9:16 frame.
+    /// </summary>
+    public double ViewportHeight
+    {
+        get => _viewportHeight;
+        set
+        {
+            if (!SetProperty(ref _viewportHeight, value)) return;
+            OnPropertyChanged(nameof(FrameWidth));
+            OnPropertyChanged(nameof(FrameHeight));
+        }
+    }
+
+    private double _viewportHeight = 820;
+
+    /// <summary>True for a lone video, which keeps the vertical 9:16 frame instead of the 4:5 carousel frame.</summary>
+    private bool IsSingleVideo => CurrentSlide is { HasVideo: true } && !HasMultipleSlides;
+
+    private double Aspect => IsSingleVideo ? 9d / 16d : 4d / 5d;
+
+    public double FrameHeight
+    {
+        get
+        {
+            // Reserve room for the page header, the message strip, the card chrome, the actions row and the caption.
+            var available = Math.Clamp(_viewportHeight - 360, 300, 620);
+            return Math.Round(available);
+        }
+    }
+
+    public double FrameWidth => Math.Round(Math.Min(FrameHeight * Aspect, IsSingleVideo ? 380 : 460));
 
     public bool IsWorking { get => _isWorking; set { if (SetProperty(ref _isWorking, value)) { RelayCommand.RaiseCanExecuteChanged(); } } }
     public bool IsCommentOpen { get => _isCommentOpen; set => SetProperty(ref _isCommentOpen, value); }

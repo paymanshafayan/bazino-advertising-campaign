@@ -23,6 +23,15 @@ public partial class PublishQueueView : UserControl
     private PublishQueuePostViewModel? PostOf(object sender) =>
         (sender as FrameworkElement)?.DataContext as PublishQueuePostViewModel;
 
+    /// <summary>
+    /// Phase 5 (2026-10-04): the review area tells the view-model its height so every card can size its frame to fit the
+    /// whole post (media + caption + buttons) in one look instead of forcing a scroll.
+    /// </summary>
+    private void View_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        if (DataContext is PublishQueueViewModel queue && e.NewSize.Height > 0) queue.ViewportHeight = e.NewSize.Height;
+    }
+
     private void Card_MouseEnter(object sender, RoutedEventArgs e)
     {
         if (DataContext is PublishQueueViewModel queue && PostOf(sender) is { } post) queue.ActivePost = post;
@@ -95,7 +104,7 @@ public partial class PublishQueueView : UserControl
         var panel = new DockPanel { Background = (Brush)FindResource("PhoneScreenBrush"), LastChildFill = true };
         var caption = new TextBlock
         {
-            Text = post.Title,
+            Text = post.Title + "\n" + slide.PositionText + " — با کلیدهای ← → اسلاید عوض می‌شود؛ Esc می‌بندد.",
             Foreground = (Brush)FindResource("OnDarkBrush"),
             Margin = new Thickness(18, 12, 18, 8),
             FontSize = 15,
@@ -130,13 +139,23 @@ public partial class PublishQueueView : UserControl
                 TextAlignment = TextAlignment.Center
             });
         }
+        // Phase 6 (2026-10-04): the preview is sized from the screen's work area — never taller or wider than the screen,
+        // so the top of the window can never sit outside the display (the old fixed 900×1080 did exactly that on 1080p).
+        var work = SystemParameters.WorkArea;
+        var width = Math.Max(520, Math.Min(1100, work.Width - 80));
+        var height = Math.Max(420, Math.Min(1320, work.Height - 80));
         var window = new Window
         {
             Title = $"{post.Title} — {slide.PositionText}",
             Owner = Window.GetWindow(this),
-            Width = 900,
-            Height = 1080,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            Width = width,
+            Height = height,
+            MaxWidth = Math.Max(520, work.Width - 20),
+            MaxHeight = Math.Max(420, work.Height - 20),
+            // CenterScreen instead of CenterOwner: with the main window spanning two monitors the owner-centred window
+            // could still land off the visible screen.
+            WindowStartupLocation = WindowStartupLocation.CenterScreen,
+            WindowState = WindowState.Normal,
             Background = (Brush)FindResource("PhoneScreenBrush"),
             FlowDirection = FlowDirection.RightToLeft,
             Content = panel

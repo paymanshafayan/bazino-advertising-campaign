@@ -1,3 +1,4 @@
+using System.Windows;
 using System.Windows.Threading;
 using BazinoMarketing.App.ViewModels;
 using BazinoMarketing.Core.Browser;
@@ -18,14 +19,16 @@ public sealed class MailboxHost
     private readonly AppServices _services;
     private readonly MainViewModel _main;
     private readonly Dispatcher _dispatcher;
+    private readonly Window? _window;
 
     public MailboxService Service { get; }
 
-    public MailboxHost(AppServices services, MainViewModel main, Dispatcher dispatcher)
+    public MailboxHost(AppServices services, MainViewModel main, Dispatcher dispatcher, Window? window = null)
     {
         _services = services;
         _main = main;
         _dispatcher = dispatcher;
+        _window = window;
         var executor = new CommandExecutor(new CommandExecutorOptions
         {
             GetSettings = () => _services.Settings,
@@ -42,10 +45,16 @@ public sealed class MailboxHost
             RunLegacyImport = RunLegacyImportAsync,
             RestartWith = (file, delay) => App.ScheduleRestartAsync(file, delay),
             Restart = delay => App.ScheduleRestartAsync(null, delay),
-            Browser = () => _services.Browser
+            Browser = () => _services.Browser,
+            // Phase 7: the agent asks the app itself to restore its window (normal, never topmost) after a capture run.
+            WindowControl = mode => _dispatcher.Invoke(() => _window is MainWindow main
+                ? main.ApplyWindowMode(mode)
+                : (object)new { ok = false, mode, error = "window_unavailable", message = "پنجرهٔ برنامه در دسترس نیست." })
         });
         Service = new MailboxService(() => _services.Settings, _services.Secrets, _services.Log, AppServices.Version, _services.Paths.Root, executor);
         _main.Connection.Mailbox.Attach(Service);
+        // Phase 8 owner addition (2026-10-04): the owner registers extra branches by pasting their public URL.
+        _main.Connection.Mailbox.SourceHandlers = (AddSourceFromUrl, RemoveSource);
     }
 
     public void Start()
@@ -56,6 +65,68 @@ public sealed class MailboxHost
     }
 
     public Task StopAsync() => Service.StopAsync(TimeSpan.FromSeconds(4));
+
+    /// <summary>
+    /// Phase 8 owner addition (2026-10-04): registers one more mailbox source from the public URL of a branch
+    /// (for example <c>https://github.com/owner/repo/tree/arena%2Fmy-branch</c>). Returns null on success or a Persian error.
+    /// </summary>
+    public string? AddSourceFromUrl(string url)
+    {
+        if (!MailboxSourceUrl.TryParse(url, out var repository, out var branch, out var parseError)) return parseError;
+        var settings = _services.Settings.Clone();
+        var mailboxPath = string.IsNullOrWhiteSpace(settings.GitHub.MailboxPath) ? "marketing-app-mailbox" : settings.GitHub.MailboxPath;
+        var primary = settings.GitHub.PrimarySource();
+        if (string.Equals(repository, primary.Repository, StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(branch, primary.Branch, StringComparison.OrdinalIgnoreCase))
+            return "این همان شاخهٔ اصلی است و از قبل ثبت شده.";
+        var key = MailboxSourceUrl.KeyOf(repository, branch, mailboxPath);
+        if (settings.GitHub.Sources.Any(s => string.Equals(s.Key, key, StringComparison.OrdinalIgnoreCase)))
+            return "این شاخه از قبل ثبت شده است.";
+        settings.GitHub.Sources.Add(new MailboxSourceSettings
+        {
+            Repository = repository,
+            Branch = branch,
+            MailboxPath = mailboxPath,
+            Enabled = true,
+            Label = ""
+        });
+        try
+        {
+            _services.SettingsStore.Save(settings);
+        }
+        catch (Exception ex)
+        {
+            return "ذخیرهٔ تنظیمات ناموفق بود: " + ex.Message;
+        }
+        _main.Settings.ApplyImported(settings);
+        _main.Settings.LoadAll();
+        Service.ReloadSources();
+        _services.Info("mailbox", "source.add", "شاخهٔ تازه به صندوق فرمان افزوده شد", $"{repository} · {branch}");
+        return null;
+    }
+
+    /// <summary>Removes an extra source by its key. The primary repository/branch cannot be removed here.</summary>
+    public string? RemoveSource(string key)
+    {
+        var settings = _services.Settings.Clone();
+        var primary = settings.GitHub.PrimarySource();
+        if (string.Equals(primary.Key, key, StringComparison.OrdinalIgnoreCase))
+            return "شاخهٔ اصلی از این فهرست حذف نمی‌شود؛ برای تغییر آن از تنظیمات گیت‌هاب استفاده کنید.";
+        var removed = settings.GitHub.Sources.RemoveAll(s => string.Equals(s.Key, key, StringComparison.OrdinalIgnoreCase));
+        if (removed == 0) return "این شاخه در فهرست پیدا نشد.";
+        try
+        {
+            _services.SettingsStore.Save(settings);
+        }
+        catch (Exception ex)
+        {
+            return "ذخیرهٔ تنظیمات ناموفق بود: " + ex.Message;
+        }
+        _main.Settings.ApplyImported(settings);
+        Service.ReloadSources();
+        _services.Info("mailbox", "source.remove", "یک شاخه از صندوق فرمان برداشته شد", key);
+        return null;
+    }
 
     private async Task<string?> ApplySettingsAsync(AppSettings settings)
     {

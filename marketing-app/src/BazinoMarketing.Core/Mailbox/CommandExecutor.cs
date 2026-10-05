@@ -76,6 +76,8 @@ public sealed class CommandExecutorOptions
     public Func<BrowserBridge>? Browser { get; init; }
     /// <summary>Local media folder, official Instaloader, FFmpeg and the existing GitHub connection.</summary>
     public MediaService? Media { get; init; }
+    /// <summary>Window control hook (phase 7): puts the app window back to normal (never topmost). Default: unavailable.</summary>
+    public Func<string, object>? WindowControl { get; init; }
 }
 
 /// <summary>
@@ -116,8 +118,21 @@ public sealed class CommandExecutor
             Commands.MediaUpload => await MediaUploadAsync(ctx, ct).ConfigureAwait(false),
             Commands.MediaFfmpeg => await MediaFfmpegAsync(ctx, ct).ConfigureAwait(false),
             Commands.MediaTranscribe => await MediaTranscribeAsync(ctx, ct).ConfigureAwait(false),
+            Commands.WindowState => WindowState(ctx),
             _ => throw new CommandException("unknown_command", $"'{ctx.Cmd}' is not a known command")
         };
+    }
+
+    /// <summary>
+    /// Phase 7 (owner order 2026-10-03/04): after a capture/screenshot run the agent asks the app to restore its own
+    /// window — normal state, not topmost, on screen — so the app never stays above the owner's other windows.
+    /// </summary>
+    private object WindowState(CommandContext ctx)
+    {
+        var mode = (ctx.Str("mode") ?? "restore").Trim().ToLowerInvariant();
+        if (_o.WindowControl is null)
+            return new { ok = false, mode, error = "window_control_unavailable", message = "کنترل پنجره در این نسخه فعال نیست." };
+        return _o.WindowControl(mode);
     }
 
     private object Ping() => new

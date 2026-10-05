@@ -78,6 +78,98 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </StackPanel>
+
+                        <!-- Phase 8 (2026-10-04): registered agents — the owner approves, disables or forgets each fingerprint. -->
+                        <StackPanel Margin="0,16,0,0">
+                            <TextBlock Text="ایجنت‌های ثبت‌شده" Style="{StaticResource H3}" />
+                            <TextBlock Style="{StaticResource Caption}" Margin="0,4,0,8" TextWrapping="Wrap" MaxWidth="760" HorizontalAlignment="Right"
+                                       Text="هر اثر انگشت تازه اول «در انتظار تأیید شما» می‌ماند و تا تأیید نکردن شما هیچ فرمانی از او اجرا نمی‌شود. «تأیید» دسترسی کامل می‌دهد و «غیرفعال» هر فرمان او را رد می‌کند؛ توکن یا کلید هیچ ایجنتی اینجا ذخیره نمی‌شود." />
+                            <ItemsControl ItemsSource="{Binding Agents}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource FlatCard}" Padding="12,8" Margin="0,0,0,6">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Ellipse Grid.Column="0" Width="10" Height="10" VerticalAlignment="Center" Margin="0,0,10,0"
+                                                         Fill="{Binding StateKind, Converter={StaticResource MailboxDotBrush}}" />
+                                                <StackPanel Grid.Column="1">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Label}" FontWeight="SemiBold" />
+                                                        <TextBlock Text="{Binding Fingerprint}" Style="{StaticResource Mono}" Margin="12,0,0,0"
+                                                                   FlowDirection="LeftToRight" Foreground="{StaticResource MutedBrush}" />
+                                                    </StackPanel>
+                                                    <TextBlock Text="{Binding StateText}" Style="{StaticResource Caption}" Margin="0,3,0,0" />
+                                                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                                        <TextBlock Text="{Binding FirstSeenText}" Style="{StaticResource Caption}" />
+                                                        <TextBlock Text="{Binding SourceText}" Style="{StaticResource Caption}" Margin="12,0,0,0" FlowDirection="LeftToRight" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Button Content="تأیید" Style="{StaticResource PrimaryButton}" Padding="12,5" Margin="0,0,6,0"
+                                                            Command="{Binding DataContext.ApproveAgentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                            CommandParameter="{Binding}" Visibility="{Binding IsApproved, Converter={StaticResource InvBoolToVis}}" />
+                                                    <Button Content="غیرفعال" Style="{StaticResource GhostButton}" Padding="12,5" Margin="0,0,6,0"
+                                                            Command="{Binding DataContext.DisableAgentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                            CommandParameter="{Binding}" Visibility="{Binding IsDisabled, Converter={StaticResource InvBoolToVis}}" />
+                                                    <Button Content="حذف از دفتر" Style="{StaticResource GhostButton}" Padding="12,5"
+                                                            Command="{Binding DataContext.ForgetAgentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                            CommandParameter="{Binding}" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock Text="هنوز هیچ ایجنتی هویتش را در صندوق نگذاشته است." Style="{StaticResource Caption}" Margin="0,2,0,0"
+                                       Visibility="{Binding HasAgents, Converter={StaticResource InvBoolToVis}}" />
+                        </StackPanel>
+
+                        <!-- Phase 8 owner addition (2026-10-04): several repositories + branches, added by pasting a public branch URL. -->
+                        <StackPanel Margin="0,16,0,0">
+                            <TextBlock Text="شاخه‌های ثبت‌شده" Style="{StaticResource H3}" />
+                            <TextBlock Style="{StaticResource Caption}" Margin="0,4,0,8" TextWrapping="Wrap" MaxWidth="760" HorizontalAlignment="Right"
+                                       Text="صندوق فرمان پیام‌های همهٔ این شاخه‌ها را می‌خواند و در همان شاخه پاسخ می‌دهد. برای افزودن، آدرس عمومی برنچ را در کادر زیر بچسبانید؛ نام مخزن و شاخه هرچه باشد پذیرفته می‌شود." />
+                            <Border Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource LineBrush}" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,0,8">
+                                <StackPanel>
+                                    <TextBox Text="{Binding NewSourceUrl, UpdateSourceTrigger=PropertyChanged}" MinHeight="34" FlowDirection="LeftToRight"
+                                             ToolTip="https://github.com/OWNER/REPO/tree/BRANCH" />
+                                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                        <Button Content="افزودن شاخه" Style="{StaticResource PrimaryButton}" Command="{Binding AddSourceCommand}" />
+                                        <TextBlock Text="{Binding SourceMessage}" Style="{StaticResource Caption}" Margin="12,0,0,0" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="520" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                            <ItemsControl ItemsSource="{Binding Sources}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource FlatCard}" Padding="12,8" Margin="0,0,0,6">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Grid.Column="0">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                                                        <TextBlock Text="شاخهٔ اصلی" Style="{StaticResource Caption}" Margin="8,0,0,0"
+                                                                   Visibility="{Binding IsPrimary, Converter={StaticResource BoolToVis}}" />
+                                                    </StackPanel>
+                                                    <TextBlock Text="{Binding Url}" Style="{StaticResource Mono}" FlowDirection="LeftToRight" Margin="0,3,0,0" TextTrimming="CharacterEllipsis" Foreground="{StaticResource Accent2Brush}" />
+                                                    <TextBlock Text="{Binding StatusText}" Style="{StaticResource Caption}" Margin="0,3,0,0" TextWrapping="Wrap" />
+                                                </StackPanel>
+                                                <Button Grid.Column="1" Content="برداشتن" Style="{StaticResource GhostButton}" Padding="12,5" VerticalAlignment="Center"
+                                                        Command="{Binding DataContext.RemoveSourceCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                        CommandParameter="{Binding}" Visibility="{Binding CanRemove, Converter={StaticResource BoolToVis}}" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Column="1" VerticalAlignment="Top">
                         <Button Content="{Binding RestartText}" Style="{StaticResource PrimaryButton}" Command="{Binding RestartCommand}" />

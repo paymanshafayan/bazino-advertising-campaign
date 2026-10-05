@@ -1,0 +1,103 @@
+# Copy this entire file to .github/workflows/build-studio-bridge.yml
+# on branch arena/01a0d4ee-bazino-gamenet-portal (via GitHub browser).
+name: Build Bazino Studio Bridge
+
+on:
+  push:
+    branches: ['arena/01a0d4ee-bazino-gamenet-portal']
+    paths:
+      - 'استودیوی تبلیغات و بازاریابی/desktop-app/browser-link/BazinoStudioBridge.ps1'
+      - 'استودیوی تبلیغات و بازاریابی/desktop-app/browser-link/workflow-build-studio-bridge.yml'
+      - '.github/workflows/build-studio-bridge.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bazino-studio-bridge-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: 'استودیوی تبلیغات و بازاریابی/desktop-app'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse Studio Bridge PowerShell source
+        shell: powershell
+        run: |
+          $script = 'browser-link/BazinoStudioBridge.ps1'
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $script),[ref]$null,[ref]$errors) | Out-Null
+          if ($errors -and $errors.Count -gt 0) {
+            $errors | ForEach-Object { Write-Error $_.Message }
+            exit 1
+          }
+          Write-Host 'PowerShell syntax OK'
+      - name: Self-test source (no GUI, Chrome or network)
+        shell: powershell
+        run: |
+          $env:BAZINO_SELFTEST = '1'
+          powershell -NoProfile -ExecutionPolicy Bypass -File 'browser-link/BazinoStudioBridge.ps1' -SelfTest
+          if ($LASTEXITCODE -ne 0) { throw 'Studio Bridge source self-test failed' }
+          $log = Get-Content (Join-Path $env:TEMP 'bazino-studio-bridge-selftest.log') -Raw
+          if ($log -notmatch 'SELFTEST OK') { throw 'Studio Bridge self-test did not finish successfully' }
+          Write-Host $log
+      - name: Install ps2exe
+        shell: powershell
+        run: Install-Module ps2exe -Scope CurrentUser -Force -AllowClobber
+      - name: Build BazinoStudioBridge.exe
+        shell: powershell
+        run: |
+          Import-Module ps2exe
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Invoke-PS2EXE -InputFile 'browser-link/BazinoStudioBridge.ps1' `
+            -OutputFile 'dist/BazinoStudioBridge.exe' -noConsole `
+            -title 'Bazino Studio Bridge' -product 'BazinoStudioBridge' `
+            -description 'Short-lived Bazino Studio browser bridge for the Arena session branch' `
+            -company 'Bazino' -version '1.6.0.0'
+          if (-not (Test-Path 'dist/BazinoStudioBridge.exe')) { throw 'EXE was not produced' }
+      - name: Inspect binary and checksum
+        shell: powershell
+        run: |
+          $exe = 'dist/BazinoStudioBridge.exe'
+          $size = (Get-Item $exe).Length
+          if ($size -lt 20KB) { throw "EXE is suspiciously small: $size bytes" }
+          $stream = [IO.File]::OpenRead((Resolve-Path $exe))
+          try {
+            $head = New-Object byte[] 2
+            [void]$stream.Read($head,0,2)
+            if ($head[0] -ne 0x4D -or $head[1] -ne 0x5A) { throw 'Missing Windows PE (MZ) header' }
+          } finally { $stream.Close() }
+          $info = (Get-Item $exe).VersionInfo
+          Write-Host "Product: $($info.ProductName); size: $size bytes"
+          Write-Host ('sha256: '+(Get-FileHash $exe -Algorithm SHA256).Hash)
+      - name: Upload Studio Bridge (before packaged smoke test)
+        uses: actions/upload-artifact@v4
+        with:
+          name: BazinoStudioBridge-Windows
+          path: استودیوی تبلیغات و بازاریابی/desktop-app/dist/BazinoStudioBridge.exe
+          retention-days: 30
+          if-no-files-found: error
+      - name: Packaged EXE self-test (no GUI/network)
+        shell: powershell
+        timeout-minutes: 2
+        continue-on-error: true
+        run: |
+          $env:BAZINO_SELFTEST = '1'
+          $logPath = Join-Path $env:TEMP 'bazino-studio-bridge-selftest.log'
+          Remove-Item $logPath -ErrorAction SilentlyContinue
+          $p = Start-Process -FilePath 'dist/BazinoStudioBridge.exe' -PassThru
+          if (-not $p.WaitForExit(45000)) { try { $p.Kill() } catch {}; throw 'EXE self-test timed out' }
+          if ($p.ExitCode -ne 0) { throw "EXE self-test failed: $($p.ExitCode)" }
+          if (-not (Test-Path $logPath) -or (Get-Content $logPath -Raw) -notmatch 'SELFTEST OK') { throw 'Packaged EXE did not complete its self-test' }
+          Get-Content $logPath
+      - name: Summary
+        shell: powershell
+        run: |
+          $sha = (Get-FileHash 'dist/BazinoStudioBridge.exe' -Algorithm SHA256).Hash
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "## Bazino Studio Bridge`nArtifact: BazinoStudioBridge-Windows / BazinoStudioBridge.exe (30 days).`nSHA256: $sha`nUnsigned; use only on the owner's Windows computer after reviewing the source."

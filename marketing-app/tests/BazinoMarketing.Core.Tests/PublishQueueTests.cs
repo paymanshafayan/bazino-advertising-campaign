@@ -1,3 +1,4 @@
+using System.Text.Json.Nodes;
 using BazinoMarketing.Core.Publishing;
 using Xunit;
 
@@ -78,7 +79,7 @@ public class PublishQueueTests
     }
 
     [Fact]
-    public void StoryPublish_OmitsEveryLocationFieldAndDoesNotRequireManusBinding()
+    public void StoryPublish_SendsTheOfficialStoryFlagAndOmitsEveryLocationField()
     {
         var item = MakeItem();
         item.ContentType = "story";
@@ -91,8 +92,51 @@ public class PublishQueueTests
         item.Media[0].PreviewPath = null;
         Assert.Equal("", item.Validate());
         var body = ZernioPublishBuilder.BuildInstagramPost(item, "ig-account", new[] { "https://media.zernio.com/sample.jpg" });
-        Assert.Null(body["platforms"]![0]!["locationId"]);
-        Assert.Null(body["platforms"]![0]!["platformSpecificData"]);
+        var platformData = body["platforms"]![0]!["platformSpecificData"]!;
+        Assert.Equal("story", platformData["contentType"]!.GetValue<string>());
+        Assert.Null(platformData["locationId"]);
+        Assert.Null(body["content"]);
+    }
+
+    [Theory]
+    [InlineData("post")]
+    [InlineData("reel")]
+    [InlineData("carousel")]
+    public void FeedFormats_KeepTheOfficialLocationAndNeverSendTheStoryFlag(string format)
+    {
+        var item = MakeItem();
+        switch (format)
+        {
+            case "post":
+                item.Kind = "post";
+                item.ContentType = "post";
+                item.Topic = "gaming-news";
+                item.Media[0].Type = "image";
+                item.Media[0].PreviewPath = null;
+                item.Media[0].Transcript = null;
+                break;
+            case "carousel":
+                item.Kind = "carousel";
+                item.ContentType = "carousel";
+                item.Topic = "gaming-news";
+                item.Media[0].Type = "image";
+                item.Media[0].PreviewPath = null;
+                item.Media[0].Transcript = null;
+                item.Media.Add(new PublishMediaItem
+                {
+                    Path = "marketing-app-mailbox/publish-queue/media/sample-2.jpg",
+                    Type = "image"
+                });
+                break;
+        }
+
+        Assert.Equal("", item.Validate());
+        var urls = item.Media.Select((_, i) => $"https://media.zernio.com/sample-{i + 1}.jpg").ToArray();
+        var body = ZernioPublishBuilder.BuildInstagramPost(item, "ig-account", urls);
+        var platformData = body["platforms"]![0]!["platformSpecificData"]!;
+        Assert.Null(platformData["contentType"]);
+        Assert.Equal(ZernioAutomationBuilder.InstagramLocationId, platformData["locationId"]!.GetValue<string>());
+        Assert.Equal(item.Caption, body["content"]!.GetValue<string>());
     }
 
     [Fact]
@@ -211,6 +255,100 @@ public class PublishQueueTests
         item.Media[0].PreviewPath = null;
         item.Media[0].Transcript = null;
         Assert.Equal("", item.Validate());
+    }
+
+    [Fact]
+    public void PublishConfirmation_NeverTreatsANonTerminalStatusAsAResult()
+    {
+        // Official Zernio platform states: pending | processing | uploading | published | failed | cancelled.
+        Assert.Equal(ZernioPlatformState.Transient, ZernioPublishConfirmation.Classify("processing"));
+        Assert.Equal(ZernioPlatformState.Transient, ZernioPublishConfirmation.Classify("uploading"));
+        Assert.Equal(ZernioPlatformState.Transient, ZernioPublishConfirmation.Classify("pending"));
+        Assert.Equal(ZernioPlatformState.Published, ZernioPublishConfirmation.Classify("published"));
+        Assert.Equal(ZernioPlatformState.Failed, ZernioPublishConfirmation.Classify("failed"));
+        Assert.Equal(ZernioPlatformState.Cancelled, ZernioPublishConfirmation.Classify("cancelled"));
+        // A value we do not know yet must wait for confirmation instead of turning into a false failure.
+        Assert.Equal(ZernioPlatformState.Transient, ZernioPublishConfirmation.Classify("some-new-state"));
+        Assert.Equal(ZernioPlatformState.Missing, ZernioPublishConfirmation.Classify(""));
+    }
+
+    [Fact]
+    public void PublishConfirmation_ReadsAStillPublishingCreateResponseAsUnconfirmed()
+    {
+        var body = JsonNode.Parse("""
+            {"message":"Post created successfully","post":{"_id":"65f1c0a9e2b5af0012ab34cd","status":"publishing",
+             "platforms":[{"platform":"instagram","status":"processing"}]}}
+            """);
+        var outcome = ZernioPublishConfirmation.ReadPlatform(ZernioPublishConfirmation.FindPostNode(body, null), "instagram");
+        Assert.NotNull(outcome);
+        Assert.Equal(ZernioPlatformState.Transient, outcome!.State);
+        Assert.Equal("processing", outcome.Status);
+        Assert.Empty(outcome.PlatformPostId);
+    }
+
+    [Fact]
+    public void PublishConfirmation_ReadsPublishedPlatformWithMediaIdAndUrl()
+    {
+        var body = JsonNode.Parse("""
+            {"post":{"_id":"65f1c0a9e2b5af0012ab34cd","status":"published","publishedAt":"2026-10-04T15:00:39Z",
+             "platforms":[{"platform":"instagram","status":"published","platformPostId":"18134197930726215",
+              "platformPostUrl":"https://www.instagram.com/p/DGx7Yk2ScAb/"}]}}
+            """);
+        var post = ZernioPublishConfirmation.FindPostNode(body, null);
+        var outcome = ZernioPublishConfirmation.ReadPlatform(post, "instagram");
+        Assert.Equal(ZernioPlatformState.Published, outcome!.State);
+        var result = ZernioPublishConfirmation.ToPlatformResult(outcome);
+        Assert.Equal("instagram", result.Platform);
+        Assert.Equal("18134197930726215", result.PlatformPostId);
+        Assert.Equal("https://www.instagram.com/p/DGx7Yk2ScAb/", result.Url);
+        // The real API puts publishedAt on the post, not on the platform entry.
+        Assert.Equal(new DateTimeOffset(2026, 10, 4, 15, 0, 39, TimeSpan.Zero), outcome.PublishedAt);
+    }
+
+    [Fact]
+    public void PublishConfirmation_TreatsARealMediaIdAsPublishedEvenWithoutAStatusWord()
+    {
+        var body = JsonNode.Parse("""
+            {"post":{"_id":"65f1c0a9e2b5af0012ab34cd","publishedAt":"2026-10-04T15:00:39Z",
+             "platforms":[{"platform":"instagram","platformPostId":"18134197930726215"}]}}
+            """);
+        var outcome = ZernioPublishConfirmation.ReadPlatform(ZernioPublishConfirmation.FindPostNode(body, null), "instagram");
+        Assert.Equal(ZernioPlatformState.Published, outcome!.State);
+        Assert.Equal("18134197930726215", outcome.PlatformPostId);
+    }
+
+    [Fact]
+    public void PublishConfirmation_ReadsFailedPlatformWithZernioErrorFields()
+    {
+        var body = JsonNode.Parse("""
+            {"post":{"_id":"65f1c0a9e2b5af0012ab34cd","status":"failed",
+             "platforms":[{"platform":"instagram","status":"failed",
+              "errorMessage":"Media processing failed: video too short for Reels",
+              "errorCategory":"user_content","errorSource":"user"}]}}
+            """);
+        var outcome = ZernioPublishConfirmation.ReadPlatform(ZernioPublishConfirmation.FindPostNode(body, null), "instagram");
+        Assert.Equal(ZernioPlatformState.Failed, outcome!.State);
+        Assert.Contains("video too short", outcome.FailureDetail());
+        Assert.Contains("user_content", outcome.FailureDetail());
+    }
+
+    [Fact]
+    public void PublishConfirmation_FindsOnlyOurOwnPostInsideAListResponse()
+    {
+        var body = JsonNode.Parse("""
+            {"posts":[
+              {"_id":"someone-else","metadata":{"contentId":"another-item"},"platforms":[{"platform":"instagram","status":"published"}]},
+              {"_id":"mine","metadata":{"contentId":"2026-10-04-post-2"},"platforms":[{"platform":"instagram","status":"published","platformPostId":"7"}]}
+            ]}
+            """);
+        var mine = ZernioPublishConfirmation.FindPostNode(body, "2026-10-04-post-2");
+        Assert.NotNull(mine);
+        Assert.Equal("mine", ZernioPublishConfirmation.ReadPostId(mine));
+        Assert.Null(ZernioPublishConfirmation.FindPostNode(body, "no-such-item"));
+        Assert.Null(ZernioPublishConfirmation.FindPostNode(JsonNode.Parse("""{"post":{"_id":"x","metadata":{"contentId":"another-item"}}}"""), "our-item"));
+        // A create response without metadata is still ours (unique Idempotency-Key), so it is accepted when no
+        // contentId filter is asked for — while the recent-list search keeps requiring our own contentId.
+        Assert.NotNull(ZernioPublishConfirmation.FindPostNode(JsonNode.Parse("""{"post":{"_id":"x","status":"published"}}"""), null));
     }
 
     private static PublishQueueItem MakeItem() => new()

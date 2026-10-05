@@ -3,7 +3,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
-    <Version>0.8.4</Version>
+    <Version>0.9.0</Version>
     <Authors>Bazino</Authors>
     <Company>Bazino</Company>
     <Product>Jinus</Product>

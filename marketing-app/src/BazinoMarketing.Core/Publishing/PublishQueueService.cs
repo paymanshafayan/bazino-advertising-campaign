@@ -25,6 +25,10 @@ public sealed class PublishQueueService
     private const string AttemptedDir = QueueRoot + "/attempted";
     private const string MediaRoot = QueueRoot + "/media/";
     private const string MediaDir = QueueRoot + "/media";
+    /// <summary>How long one run polls Zernio before a publish is reported as unconfirmed instead of failed.</summary>
+    private static readonly TimeSpan InstagramConfirmationWindow = TimeSpan.FromSeconds(90);
+    private static readonly TimeSpan AttemptConfirmationMinAge = TimeSpan.FromMinutes(3);
+    private static readonly TimeSpan AttemptConfirmationMaxAge = TimeSpan.FromHours(6);
     private readonly Func<AppSettings> _settings;
     private readonly ISecretStore _secrets;
     private readonly JsonlLogStore _log;
@@ -216,6 +220,9 @@ public sealed class PublishQueueService
             var mediaByPath = mediaEntriesByPath.ToDictionary(kv => kv.Key, kv => kv.Value.Sha, StringComparer.Ordinal);
             var done = new HashSet<string>(published.Concat(failed).Concat(attempted)
                 .Select(f => Path.GetFileNameWithoutExtension(f.Name)), StringComparer.OrdinalIgnoreCase);
+            // Finish attempts whose outcome was still unclear when they ran (owner incident 2026-10-04: Zernio
+            // published while the app reported a failure). This never creates a post; it only reads the truth.
+            await ResolveUnconfirmedAttemptsAsync(s, token, attempted, published, failed, readyById, ct).ConfigureAwait(false);
             foreach (var entry in approved.Where(f => f.Name.EndsWith(".json", StringComparison.OrdinalIgnoreCase)))
             {
                 ct.ThrowIfCancellationRequested();
@@ -266,6 +273,13 @@ public sealed class PublishQueueService
                         $"id={id}; mediaId={result.InstagramMediaId ?? "missing"}; url={result.InstagramUrl ?? "missing"}; platforms={string.Join(",", result.Platforms.Select(p => p.Platform + ":" + p.Status))}; warnings={string.Join(" | ", result.Warnings)}");
                 }
                 catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+                catch (PublishOutcomeUnknownException ex)
+                {
+                    // Owner law: never report "failed" for something that may have been published. The attempt record
+                    // already shows this item as «نتیجهٔ ارسال نامشخص است؛ بررسی دستی لازم است» and a later run finishes it.
+                    _log.Append(LogLevel.Warning, "publishing", "publish-unconfirmed",
+                        "نتیجهٔ انتشار هنوز نامشخص است؛ به‌جای ثبت «ناموفق»، وضعیت «نیاز به بررسی» می‌ماند", $"id={id}; {ex.Message}");
+                }
                 catch (Exception ex)
                 {
                     await RecordFailureAsync(id, ex.Message, ct).ConfigureAwait(false);
@@ -328,16 +342,13 @@ public sealed class PublishQueueService
                 ? new[] { instagramIdempotencyKey, otherPlatformsIdempotencyKey }
                 : new[] { instagramIdempotencyKey });
         await WriteJsonAsync($"{AttemptedDir}/{item.Id}.json", attempt, ct).ConfigureAwait(false);
-        var igReply = await ZernioClient.CreatePostAsync(settings.Zernio, apiKey, igBody, instagramIdempotencyKey, ct).ConfigureAwait(false);
-        if (!igReply.Ok) throw new InvalidOperationException("انتشار Instagram ناموفق بود: " + igReply.Error);
-        var igPlatform = FindPlatformResult(igReply.Body, "instagram");
-        if (igPlatform is null || !string.Equals(igPlatform.Status, "published", StringComparison.OrdinalIgnoreCase))
-            throw new InvalidOperationException("زرنیو موفقیت نهایی Instagram را تأیید نکرد؛ انتشار موفق گزارش نمی‌شود.");
+        var confirmed = await PublishInstagramAsync(settings.Zernio, apiKey, item, igBody, instagramIdempotencyKey, ct).ConfigureAwait(false);
+        var igPlatform = confirmed.Platform;
 
         var platforms = new List<PublishPlatformResult> { igPlatform };
         var warnings = new List<string>();
         var instagramMediaId = igPlatform.PlatformPostId;
-        var zernioPostId = FirstNonEmpty(ReadString(igReply.Body?["post"], "_id"), ReadString(igReply.Body?["post"], "id"));
+        var zernioPostId = confirmed.ZernioPostId;
         if (string.IsNullOrWhiteSpace(instagramMediaId)) warnings.Add("پاسخ زرنیو برای پست Instagram، media_id قابل‌اعتماد نداشت؛ ثبت پورتال/اتوماسیون انجام نشد.");
         var publishedAt = igPlatform.PublishedAt ?? DateTimeOffset.UtcNow;
         AffiliatePortalSyncResult? affiliatePortalSync = null;
@@ -471,6 +482,185 @@ public sealed class PublishQueueService
             instagramMediaId, igPlatform.Url, platforms, warnings, automationId,
             item.Kind == "story" ? null : ZernioAutomationBuilder.InstagramLocationId,
             item.Engagement?.Kind, item.Language, affiliatePortalSync, item.ContentType, item.Topic, item.MediaFormat);
+    }
+
+    private sealed record InstagramConfirmation(PublishPlatformResult Platform, string ZernioPostId);
+
+    /// <summary>
+    /// Publishes one approved item to Instagram and confirms the terminal state before anything is reported.
+    /// Zernio's official contract keeps a platform entry in pending/processing/uploading while Instagram still works,
+    /// and a retry of the same Idempotency-Key can only ever return the original post. A non-terminal answer is
+    /// therefore never a failure: it is polled (GET /v1/posts/{id}, falling back to the recent list matched by our own
+    /// metadata.contentId) and, when still unconfirmed, raised as <see cref="PublishOutcomeUnknownException"/> so the
+    /// item shows «نیاز به بررسی» instead of a false «ناموفق» (owner incident 2026-10-04).
+    /// </summary>
+    private async Task<InstagramConfirmation> PublishInstagramAsync(ZernioSettings settings, string apiKey,
+        PublishQueueItem item, JsonObject body, string idempotencyKey, CancellationToken ct)
+    {
+        JsonObject? post = null;
+        try
+        {
+            var reply = await ZernioClient.CreatePostAsync(settings, apiKey, body, idempotencyKey, ct,
+                TimeSpan.FromMinutes(3)).ConfigureAwait(false);
+            // Prefer the post whose metadata.contentId is this very queue item; if Zernio returns the post without
+            // that metadata, the create call was still ours (unique Idempotency-Key), so its single post is ours too.
+            post = ZernioPublishConfirmation.FindPostNode(reply.Body, item.Id)
+                ?? ZernioPublishConfirmation.FindPostNode(reply.Body, null);
+            if (!reply.Ok)
+            {
+                // Only a deterministic local refusal (status 0 = guard) or a 4xx that is not a duplicate/conflict
+                // proves nothing was created. A timeout, a 5xx or a 409 idempotency conflict may have created the
+                // post, so it must be verified before deciding.
+                if (reply.StatusCode == 0 || (reply.StatusCode is >= 400 and < 500 && reply.StatusCode != 409))
+                    throw new InvalidOperationException("انتشار Instagram ناموفق بود: " + reply.Error);
+                post ??= await FindCreatedPostAsync(settings, apiKey, item.Id, ct).ConfigureAwait(false);
+                if (post is null)
+                    throw new PublishOutcomeUnknownException(
+                        "ژینوس برای این درخواست پاسخ قطعی نداد و پستی با شناسهٔ همین محتوا در فهرست اخیر پیدا نشد؛ نتیجهٔ ارسال نامشخص است. علت: " + reply.Error);
+            }
+        }
+        catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+        catch (PublishOutcomeUnknownException) { throw; }
+        catch (Exception ex) when (ex is TaskCanceledException or HttpRequestException or IOException)
+        {
+            post = await FindCreatedPostAsync(settings, apiKey, item.Id, ct).ConfigureAwait(false)
+                ?? throw new PublishOutcomeUnknownException(
+                    "درخواست انتشار بدون پاسخ کامل پایان یافت و پستی با شناسهٔ همین محتوا در فهرست اخیر پیدا نشد؛ نتیجهٔ ارسال نامشخص است. علت: " + ex.Message, ex);
+        }
+
+        var postId = ZernioPublishConfirmation.ReadPostId(post);
+        var deadline = DateTimeOffset.UtcNow + InstagramConfirmationWindow;
+        while (true)
+        {
+            var outcome = ZernioPublishConfirmation.ReadPlatform(post, "instagram");
+            if (outcome is not null && outcome.State == ZernioPlatformState.Published)
+                return new InstagramConfirmation(ZernioPublishConfirmation.ToPlatformResult(outcome), postId);
+            if (outcome is not null && outcome.State is ZernioPlatformState.Failed or ZernioPlatformState.Cancelled)
+                throw new InvalidOperationException("انتشار Instagram در ژینوس " +
+                    (outcome.State == ZernioPlatformState.Cancelled ? "لغو شد: " : "ناموفق ثبت شد: ") + outcome.FailureDetail());
+            if (DateTimeOffset.UtcNow >= deadline)
+                throw new PublishOutcomeUnknownException(
+                    "زرنیو انتشار Instagram را در مهلت بررسی نهایی نکرد" +
+                    (outcome is null ? " و پاسخ، وضعیت پست Instagram را نداشت" : " (آخرین وضعیت: " + outcome.Status + ")") +
+                    "؛ نتیجهٔ ارسال نامشخص است و بررسی دستی لازم است.");
+            await Task.Delay(TimeSpan.FromSeconds(5), ct).ConfigureAwait(false);
+            var fresh = await ReadZernioPostAsync(settings, apiKey, postId, item.Id, ct).ConfigureAwait(false);
+            if (fresh is null) continue;
+            post = fresh;
+            postId = FirstNonEmpty(ZernioPublishConfirmation.ReadPostId(fresh), postId);
+        }
+    }
+
+    /// <summary>GET /v1/posts/{id} first, then the recent list matched by the app's own metadata.contentId.</summary>
+    private static async Task<JsonObject?> ReadZernioPostAsync(ZernioSettings settings, string apiKey, string? postId, string contentId, CancellationToken ct)
+    {
+        if (!string.IsNullOrWhiteSpace(postId))
+        {
+            try
+            {
+                var reply = await ZernioClient.GetPostAsync(settings, apiKey, postId, ct).ConfigureAwait(false);
+                var node = reply.Ok ? ZernioPublishConfirmation.FindPostNode(reply.Body, null) : null;
+                if (node is not null) return node;
+            }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+            catch { /* A failed read means "not confirmed yet", never "failed to publish". */ }
+        }
+        return await FindCreatedPostAsync(settings, apiKey, contentId, ct).ConfigureAwait(false);
+    }
+
+    private static async Task<JsonObject?> FindCreatedPostAsync(ZernioSettings settings, string apiKey, string contentId, CancellationToken ct)
+    {
+        try
+        {
+            var list = await ZernioClient.ListPostsAsync(settings, apiKey, new ZernioPostQuery(null, null, 25, 1, null, null), ct).ConfigureAwait(false);
+            return list.Ok ? ZernioPublishConfirmation.FindPostNode(list.Body, contentId) : null;
+        }
+        catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+        catch { return null; }
+    }
+
+    /// <summary>
+    /// Later runs finish attempts whose outcome stayed unclear: the post is looked up by the app's own contentId and,
+    /// once Zernio reports a terminal state, the normal published/failed record is written. Nothing is ever re-published.
+    /// </summary>
+    private async Task ResolveUnconfirmedAttemptsAsync(GitHubSettings settings, string token,
+        IReadOnlyList<GitHubContentEntry> attempted, IReadOnlyList<GitHubContentEntry> published,
+        IReadOnlyList<GitHubContentEntry> failed, IReadOnlyDictionary<string, GitHubContentEntry> readyById, CancellationToken ct)
+    {
+        var current = _settings();
+        var apiKey = _secrets.GetOrEmpty(SecretKeys.ZernioApiKey);
+        if (string.IsNullOrWhiteSpace(apiKey)) return;
+        var terminal = new HashSet<string>(published.Concat(failed)
+            .Select(f => Path.GetFileNameWithoutExtension(f.Name)), StringComparer.OrdinalIgnoreCase);
+        var now = DateTimeOffset.UtcNow;
+        var checks = 0;
+        foreach (var file in attempted.Where(f => f.Name.EndsWith(".json", StringComparison.OrdinalIgnoreCase)))
+        {
+            if (checks >= 5) break;
+            ct.ThrowIfCancellationRequested();
+            var id = Path.GetFileNameWithoutExtension(file.Name);
+            if (terminal.Contains(id) || !readyById.TryGetValue(id, out var readyEntry)) continue;
+            PublishAttemptRecord? attempt;
+            try
+            {
+                var json = Encoding.UTF8.GetString(await GitHubClient.DownloadRawAsync(settings, token, file.Path, 256 * 1024, ct).ConfigureAwait(false));
+                attempt = JsonSerializer.Deserialize<PublishAttemptRecord>(json, JsonUtil.Options);
+            }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+            catch { continue; }
+            if (attempt is null) continue;
+            var age = now - attempt.StartedAt;
+            if (age < AttemptConfirmationMinAge || age > AttemptConfirmationMaxAge) continue;
+            checks++;
+            PublishQueueItem item;
+            try { item = await ReadItemAsync(readyEntry.Path, readyEntry.Sha, settings, token, ct).ConfigureAwait(false); }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+            catch { continue; }
+            var post = await FindCreatedPostAsync(current.Zernio, apiKey, item.Id, ct).ConfigureAwait(false);
+            if (post is null) continue;
+            var outcome = ZernioPublishConfirmation.ReadPlatform(post, "instagram");
+            if (outcome is null || outcome.State == ZernioPlatformState.Transient) continue;
+            if (outcome.State is ZernioPlatformState.Failed or ZernioPlatformState.Cancelled)
+            {
+                await RecordFailureAsync(item.Id, "انتشار Instagram در ژینوس " +
+                    (outcome.State == ZernioPlatformState.Cancelled ? "لغو شد: " : "ناموفق ثبت شد: ") + outcome.FailureDetail(), ct).ConfigureAwait(false);
+                continue;
+            }
+            var warnings = new List<string>
+            {
+                "تأیید نهایی این انتشار در بررسی دیرهنگام انجام شد؛ بازنشر به شبکه‌های دیگر و اتوماسیون کامنت در همان اجرا ساخته نشده و در صورت نیاز باید دستی بررسی شود."
+            };
+            AffiliatePortalSyncResult? affiliatePortalSync = null;
+            if (item.ContentType == "Affiliate")
+            {
+                try
+                {
+                    var portalToken = _secrets.GetOrEmpty(SecretKeys.BazinoPortalIngestToken);
+                    affiliatePortalSync = string.IsNullOrWhiteSpace(outcome.PlatformPostId)
+                        ? AffiliatePortalSyncResult.Blocked("media_id واقعی در پاسخ انتشار نبود؛ ثبت پورتال انجام نشد.")
+                        : await BazinoAffiliatePortalClient.ReportPublishedReelAsync(current.BazinoPortal, portalToken,
+                            outcome.PlatformPostId, outcome.PublishedAt ?? now, ct).ConfigureAwait(false);
+                    if (!affiliatePortalSync.Success) warnings.Add("ثبت Affiliate Reel در پورتال: " + affiliatePortalSync.Message);
+                }
+                catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+                catch (Exception ex)
+                {
+                    affiliatePortalSync = new AffiliatePortalSyncResult(false, "network-error", 0, null, null, false,
+                        "ارسال ثبت پورتال با خطای " + ex.GetType().Name + " متوقف شد؛ وضعیت Instagram تغییر نکرد.");
+                    warnings.Add("ثبت Affiliate Reel در پورتال: " + affiliatePortalSync.Message);
+                }
+            }
+            var zernioPostId = ZernioPublishConfirmation.ReadPostId(post);
+            var record = new PublishResultRecord(item.Id, outcome.PublishedAt ?? now,
+                string.IsNullOrWhiteSpace(zernioPostId) ? null : zernioPostId,
+                outcome.PlatformPostId, outcome.Url,
+                new[] { ZernioPublishConfirmation.ToPlatformResult(outcome) }, warnings, null,
+                item.Kind == "story" ? null : ZernioAutomationBuilder.InstagramLocationId,
+                item.Engagement?.Kind, item.Language, affiliatePortalSync, item.ContentType, item.Topic, item.MediaFormat);
+            await WriteJsonAsync($"{PublishedDir}/{item.Id}.json", record, ct).ConfigureAwait(false);
+            _log.Append(LogLevel.Success, "publishing", "published-late", "انتشار اینستاگرام با بررسی دیرهنگام تأیید شد",
+                $"id={item.Id}; url={outcome.Url}; mediaId={outcome.PlatformPostId}");
+        }
     }
 
     private static IReadOnlyList<LiveZernioAccount> ParseAccounts(JsonNode? accountBody, JsonNode? healthBody)
@@ -709,6 +899,15 @@ public sealed class PublishQueueService
 }
 
 public sealed record PublishQueueReportEntry(string ItemId, DateTimeOffset At, bool Published, string Summary, string? Url, string Detail);
+
+/// <summary>
+/// Publishing may have reached Zernio while the API has not confirmed a terminal state yet. Such an outcome is never
+/// recorded as failed; the attempt stays visible as «نتیجهٔ ارسال نامشخص است؛ بررسی دستی لازم است» and is resolved later.
+/// </summary>
+public sealed class PublishOutcomeUnknownException : Exception
+{
+    public PublishOutcomeUnknownException(string message, Exception? inner = null) : base(message, inner) { }
+}
 
 public sealed record PublishAttemptRecord(string ItemId, DateTimeOffset StartedAt, string ReadyFileSha,
     IReadOnlyList<ApprovedQueueMedia> Media, IReadOnlyList<string> IdempotencyKeys);

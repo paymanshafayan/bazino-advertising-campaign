@@ -122,7 +122,11 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        // Diagnostic first step: even if startup dies inside WPF, this marker shows how far the process got.
+        var earlyRenderDir = RenderDirFromArgs(e.Args);
+        if (earlyRenderDir is not null) ScreenshotRenderer.Stage(earlyRenderDir, "stage-00-onstartup-enter");
         base.OnStartup(e);
+        if (earlyRenderDir is not null) ScreenshotRenderer.Stage(earlyRenderDir, "stage-01-base-onstartup");
         var culture = CultureInfo.GetCultureInfo("fa-IR");
         FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement),
             new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(culture.IetfLanguageTag)));
@@ -148,8 +152,10 @@ public partial class App : Application
             }
             catch (Exception ex)
             {
+                ScreenshotRenderer.Stage(outDir, "stage-02-renderall-caught");
                 ScreenshotRenderer.WriteRenderError(outDir, ex);
             }
+            ScreenshotRenderer.Stage(outDir, "stage-03-before-shutdown");
             Shutdown(code);
             return;
         }
@@ -200,7 +206,7 @@ public partial class App : Application
             // Phase 2: the command mailbox listens automatically whenever GitHub is configured. No approval step (owner's decision, 2026-09-27).
             try
             {
-                _mailbox = new MailboxHost(_services, vm, Dispatcher);
+                _mailbox = new MailboxHost(_services, vm, Dispatcher, window);
                 if (!smoke) _mailbox.Start();
             }
             catch (Exception ex)
@@ -359,8 +365,22 @@ public partial class App : Application
         catch { }
     }
 
+    /// <summary>Reads the screenshot output folder straight from the command line (before anything else runs).</summary>
+    private static string? RenderDirFromArgs(string[] args)
+    {
+        var index = Array.FindIndex(args, a => string.Equals(a, "--render-screenshots", StringComparison.OrdinalIgnoreCase));
+        if (index < 0) return null;
+        return index + 1 < args.Length ? string.Join(" ", args.Skip(index + 1)).Trim().Trim('"') : null;
+    }
+
     public static void ReportUnexpected(Exception ex, string where)
     {
+        try
+        {
+            if (IsRenderMode && !string.IsNullOrWhiteSpace(RenderDir))
+                File.WriteAllText(Path.Combine(RenderDir!, "render-unhandled.txt"), $"{DateTimeOffset.Now:O} [{where}] {ex}");
+        }
+        catch { }
         try
         {
             _services?.Error("app", "unhandled", $"خطای غیرمنتظره ({where}): {ex.Message}", ex.ToString(), "unhandled");

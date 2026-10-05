@@ -311,7 +311,8 @@ public static class ZernioClient
 
     /// <summary>Creates a post with a stable idempotency key. The caller must first discover accounts and validate targets.</summary>
     public static async Task<ZernioReply> CreatePostAsync(
-        ZernioSettings settings, string apiKey, JsonObject body, string idempotencyKey, CancellationToken ct = default)
+        ZernioSettings settings, string apiKey, JsonObject body, string idempotencyKey, CancellationToken ct = default,
+        TimeSpan? timeout = null)
     {
         var guard = Guard(settings, apiKey);
         if (guard is not null) return guard;
@@ -319,7 +320,7 @@ public static class ZernioClient
             return new ZernioReply(false, "انتشار خودکار فقط با زمان‌بندی تأییدشده یا publishNow مجاز است.", null);
         if (string.IsNullOrWhiteSpace(idempotencyKey) || idempotencyKey.Length > 255)
             return new ZernioReply(false, "شناسهٔ جلوگیری از انتشار تکراری معتبر نیست.", null);
-        var http = CreateAuthorized(settings, apiKey);
+        var http = CreateAuthorized(settings, apiKey, timeout);
         try
         {
             using var request = new HttpRequestMessage(HttpMethod.Post, $"{settings.BaseUrl.TrimEnd('/')}/v1/posts");
@@ -327,6 +328,21 @@ public static class ZernioClient
             request.Content = new StringContent(body.ToJsonString(BazinoMarketing.Core.Settings.JsonUtil.Compact), System.Text.Encoding.UTF8, "application/json");
             return await SendJsonAsync(http, request, ct).ConfigureAwait(false);
         }
+        finally { http.Dispose(); }
+    }
+
+    /// <summary>
+    /// Reads one post by its Zernio id. Used only to confirm publishing that was still in progress
+    /// (official contract: GET /v1/posts/{postId} returns the platform status and platformPostUrl).
+    /// </summary>
+    public static async Task<ZernioReply> GetPostAsync(ZernioSettings settings, string apiKey, string postId, CancellationToken ct = default)
+    {
+        var guard = Guard(settings, apiKey);
+        if (guard is not null) return guard;
+        if (string.IsNullOrWhiteSpace(postId) || postId.Length > 64 || postId.Any(ch => !char.IsLetterOrDigit(ch) && ch != '_' && ch != '-'))
+            return new ZernioReply(false, "شناسهٔ پست زرنیو برای بررسی وضعیت معتبر نیست.", null);
+        var http = CreateAuthorized(settings, apiKey);
+        try { return await GetJsonAsync(http, $"{settings.BaseUrl.TrimEnd('/')}/v1/posts/{Uri.EscapeDataString(postId.Trim())}", ct).ConfigureAwait(false); }
         finally { http.Dispose(); }
     }
 
@@ -405,9 +421,9 @@ public static class ZernioClient
         using var response = await http.SendAsync(request, ct).ConfigureAwait(false);
         var body = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
         if (!response.IsSuccessStatusCode)
-            return new ZernioReply(false, $"Zernio پاسخ {(int)response.StatusCode} داد: {Short(body)}", null);
-        try { return new ZernioReply(true, null, JsonNode.Parse(body)); }
-        catch (JsonException ex) { return new ZernioReply(false, "پاسخ Zernio خوانده نشد: " + ex.Message, null); }
+            return new ZernioReply(false, $"Zernio پاسخ {(int)response.StatusCode} داد: {Short(body)}", null, (int)response.StatusCode);
+        try { return new ZernioReply(true, null, JsonNode.Parse(body), (int)response.StatusCode); }
+        catch (JsonException ex) { return new ZernioReply(false, "پاسخ Zernio خوانده نشد: " + ex.Message, null, (int)response.StatusCode); }
     }
 
     private static string ReadDeepString(JsonElement root, string name)
@@ -431,9 +447,11 @@ public static class ZernioClient
         return null;
     }
 
-    private static HttpClient CreateAuthorized(ZernioSettings settings, string apiKey)
+    private static HttpClient CreateAuthorized(ZernioSettings settings, string apiKey, TimeSpan? timeout = null)
     {
-        var http = HttpFactory.Create(settings.Proxy, TimeSpan.FromSeconds(30));
+        // Publishes run synchronously inside the request and media processing can exceed the default window;
+        // callers pass a longer timeout for POST /v1/posts so a slow publish is not reported as a failure.
+        var http = HttpFactory.Create(settings.Proxy, timeout ?? TimeSpan.FromSeconds(30));
         http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey.Trim());
         return http;
     }
@@ -443,9 +461,9 @@ public static class ZernioClient
         using var response = await http.GetAsync(url, ct).ConfigureAwait(false);
         var body = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
         if (!response.IsSuccessStatusCode)
-            return new ZernioReply(false, $"Zernio پاسخ {(int)response.StatusCode} داد: {Short(body)}", null);
-        try { return new ZernioReply(true, null, JsonNode.Parse(body)); }
-        catch (JsonException ex) { return new ZernioReply(false, "پاسخ Zernio خوانده نشد: " + ex.Message, null); }
+            return new ZernioReply(false, $"Zernio پاسخ {(int)response.StatusCode} داد: {Short(body)}", null, (int)response.StatusCode);
+        try { return new ZernioReply(true, null, JsonNode.Parse(body), (int)response.StatusCode); }
+        catch (JsonException ex) { return new ZernioReply(false, "پاسخ Zernio خوانده نشد: " + ex.Message, null, (int)response.StatusCode); }
     }
 
     private static string Short(string text)
@@ -468,8 +486,8 @@ public static class ZernioClient
     }
 }
 
-/// <summary>Outcome of a read-only Zernio call: either the JSON body or a Persian reason it failed.</summary>
-public sealed record ZernioReply(bool Ok, string? Error, JsonNode? Body);
+/// <summary>Outcome of a Zernio call: either the JSON body or a Persian reason it failed, plus the HTTP status code.</summary>
+public sealed record ZernioReply(bool Ok, string? Error, JsonNode? Body, int StatusCode = 0);
 public sealed record ZernioMediaUploadResult(string PublicUrl, long SizeBytes, string ContentType);
 
 /// <summary>Optional filters for GET /v1/posts. Everything empty is simply not sent.</summary>

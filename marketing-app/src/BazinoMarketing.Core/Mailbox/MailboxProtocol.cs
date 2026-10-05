@@ -58,6 +58,10 @@ public static class Commands
     public const string OsRun = "os.run";
     public const string SessionClose = "session.close";
 
+    // ---- The app window (phase 7, 2026-10-04): the agent's automation asks the app itself to put its window back to a
+    // normal, non-topmost state after a screenshot/screen-capture run instead of forcing it through Win32 hacks.
+    public const string WindowState = "window.state";
+
     // ---- Zernio (read-only listing of connected accounts and posts) ----
     public const string ZernioAccounts = "zernio.accounts";
     public const string ZernioPosts = "zernio.posts";
@@ -88,7 +92,7 @@ public static class Commands
         SecretStatus, SecretSet, ImportLegacy, OsRun, ZernioAccounts, ZernioPosts, ZernioCommentAutomationCreate,
         BrowserStatus, BrowserLaunch, BrowserTargets, BrowserSelect,
         BrowserOpen, BrowserNavigate, BrowserRead, BrowserEval, BrowserClose,
-        InstagramDownload, MediaList, MediaUpload, MediaFfmpeg, MediaTranscribe, SessionClose
+        InstagramDownload, MediaList, MediaUpload, MediaFfmpeg, MediaTranscribe, WindowState, SessionClose
     };
 
     /// <summary>Nominal risk of a command (for the log). Nothing is gated on it.</summary>
