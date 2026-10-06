@@ -1,0 +1,18 @@
+{
+  "itemId": "2026-10-06-post-5-daily-game-couples-skit-tr",
+  "startedAt": "2026-10-06T19:30:32.7574885+00:00",
+  "readyFileSha": "c29bf55c6daa66646c12d16b02b24916b9e5e807",
+  "media": [
+    {
+      "path": "marketing-app-mailbox/publish-queue/media/2026-10-06-daily-game-couples-skit-tr.mp4",
+      "sha": "3046b95111a7555ea3d72c1174da20b2e794e5ad"
+    },
+    {
+      "path": "marketing-app-mailbox/publish-queue/media/2026-10-06-daily-game-couples-skit-tr-cover.jpg",
+      "sha": "34427671817d45879b8c0c4904230ce89327cbcb"
+    }
+  ],
+  "idempotencyKeys": [
+    "1721aed8-8445-6685-be47-01c255022f3f"
+  ]
+}
