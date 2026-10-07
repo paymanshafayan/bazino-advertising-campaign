@@ -1,0 +1,16 @@
+{
+  "itemId": "2026-10-07-post-4-daily-didactic-ps5-voice-command-mona-tr",
+  "action": "approved",
+  "at": "2026-10-07T15:58:02.2582159+00:00",
+  "readyFileSha": "07b11abcc2769f1b00d8d110336bf54744fac777",
+  "media": [
+    {
+      "path": "marketing-app-mailbox/publish-queue/media/2026-10-07-daily-didactic-ps5-voice-command-mona-tr.mp4",
+      "sha": "3a548b1e48116df828afda5c9fcb12f933b644d8"
+    },
+    {
+      "path": "marketing-app-mailbox/publish-queue/media/2026-10-07-daily-didactic-ps5-voice-command-mona-tr-cover.jpg",
+      "sha": "fac0c0252bad929adbe8f96c55d5c4d84ad4476e"
+    }
+  ]
+}
