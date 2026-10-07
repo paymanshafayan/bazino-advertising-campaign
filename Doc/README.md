@@ -11,6 +11,7 @@
 | صف نشر و قراردادهای backend | [`../marketing-app/PUBLISHING.md`](../marketing-app/PUBLISHING.md) | صف، approval، مقصدها، جریان DM، Affiliate Reel، Portal ingest یک‌طرفه، Insights و Task ویندوز. |
 | ساخت پست کاروسل | [`carousel-content-pattern-fa.md`](carousel-content-pattern-fa.md) | الگوی محتوا و تصویر که از بررسی چشمی ۹ اسلاید نمونهٔ مالک استخراج شد؛ مرجع کار است، نه سند رسمی یا مجوز انتشار. |
 | تولید محتوای روزانه | [`daily-content-production-guide-fa.md`](daily-content-production-guide-fa.md) | استانداردهای خلاقه، زبان، QC و مجوزها؛ بخش فنی جدید آن، محدودیت‌های واقعی برنامه را از آرمان محتوایی جدا می‌کند. |
+| بازسازی ویدئو با شخصیت‌های بازینو | [`bazino-character-video-recreation-guide-fa.md`](bazino-character-video-recreation-guide-fa.md) | دستورالعمل گام‌به‌گام بازتولید ریلزها با مونا و شخصیت‌های بازینو از طریق Kling 3.0 Omni Multi-Shot (`1080p`، عمودی `9:16` و صدای بومی). |
 | بستهٔ محتوای تاریخ‌دار | [`../Daily/2026-10-02/DAILY-PACK-2026-10-02.md`](../Daily/2026-10-02/DAILY-PACK-2026-10-02.md) | خروجی/وضعیت روز جمعه ۲ اکتبر ۲۰۲۶؛ وجود بسته به معنی انتشار نیست. |
 | قیدهای نوع محتوا/دسترسی | [`access-and-execution-matrix-fa.md`](access-and-execution-matrix-fa.md) | متن اصلی عمدتاً دربارهٔ برنامهٔ قدیمی `desktop-app/` است و باید به‌عنوان سابقه خوانده شود؛ سربرگ فعلی آن مرز برنامهٔ 0.8.1 را روشن می‌کند. |
 | وضعیت پلن‌ها | [`../../plans/README.md`](../../plans/README.md) | دفتر رسمی شماره‌دار پلن‌های ۱ و ۲؛ طرح‌های قدیمی این پوشه جایگزین آن نیستند. |
