@@ -4,7 +4,7 @@
   "mediaFormat": "reel",
   "contentType": "reels",
   "topic": "daily-didactic",
-  "guideVersion": "2026-10-05",
+  "guideVersion": "2026-10-02",
   "topicCycle": "2026-10-07",
   "contentSlot": "19:00-daily-didactic",
   "timeZoneId": "Turkey Standard Time",
@@ -25,5 +25,5 @@
       "transcriptLanguage": "tr"
     }
   ],
-  "republishToConnectedPlatforms": false
+  "republishToConnectedPlatforms": true
 }
