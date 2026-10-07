@@ -217,7 +217,7 @@
   "mediaFormat": "carousel | reel | image | story",
   "contentType": "carousel | reels | post | story",
   "topic": "gaming-news | daily-didactic | daily-reels | daily-game | active-tournaments | bazino-safe | affiliate-reel | story-game-interaction | story-news-reshare | story-club-live | story-night-boost",
-  "guideVersion": "2026-10-05",
+  "guideVersion": "2026-10-02",
   "topicCycle": "<تاریخِ روز>",
   "contentSlot": "<ساعت>-<موضوع>",
   "language": "tr | fa | en",
