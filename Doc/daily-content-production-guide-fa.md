@@ -138,9 +138,11 @@
 
 | مجموعه | هدف الگوریتمی | روشِ ساخت | نکتهٔ کلیدی |
 |---|---|---|---|
-| **Daily Reels** | تماشای کامل + ارسال + فالوور | مهندسی معکوس (قلاب ۳ ثانیه، ریتم کات‌ها، ایدهٔ محوری) و بازتولیدِ کامل در فضای بازینو با شخصیت‌های خودمان | ثانیهٔ ۰–۲ قلابِ فوری بدون مقدمه؛ پایان به فریمِ اول گره بخورد (Loop) |
-| **Daily Didactic** | ذخیره + ارسال برای هم‌تیمی | پیاده‌سازی گفتار، ترجمهٔ تخصصی با اصطلاحِ واقعیِ گیمرها، زیرنویس در منطقهٔ امن | تیترِ فریم اول = نتیجهٔ ملموس؛ CTAِ صریح برای ذخیره |
-| **Daily Game** | ارسال در دایرکت + کامنت | الف) انیمیشن ⇒ بازتولید با شخصیت‌های خودمان؛ ب) فقط متن روی تصویر ⇒ ترجمهٔ بامزه و گرافیک تمیز؛ ج) دیالوگ‌دار ⇒ زیرنویسِ دقیق و هماهنگ | ۱۲۵ کاراکترِ اولِ کپشن = یک لحظهٔ آشنا برای هر گیمر؛ CTA = «بفرست برای اون رفیقت…» |
+| **Daily Reels** | تماشای کامل + ارسال + فالوور | مهندسی معکوس (قلاب ۳ ثانیه، ریتم کات‌ها، ایدهٔ محوری) و بازتولیدِ کامل در فضای بازینو با شخصیت‌های خودمان (طبق [`bazino-character-video-recreation-guide-fa.md`](bazino-character-video-recreation-guide-fa.md)) | ثانیهٔ ۰–۲ قلابِ فوری بدون مقدمه؛ پایان به فریمِ اول گره بخورد (Loop) |
+| **Daily Didactic** | ذخیره + ارسال برای هم‌تیمی | پیاده‌سازی گفتار، ترجمهٔ تخصصی با اصطلاحِ واقعیِ گیمرها، زیرنویس در منطقهٔ امن یا بازسازی با شخصیت‌های بازینو ([`bazino-character-video-recreation-guide-fa.md`](bazino-character-video-recreation-guide-fa.md)) | تیترِ فریم اول = نتیجهٔ ملموس؛ CTAِ صریح برای ذخیره |
+| **Daily Game** | ارسال در دایرکت + کامنت | الف) انیمیشن/شخصیت‌محور ⇒ بازتولید با شخصیت‌های خودمان ([`bazino-character-video-recreation-guide-fa.md`](bazino-character-video-recreation-guide-fa.md))؛ ب) فقط متن روی تصویر ⇒ ترجمهٔ بامزه و گرافیک تمیز؛ ج) دیالوگ‌دار ⇒ زیرنویسِ دقیق و هماهنگ | ۱۲۵ کاراکترِ اولِ کپشن = یک لحظهٔ آشنا برای هر گیمر؛ CTA = «بفرست برای اون رفیقت…» |
+
+> **استاندارد فنی بازسازی ویدئوها با شخصیت‌های بازینو (مونا و سایر کاراکترها):** برای بازتولید ویدئوهای مرجع با حفظ ۱۰۰٪ چهره، لباس، فضای سالن بازینو، رزولوشن `1080p` عمودی (`9:16`) و صدای طبیعی از روش **Kling 3.0 Omni Multi-Shot با کی‌فریم‌های زنجیره‌ای** طبق دستورالعمل [`bazino-character-video-recreation-guide-fa.md`](bazino-character-video-recreation-guide-fa.md) استفاده شود.
 
 ### ۵٫۲ خبرِ روز
 - **خبرِ متنی/تصویری ⇒ کاروسل** (الگوی تفصیلی در [`carousel-content-pattern-fa.md`](carousel-content-pattern-fa.md)):
@@ -314,6 +316,7 @@ Daily/2026-10-06/
 | فونت‌های مصوب | [`Assets/fonts/`](../Assets/fonts/) — Bebas Neue، Anton، Russo One، Archivo Black، Poppins، Montserrat، Oswald، Vazirmatn، Lalezar |
 | لوگوی رسمی | `public/BazinoLogo.png` (کنار وردمارکِ BAZINO) |
 | شخصیت‌ها | [`Doc/campaign/brand-characters-fa.md`](campaign/brand-characters-fa.md) و `Assets/animated-family/` |
+| **بازسازی ویدئو با شخصیت‌های بازینو** | [`bazino-character-video-recreation-guide-fa.md`](bazino-character-video-recreation-guide-fa.md) |
 | الگوی کاروسل | [`carousel-content-pattern-fa.md`](carousel-content-pattern-fa.md) |
 | قرارداد صف و انتشار | [`../marketing-app/PUBLISHING.md`](../marketing-app/PUBLISHING.md) |
 | راهنمای کاربرِ برنامه | [`BAZINO_MARKETING_STUDIO_WINDOWS_USER_GUIDE_EN.md`](BAZINO_MARKETING_STUDIO_WINDOWS_USER_GUIDE_EN.md) |
