@@ -72,7 +72,6 @@
 | **L18** | **Affiliate فقط Reel** (`contentType=Affiliate` + `mediaFormat=reel`). Post/Carousel/Storyِ افیلیت حتی نباید وارد صف شود. ثبتِ `media_id` در پورتال یک‌طرفه و فقط پس از انتشار موفقِ همان Reel است. | ۱۰-۰۲ |
 | **L19** | **مکان:** برای Feed/Post، Reel و Carousel مقدار `locationId = 1091945074011846` (شناسهٔ عددیِ صفحهٔ فیسبوک) فرستاده میشود. **استثنای مالک برای Story:** هیچ مکانی جست‌وجو/ارسال نمیشود و نبودِ مکان مانع انتشار نیست. | ۱۰-۰۲ |
 | **L20** | **انتشار فقط از زرنیو** و فقط از مسیر برنامهٔ ویندوز؛ کلید زرنیو و توکن پورتال هرگز در گیت، لاگ یا گزارش نمیآیند. | ۱۰-۰۲ |
-| **L25** | **بعد از تأیید صف، همهٔ کانکتورها به‌جز واتساپ.** هر محتوایی که در «محتوای آماده» تأیید شود — غیر از استوری و افیلیت — اول اینستاگرام می‌رود و بعد به فیسبوک، تلگرام، تیک‌تاک و یوتیوب (هر کدام که وصل و مجاز باشد). واتساپ مقصد این صف نیست. در کارت صف `republishToConnectedPlatforms=true`. استوری و افیلیت فقط اینستاگرام می‌مانند (L18 و استثنای استوری). | ۱۰-۰۷ |
 
 ---
 
@@ -139,9 +138,11 @@
 
 | مجموعه | هدف الگوریتمی | روشِ ساخت | نکتهٔ کلیدی |
 |---|---|---|---|
-| **Daily Reels** | تماشای کامل + ارسال + فالوور | مهندسی معکوس (قلاب ۳ ثانیه، ریتم کات‌ها، ایدهٔ محوری) و بازتولیدِ کامل در فضای بازینو با شخصیت‌های خودمان | ثانیهٔ ۰–۲ قلابِ فوری بدون مقدمه؛ پایان به فریمِ اول گره بخورد (Loop) |
-| **Daily Didactic** | ذخیره + ارسال برای هم‌تیمی | پیاده‌سازی گفتار، ترجمهٔ تخصصی با اصطلاحِ واقعیِ گیمرها، زیرنویس در منطقهٔ امن | تیترِ فریم اول = نتیجهٔ ملموس؛ CTAِ صریح برای ذخیره |
-| **Daily Game** | ارسال در دایرکت + کامنت | الف) انیمیشن ⇒ بازتولید با شخصیت‌های خودمان؛ ب) فقط متن روی تصویر ⇒ ترجمهٔ بامزه و گرافیک تمیز؛ ج) دیالوگ‌دار ⇒ زیرنویسِ دقیق و هماهنگ | ۱۲۵ کاراکترِ اولِ کپشن = یک لحظهٔ آشنا برای هر گیمر؛ CTA = «بفرست برای اون رفیقت…» |
+| **Daily Reels** | تماشای کامل + ارسال + فالوور | مهندسی معکوس (قلاب ۳ ثانیه، ریتم کات‌ها، ایدهٔ محوری) و بازتولیدِ کامل در فضای بازینو با شخصیت‌های خودمان (طبق [`bazino-character-video-recreation-guide-fa.md`](bazino-character-video-recreation-guide-fa.md)) | ثانیهٔ ۰–۲ قلابِ فوری بدون مقدمه؛ پایان به فریمِ اول گره بخورد (Loop) |
+| **Daily Didactic** | ذخیره + ارسال برای هم‌تیمی | پیاده‌سازی گفتار، ترجمهٔ تخصصی با اصطلاحِ واقعیِ گیمرها، زیرنویس در منطقهٔ امن یا بازسازی با شخصیت‌های بازینو ([`bazino-character-video-recreation-guide-fa.md`](bazino-character-video-recreation-guide-fa.md)) | تیترِ فریم اول = نتیجهٔ ملموس؛ CTAِ صریح برای ذخیره |
+| **Daily Game** | ارسال در دایرکت + کامنت | الف) انیمیشن/شخصیت‌محور ⇒ بازتولید با شخصیت‌های خودمان ([`bazino-character-video-recreation-guide-fa.md`](bazino-character-video-recreation-guide-fa.md))؛ ب) فقط متن روی تصویر ⇒ ترجمهٔ بامزه و گرافیک تمیز؛ ج) دیالوگ‌دار ⇒ زیرنویسِ دقیق و هماهنگ | ۱۲۵ کاراکترِ اولِ کپشن = یک لحظهٔ آشنا برای هر گیمر؛ CTA = «بفرست برای اون رفیقت…» |
+
+> **استاندارد فنی بازسازی ویدئوها با شخصیت‌های بازینو (مونا و سایر کاراکترها):** برای بازتولید ویدئوهای مرجع با حفظ ۱۰۰٪ چهره، لباس، فضای سالن بازینو، رزولوشن `1080p` عمودی (`9:16`) و صدای طبیعی از روش **Kling 3.0 Omni Multi-Shot با کی‌فریم‌های زنجیره‌ای** طبق دستورالعمل [`bazino-character-video-recreation-guide-fa.md`](bazino-character-video-recreation-guide-fa.md) استفاده شود.
 
 ### ۵٫۲ خبرِ روز
 - **خبرِ متنی/تصویری ⇒ کاروسل** (الگوی تفصیلی در [`carousel-content-pattern-fa.md`](carousel-content-pattern-fa.md)):
@@ -229,7 +230,7 @@
   "productionStatus": "final",
   "previewReviewed": true,
   "media": [{ "path": "marketing-app-mailbox/publish-queue/media/<فایل>" }],
-  "republishToConnectedPlatforms": true
+  "republishToConnectedPlatforms": false
 }
 ```
 
@@ -242,7 +243,6 @@
 | `productionStatus` / `previewReviewed` | پیش از ارائه حتماً `final` و `true` |
 | `media` | استوری ۱ رسانه · ریلز ۱ ویدئو (+ کاور) · کاروسل ۲ تا ۱۰ · بدون برشِ خودکار |
 | `guideVersion` | نسخهٔ راهنمایی که کارت بر پایهٔ آن ساخته شده |
-| `republishToConnectedPlatforms` | **پیش‌فرض `true` (L25).** بعد از اینستاگرام به فیسبوک/تلگرام/تیک‌تاک/یوتیوب می‌رود؛ واتساپ نه. برای استوری و افیلیت باید `false` باشد |
 
 **نکتهٔ مهم:** هر تغییر پس از تأییدِ مالک، کارت را از اعتبار میاندازد و نیازمندِ تأییدِ دوباره است (رسیدِ تأیید به شناسهٔ فایل و رسانه‌ها گره خورده است).
 
@@ -316,6 +316,7 @@ Daily/2026-10-06/
 | فونت‌های مصوب | [`Assets/fonts/`](../Assets/fonts/) — Bebas Neue، Anton، Russo One، Archivo Black، Poppins، Montserrat، Oswald، Vazirmatn، Lalezar |
 | لوگوی رسمی | `public/BazinoLogo.png` (کنار وردمارکِ BAZINO) |
 | شخصیت‌ها | [`Doc/campaign/brand-characters-fa.md`](campaign/brand-characters-fa.md) و `Assets/animated-family/` |
+| **بازسازی ویدئو با شخصیت‌های بازینو** | [`bazino-character-video-recreation-guide-fa.md`](bazino-character-video-recreation-guide-fa.md) |
 | الگوی کاروسل | [`carousel-content-pattern-fa.md`](carousel-content-pattern-fa.md) |
 | قرارداد صف و انتشار | [`../marketing-app/PUBLISHING.md`](../marketing-app/PUBLISHING.md) |
 | راهنمای کاربرِ برنامه | [`BAZINO_MARKETING_STUDIO_WINDOWS_USER_GUIDE_EN.md`](BAZINO_MARKETING_STUDIO_WINDOWS_USER_GUIDE_EN.md) |
