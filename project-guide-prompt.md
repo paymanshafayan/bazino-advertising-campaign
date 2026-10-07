@@ -34,9 +34,10 @@ Target workflow: (1) agent checks valid daily data/metrics, builds final media a
 - **Handoff-first (owner, 2026-10-04):** before any work, re-read `HANDOFF.md` and the relevant plan document.
 - **Code/build/release changes only with an approved plan and explicit owner permission.** Work happens on the fixed session branch only.
 
-### Report format after every operation (owner directive 2026-10-02)
-Plain fluent Persian, understandable without help, no technical jargon (rename services to Persian where possible: اینستاگرام، زرنیو).
-Four fixed parts in this order, title «گزارش به زبان ساده»: **۱) چه شد؟** (one short line per item, optional 🕐 🖼️ ✈️) · **۲) پلن … (منتظر «شروع کن» شما)** · **۳) چه نشد و چرا؟** (including anything awaiting owner approval) · **۴) قدم بعدی من** · **final line:** storage confirmation with the record id, only after verifying it reached the repo.
+### Report format after every operation (owner directive 2026-10-02, updated 2026-10-06)
+- **Right-to-Left (RTL) alignment is mandatory (owner directive 2026-10-06):** every report to the owner must be rendered right-aligned / right-to-left (wrap the full report in `<div dir="rtl" align="right">...</div>`).
+- Plain fluent Persian, understandable without help, no technical jargon (rename services to Persian where possible: اینستاگرام، زرنیو).
+- Four fixed parts in this order, title «گزارش به زبان ساده»: **۱) چه شد؟** (one short line per item, optional 🕐 🖼️ ✈️) · **۲) پلن … (منتظر «شروع کن» شما)** · **۳) چه نشد و چرا؟** (including anything awaiting owner approval) · **۴) قدم بعدی من** · **final line:** storage confirmation with the record id, only after verifying it reached the repo.
 
 ## 3. PRODUCT & DOCUMENT BOUNDARIES
 - Current behaviour lives in `marketing-app/` source, its `README`, `PUBLISHING.md` and the current user guide; if a historical document conflicts with them or with a newer owner order, it is historical.
@@ -61,6 +62,7 @@ Four fixed parts in this order, title «گزارش به زبان ساده»: **�
 | 10-04 | Re-read handoff and the relevant plan before every task | §2 here |
 | 10-05 | **HANDOFF = status/changes only; law = project guide** | this file |
 | 10-05 | **Agent copy naming: owner doc name minus language suffix + `-prompt`** | §5 here |
+| 10-06 | **All reports to the owner must be Right-to-Left (RTL / right-aligned)** | §2 here |
 
 ## 5. DOCUMENT MAP & AGENT-COPY NAMING LAW
 | Document | Role | Agent copy |
@@ -76,3 +78,6 @@ Four fixed parts in this order, title «گزارش به زبان ساده»: **�
 
 ## 6. QUICK LINKS
 Status: `HANDOFF.md` · Rules: `project-guide-fa.md` · Content: `Doc/daily-content-production-guide-fa.md` · Technical: `marketing-app/PUBLISHING.md` · Plans: `plans/README.md` · Doc index: `Doc/README.md` · Brand/characters: `Doc/campaign/user-rules-fa.md`, `Doc/campaign/brand-characters-fa.md`.
+
+- Doc/bazino-character-video-recreation-guide-fa.md — Standard guide for recreating videos with Bazino characters using Kling 3.0 Omni Multi-Shot (9:16, 1080p, native voice).
+- GEMINI.md — Mandatory permanent project rules loaded automatically before every turn.
