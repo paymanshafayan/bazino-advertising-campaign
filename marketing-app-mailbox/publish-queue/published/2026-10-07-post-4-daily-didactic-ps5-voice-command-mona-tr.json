@@ -1,0 +1,44 @@
+{
+  "itemId": "2026-10-07-post-4-daily-didactic-ps5-voice-command-mona-tr",
+  "publishedAt": "2026-10-07T16:01:30.065+00:00",
+  "zernioPostId": "6ac66cae4916c66b2b845181",
+  "instagramMediaId": "18435465757178141",
+  "instagramUrl": "https://www.instagram.com/reel/DeMvUn5CuEb/",
+  "platforms": [
+    {
+      "platform": "instagram",
+      "status": "published",
+      "url": "https://www.instagram.com/reel/DeMvUn5CuEb/",
+      "platformPostId": "18435465757178141",
+      "publishedAt": "2026-10-07T16:01:30.065+00:00"
+    },
+    {
+      "platform": "youtube",
+      "status": "pending",
+      "url": "",
+      "platformPostId": ""
+    },
+    {
+      "platform": "facebook",
+      "status": "published",
+      "url": "https://www.facebook.com/watch/?v=1407891748097783",
+      "platformPostId": "1407891748097783",
+      "publishedAt": "2026-10-07T16:01:48.974+00:00"
+    },
+    {
+      "platform": "telegram",
+      "status": "published",
+      "url": "https://t.me/Bazinopro/26",
+      "platformPostId": "26",
+      "publishedAt": "2026-10-07T16:01:55.12+00:00"
+    }
+  ],
+  "warnings": [
+    "TikTok رد شد: سطح انتشار عمومی در تنظیمات زندهٔ سازنده مجاز/قابل تأیید نبود."
+  ],
+  "instagramLocationId": "1091945074011846",
+  "language": "tr",
+  "contentType": "reels",
+  "topic": "daily-didactic",
+  "mediaFormat": "reel"
+}
