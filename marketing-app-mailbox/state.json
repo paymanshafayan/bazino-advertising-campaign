@@ -2,10 +2,10 @@
   "v": 1,
   "listening": false,
   "status": "stopped",
-  "session": "7dd6cfafd4ac",
+  "session": "352ee44a4894",
   "agent": "4323:8fc6:8c68:d05c",
-  "updatedAt": "2026-10-08T14:43:28.9447301+00:00",
+  "updatedAt": "2026-10-08T14:43:39.3202611+00:00",
   "app": "0.9.1",
   "from": "56cf:8ce5:270d:9498",
-  "sig": "XWq+28soMBKpp+o9HcZEmntxt0lXxzAc2yT7d0CtVhzRy6PawuQ/7L4+UbhCOxqVsDCEcUa+ifOc9H5B+PGR3A=="
+  "sig": "qBrOUGluyEkrqG2Z+HaF4PO2F4k2zUp2V2WX8SrYdNnys9FXXFINChd2pidhDjfCqeyOOPnIuflkbbe+OtN9Zg=="
 }
