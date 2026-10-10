@@ -1,0 +1,2 @@
+::notice title=marketing-app screenshots::rendered 7/7 pages at 1280x800, version 0.9.8, 2026-10-10T23:15:55.1397260+03:30
+rendered 7/7 pages at 1280x800, version 0.9.8, 2026-10-10T23:15:55.1397260+03:30
