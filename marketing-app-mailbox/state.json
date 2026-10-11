@@ -1,11 +1,11 @@
 {
   "v": 1,
-  "listening": true,
-  "status": "listening",
+  "listening": false,
+  "status": "stopped",
   "session": "7a236ca4697a",
   "agent": "4323:8fc6:8c68:d05c",
-  "updatedAt": "2026-10-11T07:16:30.8745614+00:00",
+  "updatedAt": "2026-10-11T07:17:19.4266695+00:00",
   "app": "0.9.8",
   "from": "56cf:8ce5:270d:9498",
-  "sig": "TlXHGon45NJzNDbbAAG2OPZ0Pw9hwheOt8b1qstSktzgS1SnSqS6UY0aXOTRsNFZ4QvRaoRrUIRl64j1XHmpXw=="
+  "sig": "sjcFXL4Gkq/aLSeDQw09pyeusj2HQSjHhekzIkOqaHAMwj7O6aCNJmJ7gtQZ2nOvFeHfhfGh2KX7Rjx6+2vipw=="
 }
