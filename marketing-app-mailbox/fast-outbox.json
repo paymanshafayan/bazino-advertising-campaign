@@ -1,1 +1,13 @@
-{"v":1,"id":"e8d30be3ad29711d70ca707fb3b630e3","session":"mutvf3km0959f6","seq":2645,"kind":"reply","risk":"read","issuedAt":"2026-10-17T04:27:35.6869573+00:00","expiresAt":"2026-10-17T05:27:35.6869573+00:00","from":"56cf:8ce5:270d:9498","enc":{"salt":"Xl+06YvIY2W3Yn9OrxnebQ==","nonce":"dOniXT4cNtoaCa4/","data":"pT8qPcRmqdSFu53U9JuUgBYnNducd4M/6ZKgRXryoCLbbv8/1b+qzF53AbW/HSKCBkThfWA3znUtsDktNO5M4dvkQtXbFN+OZpL8+KbXHbr+EvWQHeuBd46Jn3tG9Stnk/uKJH/NvI+iNcF0aIv0gU9iHzutOka2IF7q1yut7foQTl3zONzv1KDnTp1HnYqtpG+uhPfycN4O9Hq5+uEqoEXidSQm/6TT/+KMCATGoD72lD9r74UhIrA4vULwB61Jnysvpl0x2/Z2Gy+RERrhSz3rbswzMbHQ4TrWhbu6aljY+HM="},"sig":"9YsMtdthjMWtMSGYkIpUua/9PDsLplHapZRxcG0+37nK15dE3yKkx39pxtDVmWyk9fbTDFsNoCEAFDx2U6kmww=="}
+{
+  "v": 1,
+  "id": "e8d30be3ad29711d70ca707fb3b630e3",
+  "replyTo": "e8d30be3ad29711d70ca707fb3b630e3",
+  "cmd": null,
+  "ok": false,
+  "at": "2026-10-18T18:42:09.384538+00:00",
+  "result": {
+    "ok": false,
+    "success": false,
+    "error": "unknown_command: '' is not recognized in Bazino Mailbox protocol."
+  }
+}
