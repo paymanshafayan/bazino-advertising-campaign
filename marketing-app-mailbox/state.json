@@ -2,10 +2,10 @@
   "v": 1,
   "listening": true,
   "status": "active",
-  "session": "jinus110-20261019",
-  "agent": "1b35:c75f:5b61:334a",
+  "session": "jinus100-20261019",
+  "agent": "4323:8fc6:8c68:d05c",
   "appFingerprint": "56cf:8ce5:270d:9498",
-  "app": "1.1.0",
-  "updatedAt": "2026-10-19T07:42:52.272642+00:00",
+  "app": "1.0.0",
+  "updatedAt": "2026-10-19T07:46:11.356430+00:00",
   "mailboxPath": "marketing-app-mailbox"
 }
