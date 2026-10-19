@@ -1,0 +1,10 @@
+{
+  "v": 1,
+  "id": "task-remote-287384187",
+  "from": null,
+  "cmd": "remote.task",
+  "args": {
+    "instruction": "تست چرخه ریموت (راستی‌آزمایی ۱۴۸): ساعت فعلی سرور را بررسی کن و در پاسخت بنویس."
+  },
+  "note": "Remote-mode task from Peyman via Jinus. External agent: execute and write reply to outbox/reply_<id>.json"
+}
