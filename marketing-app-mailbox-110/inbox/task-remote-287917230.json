@@ -1,0 +1,10 @@
+{
+  "v": 1,
+  "id": "task-remote-287917230",
+  "from": null,
+  "cmd": "remote.task",
+  "args": {
+    "instruction": "تست نهایی چرخه ریموت: بررسی کن ۶ ضربدر ۷ چند می‌شود و پاسخ را دقیقاً این‌طور بنویس: REMOTE-CYCLE-OK 42"
+  },
+  "note": "Remote-mode task from Peyman via Jinus. External agent: execute and write reply to outbox/reply_<id>.json"
+}
