@@ -1,0 +1,13 @@
+{
+  "v": 1,
+  "id": "task-remote-287384187",
+  "replyTo": "task-remote-287384187",
+  "cmd": "remote.task",
+  "ok": false,
+  "at": "2026-10-19T16:32:26.344217+00:00",
+  "result": {
+    "ok": false,
+    "success": false,
+    "error": "sender_not_authorized: missing_sender_fingerprint"
+  }
+}
