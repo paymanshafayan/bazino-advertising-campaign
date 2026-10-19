@@ -1,11 +1,11 @@
 {
   "v": 1,
   "listening": true,
-  "status": "active",
-  "session": "jinus100-20261019",
+  "status": "listening",
+  "session": "880922cfc33a",
   "agent": "4323:8fc6:8c68:d05c",
-  "appFingerprint": "56cf:8ce5:270d:9498",
-  "app": "1.0.0",
-  "updatedAt": "2026-10-19T08:54:59.316469+00:00",
-  "mailboxPath": "marketing-app-mailbox"
+  "updatedAt": "2026-10-19T10:55:21.6220522+00:00",
+  "app": "0.9.9",
+  "from": "56cf:8ce5:270d:9498",
+  "sig": "fgw0/lqfU+CD+PHMcTK+pyCc6MQJNArrkcg2rh2+5dAKEO/sRiJue2oBqRuyUP+kV8W/dAWu0ptD06IoCLqcyQ=="
 }
