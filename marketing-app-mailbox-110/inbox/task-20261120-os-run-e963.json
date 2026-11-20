@@ -1,0 +1,10 @@
+{
+  "v": 1,
+  "id": "task-20261120-os-run-e963",
+  "from": "6fdb:0aac:c4da:4888",
+  "cmd": "os.run",
+  "args": {
+    "command": "python -c exec(__import__('base64').b64decode('aW1wb3J0IG9zLGpzb24KcD1yIkM6XHByb2plY3RzXEFudGlncmF2aXR5IEJhemlub1xQdWJsaXNoLVN0dWRpbyIKb3V0PVtdCmZvciByLGQsZiBpbiBvcy53YWxrKHApOgogICAgZm9yIG4gaW4gZjoKICAgICAgICBmcD1vcy5wYXRoLmpvaW4ocixuKTsgb3V0LmFwcGVuZChbb3MucGF0aC5yZWxwYXRoKGZwLHApLG9zLnBhdGguZ2V0c2l6ZShmcCldKQpwcmludChqc29uLmR1bXBzKHsiZXhpc3RzIjpvcy5wYXRoLmlzZGlyKHApLCJjb3VudCI6bGVuKG91dCksImZpbGVzIjpvdXRbOjIwMF19LGVuc3VyZV9hc2NpaT1GYWxzZSkp').decode())"
+  },
+  "sig": "gdiX/hvCru8AIKYBC/fgKZCUihpqttQdBmQ2CX1WAzbRaL1rvItk7q/p81BMXgaI4nbHJUrcM3Z0D6o2YZaOCA=="
+}
