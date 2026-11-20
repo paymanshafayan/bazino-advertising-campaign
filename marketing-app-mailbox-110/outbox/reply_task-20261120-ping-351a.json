@@ -1,0 +1,21 @@
+{
+  "v": 1,
+  "id": "task-20261120-ping-351a",
+  "replyTo": "task-20261120-ping-351a",
+  "cmd": "ping",
+  "ok": true,
+  "at": "2026-11-20T11:09:35.030593+00:00",
+  "result": {
+    "pong": true,
+    "version": "1.1.0",
+    "time": "2026-11-20T11:09:35.030482+00:00",
+    "os": "Windows 10 (10.0.19045)",
+    "runtime": "Python 3.14.5",
+    "dataFolder": "C:\\projects\\jinus-v1.1.0\\release\\win-unpacked\\resources\\app\\jinus-v1-desktop\\server\\data",
+    "mediaFolder": "C:\\Jinus-Media",
+    "sandboxFolder": "C:\\Jinus-Sandbox",
+    "duration_ms": 0,
+    "ok": true,
+    "success": true
+  }
+}
