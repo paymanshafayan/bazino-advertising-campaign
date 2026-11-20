@@ -83,6 +83,29 @@
 | **پروفایل اختصاصی کروم فلو و ویدز** | `C:\Users\payman\.gemini\chrome-agent` |
 
 
+### نکتهٔ ساختار ریپو (به‌روزرسانی‌شده)
+- مسیرهای **`C:\projects\...`** بالا مربوط به **PC مالک** هستند و همان‌طور که هستند معتبرند؛ تغییر نکرده‌اند.
+- در **ریپوی گیت** (برنچ `arena/d7168c76-bazino-advertising-campaign`)، محتوای پوشهٔ `Publish-Studio` دسته‌بندی شده و ساختار قدیمی `Publish-Studio/` دیگر وجود ندارد. نگاشت:
+
+| مسیر قدیمی (`Publish-Studio/...`) | مسیر در ریپو |
+| :--- | :--- |
+| `GOOGLE_VIDS_PRODUCTION_GUIDE.md` | `GOOGLE_VIDS_PRODUCTION_GUIDE.md` (ریشه) |
+| `RTX5090_SERVER_PRODUCTION_GUIDE.md` | `RTX5090_SERVER_PRODUCTION_GUIDE.md` (ریشه) |
+| `GUIDE_AND_RULES.md` (همین سند) | `GUIDE_AND_RULES.md` (ریشه) |
+| `ig-reel/*` | `instagram-reels/*` |
+| `ig-carousel/*`، `carousel-template-v2/*` | `instagram-carousels/ig-carousel/*`، `instagram-carousels/carousel-template-v2/*` |
+| `ig-plan/*` | `instagram-plans/*` |
+| `ig-viral/*` | `viral-research/*` |
+| `Assets/*` (داخل Publish-Studio) | `brand-assets/*` |
+| `VistaMare/*` | `vista-mare/*` |
+| `rtx5090-api/*`، `rtx5090-server-handoff.md` | `rtx5090-api/*` |
+| `DOM_MATRIX_MAP.*`، `VIDS_DOM_MATRIX_MAP.*`، `COLLECTION-CYCLE.md`، رتبه‌بندی‌ها و `educational/game_collection_viral_posts.md` | `collections-research/*` |
+| اسکریپت‌های تولید و رتبه‌بندی (`generate_carousel_v2.py`، `assemble_final_reel.py`، `publish_zernio_reel.mjs`، `build_all_rankings_reports.py`، `rank_collections_creators.py`) | `content-scripts/*` |
+| اسکریپت‌های مرورگر و CDP (`*.py` و `open-chrome-cdp.ps1` باقی‌مانده) | `ui-automation/*` |
+
+- **فایل‌هایی که در ریپو موجود نیستند:** `Doc/instagram-agent-skill-production-guide.md`، `scripts/karaoke_burn.py`، `Assets/bazino-badge.png`. اگر لازم‌اند باید از PC به ریپو منتقل شوند.
+
+
 ---
 
 ## ۳. اسکریپت‌ها، ابزارها و کالکشن‌های ذخیرهٔ اینستاگرام بازینو
@@ -99,7 +122,7 @@
 
 ### ب) اسکریپت‌های اتوماسیون مستقر در این پوشه (`Publish-Studio`)
 1. **راه‌اندازی مرورگر کروم با CDP و پروفایل رسمی:**
-   - **فایل:** `open-chrome-cdp.ps1`
+   - **فایل:** `open-chrome-cdp.ps1` (ریپو: `ui-automation/open-chrome-cdp.ps1`)
    - **کارکرد:** باز کردن پنجره کروم مستقل با پورت اشکال‌زدایی `9335` و اکانت `Profile 1` (`fartashvarahram@gmail.com`).
    - **دستور اجرا در پاورشل:**
      ```powershell
@@ -107,7 +130,7 @@
      ```
 
 2. **واکشی کامل کالکشن‌ها (GraphQL Pagination Harvester):**
-   - **فایل:** `fetch_complete_collections.py`
+   - **فایل:** `fetch_complete_collections.py` (ریپو: `ui-automation/fetch_complete_collections.py`)
    - **کارکرد:** استخراج کامل تمامی صفحات و پست‌ها از طریق GraphQL اینستاگرام بدون باگ‌های اسکرول DOM.
    - **دستور اجرا:**
      ```powershell
@@ -115,7 +138,7 @@
      ```
 
 3. **رتبه‌بندی، اعتبارسنجی فالوورها و تفکیک عدم تکرار:**
-   - **فایل:** `rank_collections_creators.py`
+   - **فایل:** `rank_collections_creators.py` (ریپو: `content-scripts/rank_collections_creators.py`)
    - **کارکرد:** استخراج لیست اکانت‌ها، واکشی آمار واقعی فالوورها و سورت نزولی با تضمین عدم تکرار آدرس‌ها در دو لیست.
    - **دستور اجرا:**
      ```powershell
@@ -123,7 +146,7 @@
      ```
 
 4. **تولید گزارش‌های ساختاریافته جامع و تفکیکی:**
-   - **فایل:** `build_all_rankings_reports.py`
+   - **فایل:** `build_all_rankings_reports.py` (ریپو: `content-scripts/build_all_rankings_reports.py`)
    - **کارکرد:** ساخت فایل‌های خروجی Markdown و JSON برای ۱۰ پیج برتر هر دسته و لیست کامل ۱۸۸ تولیدکننده.
    - **دستور اجرا:**
      ```powershell
@@ -132,38 +155,14 @@
 
 ---
 
-### ج) اسناد و داده‌های ذخیره‌شده در پوشه
-1. **۱۰ پیج برتر هر کالکشن (تفکیک‌شده و بدون همپوشانی):**
-   - گزارش متنی مارک‌داون: `top10_collections_ranked.md`
-   - داده ساختاریافته: `top10_collections_ranked.json`
-2. **فهرست کامل ۱۸۸ پیج تولیدکننده محتوا (مرتب بر اساس بیشترین فالوور):**
-   - گزارش متنی مارک‌داون: `all_collections_creators_ranked.md`
-   - داده ساختاریافته: `all_collections_creators_ranked.json`
-3. **جدول و بانک پست‌های وایرال آموزشی (مرحله ۱: ig-viral):**
-   - جدول مارک‌داون: `educational_viral_posts.md` (و در زیرپوشه: `ig-viral/educational_viral_posts.md`)
-   - داده ساختاریافته: `ig-viral/educational_viral_posts.json`
-   - سند کامل مهندسی معکوس و سوئایپ فایل: `ig-viral/swipe.md`
-4. **جدول و بانک پست‌های وایرال کالکشن Game (شامل بین‌المللی و فارسی):**
-   - جدول مارک‌داون: `game_collection_viral_posts.md` (و در زیرپوشه: `ig-viral/game_collection_viral_posts.md`)
-   - داده ساختاریافته: `ig-viral/game_collection_viral_posts.json`
-5. **استراتژی و تقویم محتوایی هفتگی قبرس شمالی (مرحله ۲: ig-plan):**
-   - سند استراتژی و پرسونای ترک‌زبان KKTC: `ig-plan/strategy.md`
-   - تقویم زمان‌بندی هفتگی فاماگوستا (`UTC+3`): `ig-plan/weekly_content_calendar.md`
-   - اسکریپت و دیتابیس پایش انتشار: `ig-plan/schedule_tracker.py` و `ig-plan/schedule.json`
-6. **سناریونویسی و مهندسی ریلزهای ژینوس ۱.۱.۰ (مرحله ۳: ig-reel):**
-   - سند مشخصات فنی و بیت‌شیت ریلزها: `ig-reel/REEL_PRODUCTION_SPEC.md`
-   - اسکریپت اعتبارسنجی QC و پکیج ریلز: `ig-reel/generate_reel_package.py` و `ig-reel/day1_reels_package.json`
-   - مستند روش کار: `ig-reel/WORKFLOW.md`
-7. **طراحی و مهندسی پست اسلایدی ۱۰۸۰×۱۳۵۰ (مرحله ۴: ig-carousel):**
-   - سند کپی‌رایتینگ و چیدمان اسلایدها: `ig-carousel/CAROUSEL_SPEC.md`
-   - اسکریپت رندر تصاویر و پوشه اسلایدها: `ig-carousel/generate_carousel_cards.py` و `ig-carousel/slides/`
-   - پکیج ساختاریافته کاروسل: `ig-carousel/carousel_package.json`
-   - مستند روش کار: `ig-carousel/WORKFLOW.md`
-8. **راهنماها و ماتریکس‌های اتوماسیون ویدئو (Google Flow & Google Vids):**
-   - ماتریکس عناصر رابط گوگل فلو: `DOM_MATRIX_MAP.md` و `DOM_MATRIX_MAP.json`
-   - راهنمای تولید ویدئو با گوگل ویدز: `GOOGLE_VIDS_PRODUCTION_GUIDE.md`
-   - ماتریکس عناصر رابط گوگل ویدز: `VIDS_DOM_MATRIX_MAP.md` و `VIDS_DOM_MATRIX_MAP.json`
-9. **راهنمای جامع و هندآف سرور اختصاصی RTX 5090 (`root@194.93.48.125` — موتورهای `FreeVideo / MiniMax H3 Ref2VA` و `Openjutsu`):**
-   - **مرجع اصلی و عملیاتی تولید ویدیو بدون آزمون و خطا (پیش از هر اتصال به ۵۰۹۰ خوانده شود):** `RTX5090_SERVER_PRODUCTION_GUIDE.md`
-   - **فایل هندآف سرور ۵۰۹۰ در پوشه کاری:** `rtx5090-server-handoff.md`
-
+### ج) اسناد و داده‌های ذخیره‌شده (مسیر در ریپو)
+1. **۱۰ پیج برتر هر کالکشن:** `collections-research/top10_collections_ranked.md` و `collections-research/top10_collections_ranked.json`
+2. **فهرست کامل ۱۸۸ پیج تولیدکننده محتوا:** `collections-research/all_collections_creators_ranked.md` و `collections-research/all_collections_creators_ranked.json`
+3. **پست‌های وایرال آموزشی:** `viral-research/educational_viral_posts.md`، `viral-research/educational_viral_posts.json` و سند مهندسی معکوس `viral-research/swipe.md`
+4. **پست‌های وایرال کالکشن Game:** `viral-research/game_collection_viral_posts.md` و `viral-research/game_collection_viral_posts.json`
+5. **استراتژی و تقویم هفتگی (ig-plan):** `instagram-plans/strategy.md`، `instagram-plans/weekly_content_calendar.md`، `instagram-plans/schedule_tracker.py` و `instagram-plans/schedule.json`
+6. **ریلزها (ig-reel):** `instagram-reels/REEL_PRODUCTION_SPEC.md`، `instagram-reels/generate_reel_package.py`، `instagram-reels/day1_reels_package.json` و `instagram-reels/WORKFLOW.md`
+7. **کاروسل (ig-carousel):** `instagram-carousels/ig-carousel/` (شامل `carousel-post.md`، `carousel-manifest.json` و `README-fa.md`) و قالب `instagram-carousels/carousel-template-v2/`
+8. **ماتریکس‌های رابط گوگل:** `collections-research/DOM_MATRIX_MAP.md` و `.json`، `collections-research/VIDS_DOM_MATRIX_MAP.md` و `.json`
+9. **راهنمای سرور RTX 5090:** `RTX5090_SERVER_PRODUCTION_GUIDE.md` (ریشه) و `rtx5090-api/rtx5090-server-handoff.md`
+10. **راهنمای ویدیو با گوگل ویدز:** `GOOGLE_VIDS_PRODUCTION_GUIDE.md` (ریشه)
