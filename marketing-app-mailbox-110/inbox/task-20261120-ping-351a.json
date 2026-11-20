@@ -1,0 +1,8 @@
+{
+  "v": 1,
+  "id": "task-20261120-ping-351a",
+  "from": "6fdb:0aac:c4da:4888",
+  "cmd": "ping",
+  "args": {},
+  "sig": "oJJWAtJAZEWVQA/wyGNxL0VK0HPnHZ8/Ic6qvISaPOO4sHbr3YKHfNjsPt7HMQTI88+DnGI0Lbg0pK0eTL76Dg=="
+}
