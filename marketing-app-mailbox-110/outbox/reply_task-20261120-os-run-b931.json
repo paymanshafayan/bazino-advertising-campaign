@@ -1,0 +1,17 @@
+{
+  "v": 1,
+  "id": "task-20261120-os-run-b931",
+  "replyTo": "task-20261120-os-run-b931",
+  "cmd": "os.run",
+  "ok": true,
+  "at": "2026-11-20T12:52:45.084400+00:00",
+  "result": {
+    "ok": true,
+    "exit_code": 0,
+    "stdout": "$ python -c exec(__import__('base64').b64decode('aW1wb3J0IG9zLHNodXRpbCxzdWJwcm9jZXNzLGpzb24saGFzaGxpYgpCPSJhcmVuYS9kNzE2OGM3Ni1iYXppbm8tYWR2ZXJ0aXNpbmctY2FtcGFpZ24iO1I9ciJDOlxKaW51cy1TYW5kYm94XGJhemluby1kNzE2OGM3NiIKQz1bciJDOlxwcm9qZWN0c1xKaW51cy12MS4xLjJcQXNzZXRzXGJhemluby1iYWRnZS5wbmciLHIiQzpccHJvamVjdHNcamludXMtdjEuMS4wXEFzc2V0c1xiYXppbm8tYmFkZ2UucG5nIl0KZGVmIGcoKmEpOgogICAgcD1zdWJwcm9jZXNzLnJ1bihbImdpdCIsIi1DIixSXStsaXN0KGEpLGNhcHR1cmVfb3V0cHV0PVRydWUsdGV4dD1UcnVlKTtyZXR1cm4gKHAuc3Rkb3V0K3Auc3RkZXJyKS5zdHJpcCgpWy0zMDA6XQpvPXsicHVsbCI6ZygicHVsbCIsIi0tcmViYXNlIiwiLXEiLCJvcmlnaW4iLEIpfQpzcmM9bmV4dCgoYyBmb3IgYyBpbiBDIGlmIG9zLnBhdGguaXNmaWxlKGMpKSxOb25lKQpvWyJzcmMiXT1zcmMKaWYgc3JjOgogICAgdD1vcy5wYXRoLmpvaW4oUiwiQXNzZXRzIiwiYmF6aW5vLWJhZGdlLnBuZyIpO29zLm1ha2VkaXJzKG9zLnBhdGguZGlybmFtZSh0KSxleGlzdF9vaz1UcnVlKTtzaHV0aWwuY29weTIoc3JjLHQpCiAgICBvWyJzaGEiXT1oYXNobGliLnNoYTI1NihvcGVuKHQsInJiIikucmVhZCgpKS5oZXhkaWdlc3QoKVs6MTZdO29bInNpemUiXT1vcy5wYXRoLmdldHNpemUodCkKICAgIG9bImFkZCJdPWcoImFkZCIsIi0tIiwiQXNzZXRzL2Jhemluby1iYWRnZS5wbmciKQogICAgb1siY29tbWl0Il09ZygiLWMiLCJ1c2VyLm5hbWU9QXJlbmEgQWdlbnQiLCItYyIsInVzZXIuZW1haWw9YWdlbnRAYXJlbmEubG9jYWwiLCJjb21taXQiLCItbSIsImNob3JlOiBhZGQgQXNzZXRzL2Jhemluby1iYWRnZS5wbmcgZnJvbSBQQyAoY29weSBvZiBKaW51cyB2MS4xLjIgYXNzZXQpIikKICAgIG9bInB1c2giXT1nKCJwdXNoIiwib3JpZ2luIiwiSEVBRDoiK0IpCnByaW50KGpzb24uZHVtcHMobyxlbnN1cmVfYXNjaWk9RmFsc2UpKQo=').decode())\n{\"pull\": \"\", \"src\": \"C:\\\\projects\\\\Jinus-v1.1.2\\\\Assets\\\\bazino-badge.png\", \"sha\": \"21709d08213631c9\", \"size\": 4672, \"add\": \"\", \"commit\": \"[arena/d7168c76-bazino-advertising-campaign a8299e7] chore: add Assets/bazino-badge.png from PC (copy of Jinus v1.1.2 asset)\\n 1 file changed, 0 insertions(+), 0 deletions(-)\\n create mode 100644 Assets/bazino-badge.png\", \"push\": \"To https://github.com/paymanshafayan/bazino-advertising-campaign.git\\n   f243d7f..a8299e7  HEAD -> arena/d7168c76-bazino-advertising-campaign\"}\n",
+    "stderr": "",
+    "log": "C:\\projects\\jinus-v1.1.0\\mailbox110\\outbox\\osrun-20261120-162245.log",
+    "duration_ms": 8298,
+    "success": true
+  }
+}
