@@ -1,0 +1,96 @@
+{
+  "id": "bazino-carousel-ps5-settings-tr-01",
+  "title": "PS5'te Oyun Deneyimini Uçuracak 5 Gizli Ayar",
+  "mediaFormat": "carousel",
+  "contentType": "carousel",
+  "topic": "daily-didactic",
+  "guideVersion": "1.1.0",
+  "language": "tr",
+  "targetPlatform": "instagram",
+  "targetAccountId": "6ab391ba8d284ffb21332381",
+  "targetHandle": "@bazinopro",
+  "timeZoneId": "Turkey Standard Time",
+  "location": "Gazimağusa / KKTC",
+  "template": {
+    "version": "v2",
+    "sheet": "BAZINO-carousel-template-sheet-v2.jpg",
+    "dimensions": [1080, 1351],
+    "aspectRatio": "4:5",
+    "lockup": "bazino-lockup-top.png",
+    "palette": {
+      "navy": "#050814",
+      "yellow": "#F5D000",
+      "cyan": "#00E5FF",
+      "white": "#F5F8FF",
+      "magenta": "#B14AFF"
+    },
+    "fonts": {
+      "title": "Archivo Black",
+      "subtitle": "Poppins Bold",
+      "body": "Montserrat",
+      "numeric": "Bebas Neue"
+    }
+  },
+  "slides": [
+    {
+      "index": 1,
+      "type": "cover",
+      "file": "slide-01.png",
+      "title": "PS5'TE OYUN DENEYİMİNİ UÇURACAK 5 GİZLİ AYAR",
+      "subtitle": "FPS Artır · Gecikmeyi Düşür · Sesi Netleştir"
+    },
+    {
+      "index": 2,
+      "type": "promise",
+      "file": "slide-02.png",
+      "title": "KONSOLUNUN TÜM GÜCÜNÜ KULLANIYOR MUSUN?",
+      "action": "Kaydet ve arkadaşına gönder!"
+    },
+    {
+      "index": 3,
+      "type": "step",
+      "file": "slide-03.png",
+      "pill": "ADIM 1",
+      "title": "120 Hz & PERFORMANS MODU",
+      "path": "Ayarlar > Kayıtlı Veriler ve Oyun Ayarları > Oyun Ön Ayarları"
+    },
+    {
+      "index": 4,
+      "type": "step",
+      "file": "slide-04.png",
+      "pill": "ADIM 2",
+      "title": "DUALSENSE MİKROFONUNU SUSTUR",
+      "path": "Ayarlar > Ses > Mikrofon > Açılışta Mikrofon Durumu"
+    },
+    {
+      "index": 5,
+      "type": "step",
+      "file": "slide-05.png",
+      "pill": "ADIM 3",
+      "title": "TEMPEST 3D SES KALİBRASYONU",
+      "path": "Ayarlar > Ses > 3D Ses (Kulaklıklar) > 3D Ses Profilini Ayarla"
+    },
+    {
+      "index": 6,
+      "type": "step2",
+      "file": "slide-06.png",
+      "pill": "ADIM 4 & 5",
+      "title": "HDR VE İNDİRME İNCE AYARLARI",
+      "items": [
+        "Adım 4: Ekran ve Video > HDR Ayarla",
+        "Adım 5: Sistem > Güç Tasarrufu > Dinlenme Modu"
+      ]
+    },
+    {
+      "index": 7,
+      "type": "closing",
+      "file": "slide-07.png",
+      "pill": "BAZINO TOPLULUĞU",
+      "question": "SEN EN ÇOK HANGİ AYARI KULLANIYORSUN?",
+      "ctaL21": "Görüşünü yorumlarda paylaş ve BAZINO'yu takip et!",
+      "ctaL22": "Kaydet ve arkadaşına gönder!"
+    }
+  ],
+  "qcStatus": "passed",
+  "republishToConnectedPlatforms": true
+}

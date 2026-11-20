@@ -1,0 +1,114 @@
+{
+  "service": "Google Vids",
+  "cdp_port": 9335,
+  "profile_dir": "C:\\Users\\payman\\.gemini\\chrome-agent",
+  "profile_directory": "Profile 1",
+  "account": "fartashvarahram@gmail.com",
+  "urls": {
+    "home": "https://docs.google.com/videos/u/0/",
+    "create_new": "https://vids.new",
+    "editor_pattern": "https://docs.google.com/videos/d/{DOC_ID}/edit",
+    "sample_project_9_16": "https://docs.google.com/videos/d/1jeOPfJMczdik49FmZw9TNW6ZV7jW1TnGZJwiZLt_2nc/edit"
+  },
+  "home_selectors": {
+    "search_input": "input[aria-label=\"Search bar\"]",
+    "blank_video_btn": "button:has-text(\"Blank video\")",
+    "entry_cards": ".appsDocsGettingStartedEntryPointSelectionViewButton",
+    "recent_item_card": ".docs-homescreen-item-section .docs-homescreen-grid-item",
+    "recent_item_overflow": ".docs-homescreen-item-overflow[aria-label=\"More actions. Popup button.\"]",
+    "personal_avatar_disabled_marker": ".getting-started-dialog-navigation-button-premium-disabled"
+  },
+  "editor_menubar": {
+    "file": "#docs-file-menu",
+    "edit": "#docs-edit-menu",
+    "view": "#docs-view-menu",
+    "insert": "#docs-insert-menu",
+    "format": "#docs-format-menu",
+    "scene": "#flix-scene-menu",
+    "arrange": "#sketchy-arrange-menu",
+    "tools": "#docs-tools-menu",
+    "help": "#docs-help-menu",
+    "file_download_items": [
+      "MP4 video (.mp4)",
+      "GIF animation (.gif)"
+    ],
+    "file_export_items": [
+      "Export to Drive",
+      "Export to YouTube"
+    ]
+  },
+  "editor_toolbar": {
+    "rename_input": "input.docs-title-input[aria-label=\"Rename\"]",
+    "save_badge": "#docs-save-indicator-badge",
+    "play_fullscreen": "#sketchy-play-doc-as-video",
+    "share_btn": "div[role=\"button\"].scb-split-button",
+    "omnibox_btn": "button.assisted-actions-omnibox-button",
+    "new_scene_btn": "#newSceneButton",
+    "undo_btn": "#undoButton",
+    "redo_btn": "#redoButton",
+    "zoom_btn": "#zoomButton",
+    "select_btn": "#selectButton",
+    "styles_btn": "#contentStylingButton",
+    "background_btn": "#backgroundButton",
+    "transition_btn": "#transitionButton",
+    "animation_btn": "#animationButton",
+    "hide_menus_btn": "#viewModeButton"
+  },
+  "right_rail": {
+    "container": "#content-library-rail-server-rendered-refreshed",
+    "ai_avatar": "#content-library-rail-avatars-element",
+    "ai_voiceover": "#content-library-rail-voiceovers-element",
+    "ai_music_lyria": "#content-library-rail-music-generation-element",
+    "ai_image": "#content-library-rail-image-synthesis-element",
+    "record": "#content-library-rail-recording-element",
+    "drive_and_photos": "#content-library-rail-my-media-element",
+    "stock_and_web": "#content-library-rail-stock-media-element",
+    "captions": "#content-library-rail-captions-element",
+    "insert_text": "#content-library-rail-text-element",
+    "templates": "#content-library-rail-templates-element",
+    "shapes_and_lines": "#content-library-rail-shape-and-line-element"
+  },
+  "sidebars": {
+    "scripts_sidebar_container": "div.appsFlixScriptsSidebarContainer[role=\"complementary\"]",
+    "sidebar_close_btn": ".appsDocsUiSidebarClose div[role=\"button\"][aria-label=\"Close\"]",
+    "scene_scope_tabs": ".docs-sidebar-toggle-tab[role=\"tab\"]",
+    "edit_script_btn": "button.appsFlixScriptsSidebarKeyboardEditButton",
+    "scripts_form": "div[role=\"form\"][aria-label=\"Scripts\"]",
+    "prev_script_btn": "[role=\"button\"][aria-label=\"Previous script\"]",
+    "next_script_btn": "[role=\"button\"][aria-label=\"Next script\"]",
+    "change_avatar_btn": "[role=\"button\"][aria-label=\"Change the avatar\"]",
+    "change_voice_btn": "[role=\"button\"][aria-label=\"Change the voice\"]",
+    "insert_voiceover_btn": "[role=\"button\"][aria-label=\"Insert voiceover\"]",
+    "music_prompt_textarea": "textarea[aria-label^=\"Describe your song\"]",
+    "image_prompt_textarea": "textarea.docs-image-synthesis-search-bar-input",
+    "image_aspect_ratio_btn": "[role=\"button\"][aria-label=\"Aspect ratio\"]",
+    "image_style_listbox": "[role=\"listbox\"][aria-label=\"Add a style\"]",
+    "caption_style_buttons": "button.appsFlixCaptionsSelectionButtonTemplateButton",
+    "drive_picker_iframe": "iframe[src*=\"docs.google.com/picker/v2/home\"]"
+  },
+  "timeline": {
+    "toggle_timing_btn": "button[aria-label=\"Show timing\"]",
+    "go_to_beginning_btn": "button[aria-label=\"Go to beginning\"]",
+    "preview_btn": "button[aria-label=\"Preview\"]",
+    "zoom_to_fit_btn": "button.appsFlixTimelineZoomControlsZoomToFitButton",
+    "zoom_out_btn": "button[aria-label=\"Zoom out\"]",
+    "zoom_in_btn": "button[aria-label=\"Zoom in\"]",
+    "scene_tile_selector": "rect[role=\"button\"][aria-label^=\"Scene \"]",
+    "add_transition_btn": "svg[role=\"button\"][data-tooltip=\"Add transition\"]",
+    "trim_video_start": "div[role=\"slider\"][aria-label=\"Trim start\"]",
+    "trim_video_end": "div[role=\"slider\"][aria-label=\"Trim end\"]",
+    "trim_audio_start": "div[role=\"slider\"][aria-label=\"Trim audio start\"]",
+    "trim_audio_end": "div[role=\"slider\"][aria-label=\"Trim audio end\"]"
+  },
+  "verified_account_capabilities": {
+    "ai_avatar_presets": true,
+    "ai_voiceover": true,
+    "ai_music_lyria_3_5": true,
+    "ai_image_synthesis": true,
+    "docs_and_slides_to_video": true,
+    "captions_and_templates": true,
+    "mp4_and_gif_download": true,
+    "personal_custom_avatar": false,
+    "veo_ai_video_clip_generator_in_ui": false
+  }
+}

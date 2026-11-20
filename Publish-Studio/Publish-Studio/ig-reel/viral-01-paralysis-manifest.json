@@ -1,0 +1,47 @@
+{
+  "id": "bazino-reel-viral01-paralysis-tr",
+  "title": "Konsol Oyunla Dolu Ama Oynayamıyor Musun? (Seçim Felci)",
+  "mediaFormat": "reel",
+  "contentType": "reels",
+  "topic": "daily-reels",
+  "guideVersion": "1.1.0",
+  "language": "tr",
+  "targetPlatform": "instagram",
+  "targetAccountId": "6ab391ba8d284ffb21332381",
+  "targetHandle": "@bazinopro",
+  "timeZoneId": "Turkey Standard Time",
+  "location": "Gazimağusa / KKTC",
+  "character": {
+    "name": "Mona",
+    "characterId": "mona",
+    "voiceEngine": "tr-TR-EmelNeural",
+    "voiceRate": "+4%",
+    "voicePitch": "+2Hz",
+    "referencePortrait": "Assets/mona/mona-bazino-character-sheet.jpg",
+    "referenceClub": "Assets/club/club-tall-01.jpeg"
+  },
+  "durationSeconds": 14,
+  "aspectRatio": "9:16",
+  "resolution": [1080, 1920],
+  "hook": {
+    "first3Seconds": "Konsolun onlarca oyunla dolu ama her açtığında saatlerce menüde gezip hiçbir şey oynamadan kapatıyor musun?",
+    "onScreenText": "OYUN SEÇME KRİZİ! 🤦‍♀️🎮",
+    "first125CharsCaption": "Konsolun onlarca oyunla dolu ama her açtığında saatlerce menüde gezip hiçbir şey oynamadan kapatıyor musun? 🎮🤦‍♀️"
+  },
+  "viralAnalysis": {
+    "sourceRank": 1,
+    "sourceCreator": "@bnalgame",
+    "sourceFollowers": 20000,
+    "sourceLikes": 108512,
+    "sourceComments": 751,
+    "outlierMultiplier": 218.5,
+    "psychologyFormula": "Universal Gamer Choice Paralysis Empathy + Club Solution"
+  },
+  "ctaRules": {
+    "l21Compliance": "Yorumlarda yaz ve BAZINO'yu takip et! (Comment + Follow)",
+    "l22Compliance": "Bu videoyu hemen gönder ve sonra uygulamak için kaydet! (Save & Share, No Tagging)"
+  },
+  "qcStatus": "passed",
+  "productionStatus": "storyboard_approved",
+  "republishToConnectedPlatforms": true
+}

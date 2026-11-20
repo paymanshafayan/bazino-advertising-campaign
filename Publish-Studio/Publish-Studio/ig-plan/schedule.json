@@ -1,0 +1,47 @@
+{
+  "daily_target": 5,
+  "weekly_total": 35,
+  "timezone": "UTC+03:00 (Famagusta)",
+  "slots": [
+    {
+      "slot": 1,
+      "time": "12:30",
+      "type": "Quick Hack (Reels)",
+      "theme": "Konsol & Oyun Ayarları",
+      "day1_title_tr": "PS5'te Düşman Sesini Net Duymak İçin Bu Ayarı Aç! 🎧",
+      "status": "Ready for Pipeline"
+    },
+    {
+      "slot": 2,
+      "time": "15:30",
+      "type": "Listicle / Carousel",
+      "theme": "Faydalı Siteler & Araçlar",
+      "day1_title_tr": "Her Oyuncunun Kaydetmesi Gereken 3 Hayati Site 💻",
+      "status": "Ready for Pipeline"
+    },
+    {
+      "slot": 3,
+      "time": "18:30",
+      "type": "Main Viral Reel (Mona)",
+      "theme": "FC25 & Rekabetçi Oyun Taktikleri",
+      "day1_title_tr": "FC25'te Arkadaşını Delirtecek Gizli Defans Taktiği! 🛡️🔥",
+      "status": "Priority #1 (ig-reel)"
+    },
+    {
+      "slot": 4,
+      "time": "21:00",
+      "type": "Game Net Humor & Banter",
+      "theme": "Mizah, Kol Kırma & Hesap Ödeme",
+      "day1_title_tr": "Mağusa'da 90+3 Golü Sonrası Kolların Hali 😂💀",
+      "status": "Ready for Pipeline"
+    },
+    {
+      "slot": 5,
+      "time": "23:30",
+      "type": "Late Night Debate",
+      "theme": "Gece Tartışması & Hype",
+      "day1_title_tr": "Gece Yarısı Tartışması: Ronaldo mu Messi mi? 🏆⚽",
+      "status": "Ready for Pipeline"
+    }
+  ]
+}

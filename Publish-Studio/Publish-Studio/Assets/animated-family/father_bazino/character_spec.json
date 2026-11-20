@@ -1,0 +1,53 @@
+{
+  "character_id": "father_bazino",
+  "display_name": "Father Bazino / Baba (پدر خانواده بازینو)",
+  "role": "3D Pixar-Style Animated Father of Bazino Family (پدر ۳۶ ساله انیمیشنی خانواده بازینو)",
+  "domain": "3d_animated",
+  "preferred_engine": "wan-2.2",
+  "age": 36,
+  "height_cm": 180,
+  "under_18_restricted": false,
+  "folder": "animated-family/father_bazino",
+  "triggers": [
+    "father bazino",
+    "father_bazino",
+    "baba bazino",
+    "پدر بازینو",
+    "بابا بازینو",
+    "پدر خانواده بازینو"
+  ],
+  "assets": {
+    "character_sheet": "characters/animated-family/father_bazino/father-studio-sheet.jpg",
+    "portrait_image": "characters/animated-family/father_bazino/father-avatar-01.png",
+    "fullbody_image": "characters/animated-family/father_bazino/father-avatar-02.png",
+    "club_image": "characters/animated-family/father_bazino/father-avatar-03.png",
+    "voice_samples": {
+      "tr": "characters/animated-family/father_bazino/voice_ref_tr.mp3",
+      "fa": "characters/animated-family/father_bazino/voice_ref_fa.mp3",
+      "en": "characters/animated-family/father_bazino/voice_ref_en.mp3"
+    }
+  },
+  "voices": {
+    "tr": {
+      "tts_voice": "tr-TR-AhmetNeural",
+      "rate": "+2%",
+      "pitch": "-2Hz",
+      "sample_text": "Tamam şampiyon! Hafta sonu tüm aile Bazino'ya gidiyoruz, ama FC 26'da seni yenerim haberin olsun!"
+    },
+    "fa": {
+      "tts_voice": "fa-IR-FaridNeural",
+      "rate": "+2%",
+      "pitch": "-2Hz",
+      "sample_text": "حله قهرمان! آخر هفته دسته‌جمعی میریم بازینو، ولی توی فوتبال خودم برنده میشم‌ها!"
+    },
+    "en": {
+      "tts_voice": "en-US-BrianMultilingualNeural",
+      "rate": "+2%",
+      "pitch": "-2Hz",
+      "sample_text": "Alright champion! This weekend the whole family is going to Bazino Club, get ready for our match!"
+    }
+  },
+  "visual_prompt": "Handsome 3D Pixar/Disney style animated 36-year-old father named Father Bazino, warm brown eyes, neatly styled dark brown hair and groomed short beard/mustache, warm friendly dad smile, wearing a navy-blue and teal polo shirt or zip jacket with the BAZINO logo on the chest, khaki chinos, and white sneakers, holding a white PS5 controller, ultra-clean 3D CGI animation render.",
+  "negative_prompt": "photorealistic human, real photo, bald, old grandpa, ugly, deformed hands, blurry",
+  "personality_and_rules": "3D Pixar-style animated father who loves playing PS5 games with his son (Boy Bazino) and wife (Mother Bazino). Always routed to Wan 2.2."
+}

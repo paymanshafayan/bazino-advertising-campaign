@@ -1,0 +1,419 @@
+{
+  "mona": {
+    "character_id": "mona",
+    "display_name": "Mona (مونا)",
+    "role": "Bazino Official Brand Ambassador & Presenter (سفیر و مجری رسمی بازینو)",
+    "domain": "realistic_human",
+    "preferred_engine": "hunyuan-13b",
+    "age": 24,
+    "height_cm": 168,
+    "under_18_restricted": false,
+    "folder": "mona",
+    "triggers": [
+      "mona",
+      "مونا",
+      "presenter mona",
+      "ambassador mona",
+      "sunucu mona"
+    ],
+    "assets": {
+      "character_sheet": "characters/mona/mona-brandwear-character-sheet.png",
+      "portrait_image": "characters/mona/mona-portrait-avatar-01.png",
+      "fullbody_image": "characters/mona/mona-brandwear-fullbody-01.png",
+      "club_image": "characters/mona/mona-bazino-club-shorts.jpg",
+      "alt_sheet": "characters/mona/mona-character-sheet.png",
+      "voice_reference_video": "characters/mona/ps5-voice-ref-part1-10s.mp4",
+      "voice_samples": {
+        "tr": "characters/mona/voice_ref_tr.mp3",
+        "fa": "characters/mona/voice_ref_fa.mp3",
+        "en": "characters/mona/voice_ref_en.mp3",
+        "original_ref": "characters/mona/voice_ref_original.wav"
+      }
+    },
+    "voices": {
+      "tr": {
+        "tts_voice": "tr-TR-EmelNeural",
+        "rate": "+4%",
+        "pitch": "+2Hz",
+        "sample_text": "Merhaba arkadaşlar! Ben Mona, Mağusa'nın en heyecanlı PS5 kulübü Bazino'ya hoş geldiniz!"
+      },
+      "fa": {
+        "tts_voice": "fa-IR-DilaraNeural",
+        "rate": "+4%",
+        "pitch": "+2Hz",
+        "sample_text": "سلام بچه‌ها! من مونا هستم، به بازینو، هیجان‌انگیزترین باشگاه پی‌اس‌فایو فاماگوستا خوش اومدین!"
+      },
+      "en": {
+        "tts_voice": "en-US-AvaMultilingualNeural",
+        "rate": "+3%",
+        "pitch": "+1Hz",
+        "sample_text": "Hey everyone! I'm Mona, welcome to Bazino Gaming Club in Famagusta, where every game feels like a final!"
+      }
+    },
+    "visual_prompt": "Photorealistic 24-year-old Mediterranean/Iranian young woman named Mona, 168cm tall, athletic slim build, warm olive skin with natural texture, expressive hazel-brown almond eyes, well-defined natural eyebrows, warm charismatic smile, sleek dark brown hair styled in a high ponytail with soft face-framing strands, wearing Bazino official navy-blue and white zip-up gaming jersey with the colorful BAZINO joystick logo on the chest, white sporty shorts or fitted dark jeans, white sneakers, standing inside the modern Bazino PS5 gaming lounge in Famagusta with warm wooden slatted walls, glowing purple/blue/magenta RGB LED strips, and 65-inch 4K TVs.",
+    "negative_prompt": "different face, blonde hair, curly hair, glasses, old, chubby, distorted eyes, wide bulging eyes, extra fingers, deformed hands, blurry, low quality, cartoon, 3d render, watermark, text overlay",
+    "personality_and_rules": "Energetic, welcoming, confident, gamer-savvy presenter. Speaks primarily Turkish (for Northern Cyprus / Famagusta audience), as well as Persian and English. Always maintains exact facial identity from mona-portrait-avatar-01.png and mona-brandwear-fullbody-01.png."
+  },
+  "farid": {
+    "character_id": "farid",
+    "display_name": "Farid / Ferit (فرید)",
+    "role": "Young Male Competitive Gamer & Friend (گیمر جوان و رقیب حرفه‌ای)",
+    "domain": "realistic_human",
+    "preferred_engine": "hunyuan-13b",
+    "age": 24,
+    "height_cm": 178,
+    "under_18_restricted": false,
+    "folder": "farid",
+    "triggers": [
+      "farid",
+      "ferit",
+      "فرید",
+      "gamer farid"
+    ],
+    "assets": {
+      "character_sheet": "characters/farid/farid-character-sheet.jpg",
+      "portrait_image": "characters/farid/farid-portrait-avatar-01.jpg",
+      "fullbody_image": "characters/farid/farid-fullbody-avatar-01.jpg",
+      "club_image": "characters/farid/farid-fullbody-avatar-01.jpg",
+      "voice_samples": {
+        "tr": "characters/farid/voice_ref_tr.mp3",
+        "fa": "characters/farid/voice_ref_fa.mp3",
+        "en": "characters/farid/voice_ref_en.mp3"
+      }
+    },
+    "voices": {
+      "tr": {
+        "tts_voice": "tr-TR-AhmetNeural",
+        "rate": "+5%",
+        "pitch": "+0Hz",
+        "sample_text": "Selam millet! Ben Ferit. Bazino'da FC 26 turnuvası başlıyor, kendine güvenen varsa kolu alsın gelsin!"
+      },
+      "fa": {
+        "tts_voice": "fa-IR-FaridNeural",
+        "rate": "+4%",
+        "pitch": "+0Hz",
+        "sample_text": "سلام رفقا! من فریدم. توی بازینو هیچ‌کس حریف من توی اف‌سی ۲۶ نمیشه، اگه ادعات میشه بیا بشین پای دستگاه!"
+      },
+      "en": {
+        "tts_voice": "en-US-AndrewMultilingualNeural",
+        "rate": "+4%",
+        "pitch": "+0Hz",
+        "sample_text": "What's up guys! I'm Farid. Ready for the ultimate PS5 showdown at Bazino Club in Famagusta?"
+      }
+    },
+    "visual_prompt": "Photorealistic 24-year-old Mediterranean/Iranian young man named Farid, 178cm tall, athletic build, short styled dark brown/black hair with clean fade, neatly trimmed short stubble beard, warm dark brown eyes, charismatic confident smile, wearing a sleek dark navy/charcoal casual jacket over a black crew-neck t-shirt, dark slim-fit jeans and clean sneakers, holding a white PlayStation 5 DualSense controller inside Bazino PS5 gaming club with wooden slatted walls and neon RGB lighting.",
+    "negative_prompt": "different face, long hair, bald, clean shaven baby face, long bushy beard, glasses, old, deformed hands, wide bulging eyes, cartoon, 3d render, blurry, watermark",
+    "personality_and_rules": "Competitive, friendly, energetic 24-year-old pro gamer. Excels at FC 26, Tekken 8, Call of Duty, and Mortal Kombat 1. Can participate in all adult and competitive gaming scenarios."
+  },
+  "hasti": {
+    "character_id": "hasti",
+    "display_name": "Hasti (هستی)",
+    "role": "Young Female Gamer & Friend (دختر گیمر جوان و پرانرژی)",
+    "domain": "realistic_human",
+    "preferred_engine": "hunyuan-13b",
+    "age": 23,
+    "height_cm": 165,
+    "under_18_restricted": false,
+    "folder": "hasti",
+    "triggers": [
+      "hasti",
+      "هستی",
+      "gamer hasti"
+    ],
+    "assets": {
+      "character_sheet": "characters/hasti/hasti-character-sheet.jpg",
+      "portrait_image": "characters/hasti/hasti-portrait-avatar-01.jpg",
+      "fullbody_image": "characters/hasti/hasti-fullbody-avatar-01.jpg",
+      "club_image": "characters/hasti/hasti-fullbody-avatar-01.jpg",
+      "voice_samples": {
+        "tr": "characters/hasti/voice_ref_tr.mp3",
+        "fa": "characters/hasti/voice_ref_fa.mp3",
+        "en": "characters/hasti/voice_ref_en.mp3"
+      }
+    },
+    "voices": {
+      "tr": {
+        "tts_voice": "tr-TR-EmelNeural",
+        "rate": "+7%",
+        "pitch": "+5Hz",
+        "sample_text": "Selam! Ben Hasti! Bazino'da arkadaşlarla oyun keyfi bir başka, hadi sen de aramıza katıl!"
+      },
+      "fa": {
+        "tts_voice": "fa-IR-DilaraNeural",
+        "rate": "+6%",
+        "pitch": "+5Hz",
+        "sample_text": "سلام! من هستی هستم! هیچ جایی مثل بازینو واسه دورهمی و رقابت با بچه‌ها حال نمیده!"
+      },
+      "en": {
+        "tts_voice": "en-US-EmmaMultilingualNeural",
+        "rate": "+5%",
+        "pitch": "+3Hz",
+        "sample_text": "Hi guys, I'm Hasti! Gaming nights with friends at Bazino are always unforgettable!"
+      }
+    },
+    "visual_prompt": "Photorealistic 23-year-old Mediterranean/Iranian young woman named Hasti, 165cm tall, slim build, long wavy chestnut-brown hair worn down over her shoulders, warm brown eyes, cheerful friendly smile, wearing a cozy stylish beige/cream knitted sweater, blue high-waisted jeans, and white sneakers, holding a white PS5 DualSense controller inside Bazino gaming lounge with warm wooden walls and RGB neon lights.",
+    "negative_prompt": "ponytail, short hair, blonde hair, glasses, old, distorted face, bulging eyes, extra fingers, cartoon, 3d render, blurry",
+    "personality_and_rules": "Warm, cheerful, relatable 23-year-old student and gamer who loves co-op games, FC 26, Tekken 8, and group hangouts with Mona and Farid."
+  },
+  "youna": {
+    "character_id": "youna",
+    "display_name": "Youna / Yuna (یونا)",
+    "role": "Teenage Boy Gamer - Under 18 Safe Sports/Racing Only (نوجوان گیمر - ویژه بازی‌های ورزشی و مسابقه‌ای)",
+    "domain": "realistic_human",
+    "preferred_engine": "hunyuan-13b",
+    "age": 15,
+    "height_cm": 162,
+    "under_18_restricted": true,
+    "folder": "youna",
+    "triggers": [
+      "youna",
+      "yuna",
+      "یونا"
+    ],
+    "assets": {
+      "character_sheet": "characters/youna/youna-character-sheet.jpg",
+      "portrait_image": "characters/youna/youna-portrait-avatar-01.jpg",
+      "fullbody_image": "characters/youna/youna-fullbody-avatar-01.jpg",
+      "club_image": "characters/youna/youna-fullbody-avatar-01.jpg",
+      "voice_samples": {
+        "tr": "characters/youna/voice_ref_tr.mp3",
+        "fa": "characters/youna/voice_ref_fa.mp3",
+        "en": "characters/youna/voice_ref_en.mp3"
+      }
+    },
+    "voices": {
+      "tr": {
+        "tts_voice": "tr-TR-AhmetNeural",
+        "rate": "+8%",
+        "pitch": "+12Hz",
+        "sample_text": "Selam! Ben Yuna! Bazino'da FC 26 ve Gran Turismo 7 oynamak 진짜 süper heyecanlı!"
+      },
+      "fa": {
+        "tts_voice": "fa-IR-FaridNeural",
+        "rate": "+8%",
+        "pitch": "+12Hz",
+        "sample_text": "سلام! من یونا هستم! بازی کردن اف‌سی ۲۶ و گرن توریسمو روی تلویزیون‌های بزرگ بازینو فوق‌العاده‌ست!"
+      },
+      "en": {
+        "tts_voice": "en-US-GuyNeural",
+        "rate": "+8%",
+        "pitch": "+10Hz",
+        "sample_text": "Hey! I'm Youna! Playing FC 26 and Gran Turismo 7 on the huge 4K screens at Bazino is awesome!"
+      }
+    },
+    "visual_prompt": "Photorealistic 15-year-old teenage boy named Youna, 162cm tall, youthful friendly face, short tousled dark brown hair, bright brown eyes, enthusiastic teenager smile, wearing a casual heather-grey hoodie over a dark t-shirt, blue jeans, and sporty sneakers, holding a white PS5 DualSense controller inside Bazino PS5 gaming club, family-friendly bright atmosphere, TV screen in background ONLY showing football (EA Sports FC 26) or car racing (Gran Turismo 7).",
+    "negative_prompt": "beard, mustache, adult man, old, violence, guns, blood, Mortal Kombat, GTA, Call of Duty, distorted face, bulging eyes, cartoon, 3d render, blurry",
+    "personality_and_rules": "MANDATORY SAFETY RULE (UNDER 18): Youna is 15 years old. He MUST NEVER appear near violent or 18+ games (NO GTA, NO Mortal Kombat, NO Call of Duty, NO Resident Evil). ONLY sports, football (FC 26, NBA 2K), and racing (Gran Turismo 7, Sonic, Astro Bot)!"
+  },
+  "lea": {
+    "character_id": "lea",
+    "display_name": "Lea (لیا)",
+    "role": "Young Girl Gamer - Under 18 Family/Kids Games Only (دختر نوجوان گیمر - ویژه بازی‌های خانوادگی و شاد)",
+    "domain": "realistic_human",
+    "preferred_engine": "hunyuan-13b",
+    "age": 12,
+    "height_cm": 148,
+    "under_18_restricted": true,
+    "folder": "lea",
+    "triggers": [
+      "lea",
+      "لیا",
+      "لی‌آ"
+    ],
+    "assets": {
+      "character_sheet": "characters/lea/lea-character-sheet.jpg",
+      "portrait_image": "characters/lea/lea-portrait-avatar-01.jpg",
+      "fullbody_image": "characters/lea/lea-fullbody-avatar-01.jpg",
+      "club_image": "characters/lea/lea-fullbody-avatar-01.jpg",
+      "voice_samples": {
+        "tr": "characters/lea/voice_ref_tr.mp3",
+        "fa": "characters/lea/voice_ref_fa.mp3",
+        "en": "characters/lea/voice_ref_en.mp3"
+      }
+    },
+    "voices": {
+      "tr": {
+        "tts_voice": "tr-TR-EmelNeural",
+        "rate": "+9%",
+        "pitch": "+16Hz",
+        "sample_text": "Merhaba! Ben Lea! Bazino'da ailemle birlikte Astro Bot ve yarış oyunları oynamayı çok seviyorum!"
+      },
+      "fa": {
+        "tts_voice": "fa-IR-DilaraNeural",
+        "rate": "+8%",
+        "pitch": "+16Hz",
+        "sample_text": "سلام! من لیا هستم! توی بازینو با خونواده‌م کلی بازی‌های شاد و مسابقه‌ای بازی می‌کنیم!"
+      },
+      "en": {
+        "tts_voice": "en-US-AnaNeural",
+        "rate": "+5%",
+        "pitch": "+4Hz",
+        "sample_text": "Hi! I'm Lea! I love playing Astro Bot and fun family games at Bazino Club!"
+      }
+    },
+    "visual_prompt": "Photorealistic 12-year-old girl named Lea, 148cm tall, sweet cheerful child face, straight dark brown shoulder-length hair with neat bangs (fringe) across her forehead, bright brown eyes, happy innocent smile, wearing a modest soft pastel-pink long-sleeve sweatshirt, blue jeans, and white sneakers, holding a white PS5 DualSense controller in a bright, safe, family-friendly Bazino gaming lounge, TV screen in background ONLY showing colorful family/kids games like Astro Bot or kart racing.",
+    "negative_prompt": "adult woman, makeup, violence, guns, blood, horror, Mortal Kombat, GTA, Call of Duty, distorted face, bulging eyes, cartoon, blurry",
+    "personality_and_rules": "MANDATORY SAFETY RULE (UNDER 18): Lea is 12 years old. She MUST NEVER appear in any adult, violent, or 18+ gaming scenes. ONLY family-friendly, cheerful, colorful games (Astro Bot, It Takes Two, Sackboy, Overcooked, Racing, Sports)!"
+  },
+  "boy_bazino": {
+    "character_id": "boy_bazino",
+    "display_name": "Boy Bazino / Can (پسر بازینو / کوچولو بازینو)",
+    "role": "3D Pixar-Style Animated Boy Mascot of Bazino Family (پسر ۶ ساله انیمیشنی خانواده بازینو)",
+    "domain": "3d_animated",
+    "preferred_engine": "wan-2.2",
+    "age": 6,
+    "height_cm": 115,
+    "under_18_restricted": true,
+    "folder": "animated-family/boy_bazino",
+    "triggers": [
+      "boy bazino",
+      "boy_bazino",
+      "boy-bazino",
+      "can bazino",
+      "پسر بازینو",
+      "کوچولو بازینو",
+      "بچه بازینو",
+      "پسر انیمیشنی"
+    ],
+    "assets": {
+      "character_sheet": "characters/animated-family/boy_bazino/boy-bazino-studio-sheet.jpg",
+      "portrait_image": "characters/animated-family/boy_bazino/boy-bazino-avatar-01.png",
+      "fullbody_image": "characters/animated-family/boy_bazino/boy-bazino-avatar-02.png",
+      "club_image": "characters/animated-family/boy_bazino/boy-bazino-avatar-03.png",
+      "voice_samples": {
+        "tr": "characters/animated-family/boy_bazino/voice_ref_tr.mp3",
+        "fa": "characters/animated-family/boy_bazino/voice_ref_fa.mp3",
+        "en": "characters/animated-family/boy_bazino/voice_ref_en.mp3"
+      }
+    },
+    "voices": {
+      "tr": {
+        "tts_voice": "tr-TR-EmelNeural",
+        "rate": "+12%",
+        "pitch": "+22Hz",
+        "sample_text": "Yaşasın! Baba, anne, hadi çabuk Bazino'ya gidelim! PS5'te oyun oynamak istiyorum!"
+      },
+      "fa": {
+        "tts_voice": "fa-IR-DilaraNeural",
+        "rate": "+10%",
+        "pitch": "+22Hz",
+        "sample_text": "آخ جووون! بابایی، مامانی، زود باشین بریم بازینو! می‌خوام با پی‌اس‌فایو بازی کنم!"
+      },
+      "en": {
+        "tts_voice": "en-US-AnaNeural",
+        "rate": "+10%",
+        "pitch": "+12Hz",
+        "sample_text": "Yay! Dad, Mom, let's go to Bazino Gaming Club! I want to play on the PS5!"
+      }
+    },
+    "visual_prompt": "Cute 3D Pixar/Disney style animated 6-year-old boy named Boy Bazino, big expressive glossy brown eyes, fluffy styled brown hair with a cute front curl, rosy cheeks, cheerful excited smile, wearing a royal-blue and yellow sporty hoodie with the colorful BAZINO joystick logo on the chest, blue denim shorts, and blue-yellow sneakers, holding a white PS5 controller, ultra-clean 3D CGI animation render.",
+    "negative_prompt": "photorealistic human, real photo, creepy, horror, ugly, deformed face, extra limbs, low resolution, blurry",
+    "personality_and_rules": "3D Pixar-style animated kid mascot. Always routed to Wan 2.2 (wan22_14b_i2v) using boy-bazino-avatar-01.png as start_image for 100% 3D character consistency."
+  },
+  "father_bazino": {
+    "character_id": "father_bazino",
+    "display_name": "Father Bazino / Baba (پدر خانواده بازینو)",
+    "role": "3D Pixar-Style Animated Father of Bazino Family (پدر ۳۶ ساله انیمیشنی خانواده بازینو)",
+    "domain": "3d_animated",
+    "preferred_engine": "wan-2.2",
+    "age": 36,
+    "height_cm": 180,
+    "under_18_restricted": false,
+    "folder": "animated-family/father_bazino",
+    "triggers": [
+      "father bazino",
+      "father_bazino",
+      "baba bazino",
+      "پدر بازینو",
+      "بابا بازینو",
+      "پدر خانواده بازینو"
+    ],
+    "assets": {
+      "character_sheet": "characters/animated-family/father_bazino/father-studio-sheet.jpg",
+      "portrait_image": "characters/animated-family/father_bazino/father-avatar-01.png",
+      "fullbody_image": "characters/animated-family/father_bazino/father-avatar-02.png",
+      "club_image": "characters/animated-family/father_bazino/father-avatar-03.png",
+      "voice_samples": {
+        "tr": "characters/animated-family/father_bazino/voice_ref_tr.mp3",
+        "fa": "characters/animated-family/father_bazino/voice_ref_fa.mp3",
+        "en": "characters/animated-family/father_bazino/voice_ref_en.mp3"
+      }
+    },
+    "voices": {
+      "tr": {
+        "tts_voice": "tr-TR-AhmetNeural",
+        "rate": "+2%",
+        "pitch": "-2Hz",
+        "sample_text": "Tamam şampiyon! Hafta sonu tüm aile Bazino'ya gidiyoruz, ama FC 26'da seni yenerim haberin olsun!"
+      },
+      "fa": {
+        "tts_voice": "fa-IR-FaridNeural",
+        "rate": "+2%",
+        "pitch": "-2Hz",
+        "sample_text": "حله قهرمان! آخر هفته دسته‌جمعی میریم بازینو، ولی توی فوتبال خودم برنده میشم‌ها!"
+      },
+      "en": {
+        "tts_voice": "en-US-BrianMultilingualNeural",
+        "rate": "+2%",
+        "pitch": "-2Hz",
+        "sample_text": "Alright champion! This weekend the whole family is going to Bazino Club, get ready for our match!"
+      }
+    },
+    "visual_prompt": "Handsome 3D Pixar/Disney style animated 36-year-old father named Father Bazino, warm brown eyes, neatly styled dark brown hair and groomed short beard/mustache, warm friendly dad smile, wearing a navy-blue and teal polo shirt or zip jacket with the BAZINO logo on the chest, khaki chinos, and white sneakers, holding a white PS5 controller, ultra-clean 3D CGI animation render.",
+    "negative_prompt": "photorealistic human, real photo, bald, old grandpa, ugly, deformed hands, blurry",
+    "personality_and_rules": "3D Pixar-style animated father who loves playing PS5 games with his son (Boy Bazino) and wife (Mother Bazino). Always routed to Wan 2.2."
+  },
+  "mother_bazino": {
+    "character_id": "mother_bazino",
+    "display_name": "Mother Bazino / Anne (مادر خانواده بازینو)",
+    "role": "3D Pixar-Style Animated Mother of Bazino Family (مادر ۳۳ ساله انیمیشنی خانواده بازینو)",
+    "domain": "3d_animated",
+    "preferred_engine": "wan-2.2",
+    "age": 33,
+    "height_cm": 168,
+    "under_18_restricted": false,
+    "folder": "animated-family/mother_bazino",
+    "triggers": [
+      "mother bazino",
+      "mother_bazino",
+      "anne bazino",
+      "مادر بازینو",
+      "مامان بازینو",
+      "مادر خانواده بازینو"
+    ],
+    "assets": {
+      "character_sheet": "characters/animated-family/mother_bazino/mother-studio-sheet.jpg",
+      "portrait_image": "characters/animated-family/mother_bazino/mother-avatar-01.png",
+      "fullbody_image": "characters/animated-family/mother_bazino/mother-avatar-02.png",
+      "club_image": "characters/animated-family/mother_bazino/mother-avatar-03.png",
+      "voice_samples": {
+        "tr": "characters/animated-family/mother_bazino/voice_ref_tr.mp3",
+        "fa": "characters/animated-family/mother_bazino/voice_ref_fa.mp3",
+        "en": "characters/animated-family/mother_bazino/voice_ref_en.mp3"
+      }
+    },
+    "voices": {
+      "tr": {
+        "tts_voice": "tr-TR-EmelNeural",
+        "rate": "+3%",
+        "pitch": "+0Hz",
+        "sample_text": "Bazino hem çok temiz hem de aileler için harika bir ortam! Bu akşam kupayı ben kaldıracağım!"
+      },
+      "fa": {
+        "tts_voice": "fa-IR-DilaraNeural",
+        "rate": "+2%",
+        "pitch": "+0Hz",
+        "sample_text": "محیط بازینو هم فوق‌العاده تمیز و شیکه و هم برای خانواده‌ها عالیه! امشب جام قهرمانی مال خودمه!"
+      },
+      "en": {
+        "tts_voice": "en-US-AvaMultilingualNeural",
+        "rate": "+2%",
+        "pitch": "+0Hz",
+        "sample_text": "Bazino is so clean, modern, and welcoming for families! Tonight I'm winning the family tournament!"
+      }
+    },
+    "visual_prompt": "Lovely 3D Pixar/Disney style animated 33-year-old mother named Mother Bazino, expressive warm hazel-brown eyes, wavy chestnut-brown hair styled half-up, kind joyful smile, wearing a stylish purple/magenta and navy sporty top with the BAZINO logo on the chest, dark jeans, and white sneakers, holding a white PS5 controller, ultra-clean 3D CGI animation render.",
+    "negative_prompt": "photorealistic human, real photo, old grandma, ugly, deformed face, blurry",
+    "personality_and_rules": "3D Pixar-style animated mother who enjoys family gaming nights at Bazino Club. Always routed to Wan 2.2."
+  }
+}

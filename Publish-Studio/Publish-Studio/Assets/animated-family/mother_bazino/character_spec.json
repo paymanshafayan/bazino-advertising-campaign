@@ -1,0 +1,53 @@
+{
+  "character_id": "mother_bazino",
+  "display_name": "Mother Bazino / Anne (مادر خانواده بازینو)",
+  "role": "3D Pixar-Style Animated Mother of Bazino Family (مادر ۳۳ ساله انیمیشنی خانواده بازینو)",
+  "domain": "3d_animated",
+  "preferred_engine": "wan-2.2",
+  "age": 33,
+  "height_cm": 168,
+  "under_18_restricted": false,
+  "folder": "animated-family/mother_bazino",
+  "triggers": [
+    "mother bazino",
+    "mother_bazino",
+    "anne bazino",
+    "مادر بازینو",
+    "مامان بازینو",
+    "مادر خانواده بازینو"
+  ],
+  "assets": {
+    "character_sheet": "characters/animated-family/mother_bazino/mother-studio-sheet.jpg",
+    "portrait_image": "characters/animated-family/mother_bazino/mother-avatar-01.png",
+    "fullbody_image": "characters/animated-family/mother_bazino/mother-avatar-02.png",
+    "club_image": "characters/animated-family/mother_bazino/mother-avatar-03.png",
+    "voice_samples": {
+      "tr": "characters/animated-family/mother_bazino/voice_ref_tr.mp3",
+      "fa": "characters/animated-family/mother_bazino/voice_ref_fa.mp3",
+      "en": "characters/animated-family/mother_bazino/voice_ref_en.mp3"
+    }
+  },
+  "voices": {
+    "tr": {
+      "tts_voice": "tr-TR-EmelNeural",
+      "rate": "+3%",
+      "pitch": "+0Hz",
+      "sample_text": "Bazino hem çok temiz hem de aileler için harika bir ortam! Bu akşam kupayı ben kaldıracağım!"
+    },
+    "fa": {
+      "tts_voice": "fa-IR-DilaraNeural",
+      "rate": "+2%",
+      "pitch": "+0Hz",
+      "sample_text": "محیط بازینو هم فوق‌العاده تمیز و شیکه و هم برای خانواده‌ها عالیه! امشب جام قهرمانی مال خودمه!"
+    },
+    "en": {
+      "tts_voice": "en-US-AvaMultilingualNeural",
+      "rate": "+2%",
+      "pitch": "+0Hz",
+      "sample_text": "Bazino is so clean, modern, and welcoming for families! Tonight I'm winning the family tournament!"
+    }
+  },
+  "visual_prompt": "Lovely 3D Pixar/Disney style animated 33-year-old mother named Mother Bazino, expressive warm hazel-brown eyes, wavy chestnut-brown hair styled half-up, kind joyful smile, wearing a stylish purple/magenta and navy sporty top with the BAZINO logo on the chest, dark jeans, and white sneakers, holding a white PS5 controller, ultra-clean 3D CGI animation render.",
+  "negative_prompt": "photorealistic human, real photo, old grandma, ugly, deformed face, blurry",
+  "personality_and_rules": "3D Pixar-style animated mother who enjoys family gaming nights at Bazino Club. Always routed to Wan 2.2."
+}

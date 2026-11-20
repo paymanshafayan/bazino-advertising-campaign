@@ -1,0 +1,55 @@
+{
+  "character_id": "boy_bazino",
+  "display_name": "Boy Bazino / Can (پسر بازینو / کوچولو بازینو)",
+  "role": "3D Pixar-Style Animated Boy Mascot of Bazino Family (پسر ۶ ساله انیمیشنی خانواده بازینو)",
+  "domain": "3d_animated",
+  "preferred_engine": "wan-2.2",
+  "age": 6,
+  "height_cm": 115,
+  "under_18_restricted": true,
+  "folder": "animated-family/boy_bazino",
+  "triggers": [
+    "boy bazino",
+    "boy_bazino",
+    "boy-bazino",
+    "can bazino",
+    "پسر بازینو",
+    "کوچولو بازینو",
+    "بچه بازینو",
+    "پسر انیمیشنی"
+  ],
+  "assets": {
+    "character_sheet": "characters/animated-family/boy_bazino/boy-bazino-studio-sheet.jpg",
+    "portrait_image": "characters/animated-family/boy_bazino/boy-bazino-avatar-01.png",
+    "fullbody_image": "characters/animated-family/boy_bazino/boy-bazino-avatar-02.png",
+    "club_image": "characters/animated-family/boy_bazino/boy-bazino-avatar-03.png",
+    "voice_samples": {
+      "tr": "characters/animated-family/boy_bazino/voice_ref_tr.mp3",
+      "fa": "characters/animated-family/boy_bazino/voice_ref_fa.mp3",
+      "en": "characters/animated-family/boy_bazino/voice_ref_en.mp3"
+    }
+  },
+  "voices": {
+    "tr": {
+      "tts_voice": "tr-TR-EmelNeural",
+      "rate": "+12%",
+      "pitch": "+22Hz",
+      "sample_text": "Yaşasın! Baba, anne, hadi çabuk Bazino'ya gidelim! PS5'te oyun oynamak istiyorum!"
+    },
+    "fa": {
+      "tts_voice": "fa-IR-DilaraNeural",
+      "rate": "+10%",
+      "pitch": "+22Hz",
+      "sample_text": "آخ جووون! بابایی، مامانی، زود باشین بریم بازینو! می‌خوام با پی‌اس‌فایو بازی کنم!"
+    },
+    "en": {
+      "tts_voice": "en-US-AnaNeural",
+      "rate": "+10%",
+      "pitch": "+12Hz",
+      "sample_text": "Yay! Dad, Mom, let's go to Bazino Gaming Club! I want to play on the PS5!"
+    }
+  },
+  "visual_prompt": "Cute 3D Pixar/Disney style animated 6-year-old boy named Boy Bazino, big expressive glossy brown eyes, fluffy styled brown hair with a cute front curl, rosy cheeks, cheerful excited smile, wearing a royal-blue and yellow sporty hoodie with the colorful BAZINO joystick logo on the chest, blue denim shorts, and blue-yellow sneakers, holding a white PS5 controller, ultra-clean 3D CGI animation render.",
+  "negative_prompt": "photorealistic human, real photo, creepy, horror, ugly, deformed face, extra limbs, low resolution, blurry",
+  "personality_and_rules": "3D Pixar-style animated kid mascot. Always routed to Wan 2.2 (wan22_14b_i2v) using boy-bazino-avatar-01.png as start_image for 100% 3D character consistency."
+}

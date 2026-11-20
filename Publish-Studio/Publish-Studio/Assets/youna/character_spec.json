@@ -1,0 +1,50 @@
+{
+  "character_id": "youna",
+  "display_name": "Youna / Yuna (یونا)",
+  "role": "Teenage Boy Gamer - Under 18 Safe Sports/Racing Only (نوجوان گیمر - ویژه بازی‌های ورزشی و مسابقه‌ای)",
+  "domain": "realistic_human",
+  "preferred_engine": "hunyuan-13b",
+  "age": 15,
+  "height_cm": 162,
+  "under_18_restricted": true,
+  "folder": "youna",
+  "triggers": [
+    "youna",
+    "yuna",
+    "یونا"
+  ],
+  "assets": {
+    "character_sheet": "characters/youna/youna-character-sheet.jpg",
+    "portrait_image": "characters/youna/youna-portrait-avatar-01.jpg",
+    "fullbody_image": "characters/youna/youna-fullbody-avatar-01.jpg",
+    "club_image": "characters/youna/youna-fullbody-avatar-01.jpg",
+    "voice_samples": {
+      "tr": "characters/youna/voice_ref_tr.mp3",
+      "fa": "characters/youna/voice_ref_fa.mp3",
+      "en": "characters/youna/voice_ref_en.mp3"
+    }
+  },
+  "voices": {
+    "tr": {
+      "tts_voice": "tr-TR-AhmetNeural",
+      "rate": "+8%",
+      "pitch": "+12Hz",
+      "sample_text": "Selam! Ben Yuna! Bazino'da FC 26 ve Gran Turismo 7 oynamak 진짜 süper heyecanlı!"
+    },
+    "fa": {
+      "tts_voice": "fa-IR-FaridNeural",
+      "rate": "+8%",
+      "pitch": "+12Hz",
+      "sample_text": "سلام! من یونا هستم! بازی کردن اف‌سی ۲۶ و گرن توریسمو روی تلویزیون‌های بزرگ بازینو فوق‌العاده‌ست!"
+    },
+    "en": {
+      "tts_voice": "en-US-GuyNeural",
+      "rate": "+8%",
+      "pitch": "+10Hz",
+      "sample_text": "Hey! I'm Youna! Playing FC 26 and Gran Turismo 7 on the huge 4K screens at Bazino is awesome!"
+    }
+  },
+  "visual_prompt": "Photorealistic 15-year-old teenage boy named Youna, 162cm tall, youthful friendly face, short tousled dark brown hair, bright brown eyes, enthusiastic teenager smile, wearing a casual heather-grey hoodie over a dark t-shirt, blue jeans, and sporty sneakers, holding a white PS5 DualSense controller inside Bazino PS5 gaming club, family-friendly bright atmosphere, TV screen in background ONLY showing football (EA Sports FC 26) or car racing (Gran Turismo 7).",
+  "negative_prompt": "beard, mustache, adult man, old, violence, guns, blood, Mortal Kombat, GTA, Call of Duty, distorted face, bulging eyes, cartoon, 3d render, blurry",
+  "personality_and_rules": "MANDATORY SAFETY RULE (UNDER 18): Youna is 15 years old. He MUST NEVER appear near violent or 18+ games (NO GTA, NO Mortal Kombat, NO Call of Duty, NO Resident Evil). ONLY sports, football (FC 26, NBA 2K), and racing (Gran Turismo 7, Sonic, Astro Bot)!"
+}

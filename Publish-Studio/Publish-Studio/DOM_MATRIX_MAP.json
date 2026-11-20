@@ -1,0 +1,61 @@
+{
+  "project_url": "https://flow.google.com/project/{project_id}",
+  "character_studio_url": "https://flow.google.com/project/{project_id}/character",
+  "navigation_selectors": {
+    "all_media_button": "button:has-text('All media'), button.mat-mdc-list-item:has(mat-icon:contains('dashboard'))",
+    "characters_nav_button": "button:has-text('Characters'), button.mat-mdc-list-item:has(mat-icon:contains('accessibility_new'))",
+    "scenes_nav_button": "button:has-text('Scenes'), button.mat-mdc-list-item:has(mat-icon:contains('movie'))",
+    "back_button": "button.back-button, button[aria-label='Go back']"
+  },
+  "character_studio_selectors": {
+    "upload_button": "button.create-character-footer-mode-button:has-text('Upload'), button:contains('upload Upload')",
+    "file_input": "input[type='file'][accept*='.png,.jpg,.jpeg']",
+    "name_input": "input.name-input, input[aria-label='Character name']",
+    "header_title_input": "input.editable-text-input",
+    "done_save_button": "button.flow-button-secondary:has-text('Done')",
+    "preview_image": "img.preview-image"
+  },
+  "composer_selectors": {
+    "editor_container": "div.ProseMirror",
+    "clear_prompt_button": "button[aria-label='Clear prompt'], button.clear-button",
+    "add_ingredients_button": "button[aria-label='Add ingredients to the prompt box'], button.add-menu-trigger",
+    "composer_settings_button": "button.agent-action-button[aria-label='Settings']",
+    "generate_button": "button.generate-icon-button, button[aria-label='Start generation']",
+    "character_chip": ".chip-container:has(img.chip-image)"
+  },
+  "add_ingredients_popover_selectors": {
+    "popover_container": ".add-menu-popover-container, .cdk-overlay-pane",
+    "characters_category_item": ".side-nav-list-item:has-text('Characters')",
+    "asset_item": ".asset-item, .asset-item-container",
+    "add_to_prompt_button": "button.detail-add-to-prompt-btn, button:has-text('Add to prompt')"
+  },
+  "project_settings_drawer_selectors": {
+    "drawer_container": ".settings-content",
+    "confirm_never_radio": "#mat-radio-1, #mat-radio-1-input, mat-radio-button:has-text('Never')",
+    "confirm_always_radio": "#mat-radio-0, #mat-radio-0-input, mat-radio-button:has-text('Always')",
+    "video_aspect_9_16_button": "#mat-button-toggle-20-button, button:has-text('9:16'):in-section('Video')",
+    "image_aspect_9_16_button": "#mat-button-toggle-14-button, button:has-text('9:16'):in-section('Image')",
+    "video_model_picker_button": "button.video-model-picker-button",
+    "save_settings_button": "button.settings-save-button"
+  },
+  "session_chat_selectors": {
+    "session_container": "flow-chat-view, .agent-panel-content",
+    "permission_dialog": "flow-permission-message",
+    "always_approve_option": "flow-permission-message .option-row[role='radio']:has-text('Always approve')",
+    "approve_option": "flow-permission-message .option-row[role='radio']:has-text('Approve')",
+    "reject_option": "flow-permission-message .option-row[role='radio']:has-text('Reject')",
+    "close_session_button": "button.header-action[aria-label='Close']"
+  },
+  "gallery_media_selectors": {
+    "media_tile": ".media-tile, .generation-tile",
+    "video_element": "video",
+    "error_tile": "flow-error-tile, .error-tile",
+    "error_retry_button": "flow-error-tile button[aria-label='Retry']",
+    "error_reuse_button": "flow-error-tile button[aria-label='Reuse prompt']",
+    "error_delete_button": "flow-error-tile button[aria-label='Delete']",
+    "download_button": "button[aria-label='Download'], button.top-action-button[aria-label='Download image'], button:has-text('Download')",
+    "download_menu_1080p": "[role='menuitem']:has-text('1080p'), button:has-text('1080p'), .mat-mdc-menu-item:has-text('1080p')",
+    "download_menu_highest": "[role='menuitem']:has-text('4K'), [role='menuitem']:has-text('1080p'), [role='menuitem']:has-text('High')",
+    "more_options_button": "button[aria-label='More options']"
+  }
+}

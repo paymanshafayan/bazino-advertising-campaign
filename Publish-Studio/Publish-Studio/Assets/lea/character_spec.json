@@ -1,0 +1,50 @@
+{
+  "character_id": "lea",
+  "display_name": "Lea (لیا)",
+  "role": "Young Girl Gamer - Under 18 Family/Kids Games Only (دختر نوجوان گیمر - ویژه بازی‌های خانوادگی و شاد)",
+  "domain": "realistic_human",
+  "preferred_engine": "hunyuan-13b",
+  "age": 12,
+  "height_cm": 148,
+  "under_18_restricted": true,
+  "folder": "lea",
+  "triggers": [
+    "lea",
+    "لیا",
+    "لی‌آ"
+  ],
+  "assets": {
+    "character_sheet": "characters/lea/lea-character-sheet.jpg",
+    "portrait_image": "characters/lea/lea-portrait-avatar-01.jpg",
+    "fullbody_image": "characters/lea/lea-fullbody-avatar-01.jpg",
+    "club_image": "characters/lea/lea-fullbody-avatar-01.jpg",
+    "voice_samples": {
+      "tr": "characters/lea/voice_ref_tr.mp3",
+      "fa": "characters/lea/voice_ref_fa.mp3",
+      "en": "characters/lea/voice_ref_en.mp3"
+    }
+  },
+  "voices": {
+    "tr": {
+      "tts_voice": "tr-TR-EmelNeural",
+      "rate": "+9%",
+      "pitch": "+16Hz",
+      "sample_text": "Merhaba! Ben Lea! Bazino'da ailemle birlikte Astro Bot ve yarış oyunları oynamayı çok seviyorum!"
+    },
+    "fa": {
+      "tts_voice": "fa-IR-DilaraNeural",
+      "rate": "+8%",
+      "pitch": "+16Hz",
+      "sample_text": "سلام! من لیا هستم! توی بازینو با خونواده‌م کلی بازی‌های شاد و مسابقه‌ای بازی می‌کنیم!"
+    },
+    "en": {
+      "tts_voice": "en-US-AnaNeural",
+      "rate": "+5%",
+      "pitch": "+4Hz",
+      "sample_text": "Hi! I'm Lea! I love playing Astro Bot and fun family games at Bazino Club!"
+    }
+  },
+  "visual_prompt": "Photorealistic 12-year-old girl named Lea, 148cm tall, sweet cheerful child face, straight dark brown shoulder-length hair with neat bangs (fringe) across her forehead, bright brown eyes, happy innocent smile, wearing a modest soft pastel-pink long-sleeve sweatshirt, blue jeans, and white sneakers, holding a white PS5 DualSense controller in a bright, safe, family-friendly Bazino gaming lounge, TV screen in background ONLY showing colorful family/kids games like Astro Bot or kart racing.",
+  "negative_prompt": "adult woman, makeup, violence, guns, blood, horror, Mortal Kombat, GTA, Call of Duty, distorted face, bulging eyes, cartoon, blurry",
+  "personality_and_rules": "MANDATORY SAFETY RULE (UNDER 18): Lea is 12 years old. She MUST NEVER appear in any adult, violent, or 18+ gaming scenes. ONLY family-friendly, cheerful, colorful games (Astro Bot, It Takes Two, Sackboy, Overcooked, Racing, Sports)!"
+}

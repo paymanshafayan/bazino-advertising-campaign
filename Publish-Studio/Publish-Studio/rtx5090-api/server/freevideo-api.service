@@ -1,0 +1,18 @@
+[Unit]
+Description=FreeVideo MiniMax H3 Ref2VA HTTPS API
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/FreeVideo
+EnvironmentFile=/root/FreeVideo/.api_env
+Environment=PYTHONPATH=/root/FreeVideo
+ExecStart=/root/FreeVideo/envs/unified/bin/uvicorn api_server:app --host 0.0.0.0 --port 443 --ssl-keyfile /root/FreeVideo/ssl/freevideo.key --ssl-certfile /root/FreeVideo/ssl/freevideo.crt --timeout-keep-alive 900
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

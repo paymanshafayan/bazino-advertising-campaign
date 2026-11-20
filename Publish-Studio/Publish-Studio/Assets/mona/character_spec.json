@@ -1,0 +1,55 @@
+{
+  "character_id": "mona",
+  "display_name": "Mona (مونا)",
+  "role": "Bazino Official Brand Ambassador & Presenter (سفیر و مجری رسمی بازینو)",
+  "domain": "realistic_human",
+  "preferred_engine": "hunyuan-13b",
+  "age": 24,
+  "height_cm": 168,
+  "under_18_restricted": false,
+  "folder": "mona",
+  "triggers": [
+    "mona",
+    "مونا",
+    "presenter mona",
+    "ambassador mona",
+    "sunucu mona"
+  ],
+  "assets": {
+    "character_sheet": "characters/mona/mona-brandwear-character-sheet.png",
+    "portrait_image": "characters/mona/mona-portrait-avatar-01.png",
+    "fullbody_image": "characters/mona/mona-brandwear-fullbody-01.png",
+    "club_image": "characters/mona/mona-bazino-club-shorts.jpg",
+    "alt_sheet": "characters/mona/mona-character-sheet.png",
+    "voice_reference_video": "characters/mona/ps5-voice-ref-part1-10s.mp4",
+    "voice_samples": {
+      "tr": "characters/mona/voice_ref_tr.mp3",
+      "fa": "characters/mona/voice_ref_fa.mp3",
+      "en": "characters/mona/voice_ref_en.mp3",
+      "original_ref": "characters/mona/voice_ref_original.wav"
+    }
+  },
+  "voices": {
+    "tr": {
+      "tts_voice": "tr-TR-EmelNeural",
+      "rate": "+4%",
+      "pitch": "+2Hz",
+      "sample_text": "Merhaba arkadaşlar! Ben Mona, Mağusa'nın en heyecanlı PS5 kulübü Bazino'ya hoş geldiniz!"
+    },
+    "fa": {
+      "tts_voice": "fa-IR-DilaraNeural",
+      "rate": "+4%",
+      "pitch": "+2Hz",
+      "sample_text": "سلام بچه‌ها! من مونا هستم، به بازینو، هیجان‌انگیزترین باشگاه پی‌اس‌فایو فاماگوستا خوش اومدین!"
+    },
+    "en": {
+      "tts_voice": "en-US-AvaMultilingualNeural",
+      "rate": "+3%",
+      "pitch": "+1Hz",
+      "sample_text": "Hey everyone! I'm Mona, welcome to Bazino Gaming Club in Famagusta, where every game feels like a final!"
+    }
+  },
+  "visual_prompt": "Photorealistic 24-year-old Mediterranean/Iranian young woman named Mona, 168cm tall, athletic slim build, warm olive skin with natural texture, expressive hazel-brown almond eyes, well-defined natural eyebrows, warm charismatic smile, sleek dark brown hair styled in a high ponytail with soft face-framing strands, wearing Bazino official navy-blue and white zip-up gaming jersey with the colorful BAZINO joystick logo on the chest, white sporty shorts or fitted dark jeans, white sneakers, standing inside the modern Bazino PS5 gaming lounge in Famagusta with warm wooden slatted walls, glowing purple/blue/magenta RGB LED strips, and 65-inch 4K TVs.",
+  "negative_prompt": "different face, blonde hair, curly hair, glasses, old, chubby, distorted eyes, wide bulging eyes, extra fingers, deformed hands, blurry, low quality, cartoon, 3d render, watermark, text overlay",
+  "personality_and_rules": "Energetic, welcoming, confident, gamer-savvy presenter. Speaks primarily Turkish (for Northern Cyprus / Famagusta audience), as well as Persian and English. Always maintains exact facial identity from mona-portrait-avatar-01.png and mona-brandwear-fullbody-01.png."
+}
