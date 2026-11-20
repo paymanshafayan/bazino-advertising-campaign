@@ -1,0 +1,13 @@
+{
+  "v": 1,
+  "id": "c324c203a9e20d94f2490db61ab36032",
+  "replyTo": "c324c203a9e20d94f2490db61ab36032",
+  "cmd": "command",
+  "ok": false,
+  "at": "2026-11-20T11:04:22.128720+00:00",
+  "result": {
+    "ok": false,
+    "success": false,
+    "error": "sender_not_authorized: invalid_signature"
+  }
+}
